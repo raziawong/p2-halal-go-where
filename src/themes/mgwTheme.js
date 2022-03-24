@@ -8,31 +8,30 @@ const mgwTheme = createTheme({
       contrastText: "#F7F7FF",
     },
     secondary: {
-      main: "#FE5F55",
+      main: "#D7BCC8",
     },
     text: {
       primary: "#0A2E36",
-      secondary: "#D7BCC8",
+      secondary: "#ECA72C",
     },
   },
   typography: {
     fontFamily: "Raleway, sans-serif",
     body1: {
-      fontFamily: "Barlow, sans-serif",
+      fontFamily: "Rubik, sans-serif",
     },
     body2: {
-      fontFamily: "Barlow, sans-serif",
+      fontFamily: "Rubik, sans-serif",
     },
     button: {
-      fontFamily: "Barlow, sans-serif",
+      fontFamily: "Rubik, sans-serif",
     },
   },
   components: {
     MuiAppBar: {
       styleOverrides: {
         root: {
-          backgroundColor: "#CDC6A5",
-          color: "#1C7C54"
+          backgroundColor: "#F7F7FF"
         }
       }
     }
