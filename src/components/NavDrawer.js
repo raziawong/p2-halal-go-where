@@ -21,6 +21,13 @@ export default class NavDrawer extends React.Component {
           <List className="nav-menu">
             <ListItem>
               <ListItemText>
+                <Link to="/" className="nav-link-item">
+                    Home
+                </Link>
+              </ListItemText>
+            </ListItem>
+            <ListItem>
+              <ListItemText>
                 <Link to="/explore" className="nav-link-item">
                     Explore
                 </Link>
