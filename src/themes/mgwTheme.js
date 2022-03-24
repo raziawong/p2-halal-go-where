@@ -31,8 +31,8 @@ const mgwTheme = createTheme({
     MuiAppBar: {
       styleOverrides: {
         root: {
-          backgroundColor: "#1C7C54",
-          color: "#0A2E36",
+          backgroundColor: "#CDC6A5",
+          color: "#1C7C54"
         }
       }
     }
