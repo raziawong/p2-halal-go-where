@@ -13,9 +13,10 @@ export default class NavDrawer extends React.Component {
       <React.Fragment>
         <Drawer
           className="nav-drawer"
+          anchor="right"
           open={this.state.opened}
           onClose={() => this.setState({ opened: false })}
-          sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
+          sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}
         >
           <List className="nav-menu">
             <ListItem>
