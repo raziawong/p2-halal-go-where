@@ -1,10 +1,12 @@
 :root {
     --pri-color: #1C7C54;
-    --sec-color: #D7BCC8;
+    --sec-color: #F0BCD4;
     --pri-text: #0A2E36;
     --sec-text: #ECA72C;
+    --pri-accent: rgba(198, 197, 185, 0.8);
+    --sec-accent: #EBB9DF;
     --bg-color: #F7F7FF;
-
+    --bg-color-o3: rgb(247, 247, 255, 0.3);
 }
 
 body {
@@ -12,11 +14,9 @@ body {
     padding: 0;
     font-family: 'Raleway', sans-serif;;
 }
-
 span, p, a, button {
     font-family: 'Rubik', sans-serif;
 }
-
 .nav-logo {
     flex-grow: 1;
     cursor: pointer;
@@ -32,6 +32,8 @@ span, p, a, button {
 .nav-link-item {
     color: var(--pri-text);
     text-decoration: none;
+    display: flex;
+    align-items: center;
     margin-left: 2em;
 }
 .nav-link-item:hover {
@@ -51,7 +53,7 @@ span, p, a, button {
         min-width: 30vw;
     }
     .nav-link-item {
-        margin: 3rem;
+        margin: 0;
         padding: 0.5rem;
     }
 }

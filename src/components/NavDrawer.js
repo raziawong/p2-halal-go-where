@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Drawer, IconButton, List, ListItem, ListItemText } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
+import { CollectionsBookmarkSharp, HomeSharp, MenuSharp, NoteAddSharp, ViewListSharp } from "@mui/icons-material";
 
 export default class NavDrawer extends React.Component {
   state = {
@@ -22,28 +22,31 @@ export default class NavDrawer extends React.Component {
             <ListItem>
               <ListItemText>
                 <Link to="/" className="nav-link-item">
-                    Home
+                  <HomeSharp fontSize="small" sx={{ mx: 1}}/>
+                  Home
                 </Link>
               </ListItemText>
             </ListItem>
             <ListItem>
               <ListItemText>
                 <Link to="/explore" className="nav-link-item">
-                    Explore
+                  <ViewListSharp fontSize="small" sx={{ mx: 1}} />
+                  Explore
                 </Link>
               </ListItemText>
             </ListItem>
             <ListItem>
               <ListItemText>
                 <Link to="/create" className="nav-link-item">
-                    Create
+                  <NoteAddSharp fontSize="small" sx={{ mx: 1}} />
+                  Create
                 </Link>
               </ListItemText>
             </ListItem>
           </List>
         </Drawer>
         <IconButton onClick={() => this.setState({ opened: !this.state.opened })}>
-          <MenuIcon />
+          <MenuSharp />
         </IconButton>
       </React.Fragment>
     );
