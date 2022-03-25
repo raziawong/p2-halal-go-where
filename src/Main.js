@@ -6,6 +6,7 @@ import { ThemeProvider } from "@mui/material";
 import { Navigate, Routes, Route } from "react-router-dom";
 import { NavBar } from "./components/collection.js";
 import { Home, Explore, Create } from "./views/collection.js";
+import Loader from "./components/Loader";
 
 export default class Main extends React.Component {
   state = {
@@ -26,7 +27,8 @@ export default class Main extends React.Component {
       this.setState({
         countriesData: r[0].data,
         categoriesData: r[1].data,
-        articlesData: r[2].data
+        articlesData: r[2].data,
+        loaded: true
       });
     }).catch(err => {
       console.log("Cannot get data from API. Please contact administrator.");
@@ -38,7 +40,8 @@ export default class Main extends React.Component {
       <React.Fragment>
         <ThemeProvider theme={mgwTheme}>
           {
-
+            // this.state.loaded ? "" : 
+            <Loader />
           }
           <NavBar />
           <Routes>

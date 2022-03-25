@@ -11,12 +11,13 @@ export default function Home(props) {
       <Container maxWidth="xl" disableGutters>
         <Box className="hero-banner" sx={{ my: 0 }}>
           <Box className="hero-overlay">
-            <FormControl variant="outlined">
+            <FormControl>
               <OutlinedInput
                 id="home-search"
                 arial-label="search"
                 onChange={props.searchText}
                 onKeyDown={props.search}
+                onClick={props.search}
                 startAdornment={
                   <InputAdornment position="start">
                     <SearchSharp sx={{ color: "white", mr: 1, my: 0.5 }} />
