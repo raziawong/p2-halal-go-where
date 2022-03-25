@@ -1,43 +1,87 @@
-import './assets/main.css';
-import mgwTheme from './themes/mgwTheme';
-import React from 'react';
-import axios from 'axios';
-import { ThemeProvider } from '@mui/material';
+import "./assets/main.css";
+import mgwTheme from "./utils/mgwTheme";
+import { API } from "./utils/const";
+import React from "react";
+import { ThemeProvider } from "@mui/material";
 import { Routes, Route } from "react-router-dom";
-import { NavBar } from './components/collection.js';
-import { Home, Explore, Create } from './views/collection.js';
+import { NavBar } from "./components/collection.js";
+import { Home, Explore, Create } from "./views/collection.js";
 
 export default class Main extends React.Component {
-  BASE_API_URL = "http://localhost:3388";
-
   state = {
-    countriesData: null,
-    categoriesData: null,
-    articlesData: null
+    searchText: "",
+    redirectFilter: false,
+    countriesData: [],
+    categoriesData: [],
+    articlesData: []
   };
+
+  componentDidMount() {
+    let gCountries = API.axiosBase.get(API.dataPaths.countries);
+    let gCategories = API.axiosBase.get(API.dataPaths.categories);
+    let gArticles = API.axiosBase.get(API.dataPaths.articles);
+
+    Promise.all([gCountries, gCategories, gArticles]).then(r => {
+      this.setState({
+        countriesData: r[0].data,
+        categoriesData: r[1].data,
+        articlesData: r[2].data
+      });
+    }).catch(err => {
+      console.log("Cannot get data from API. Please contact administrator.");
+    });
+  }
 
   render() {
     return (
-      <ThemeProvider theme={mgwTheme}>
-        <NavBar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/explore" element={<Explore />} />
-          <Route path="/create" element={<Create />} />
-        </Routes>
-      </ThemeProvider>
+      <React.Fragment>
+        <ThemeProvider theme={mgwTheme}>
+          <NavBar />
+          <Routes>
+            <Route path="/" 
+              element={
+                this.state.redirectFilter ? 
+                <Explore 
+                  redirect={this.setRedirectFilter()}
+                /> :
+                <Home 
+                  searchText={this.setSearchText} 
+                  search={this.searchArticles}
+                />
+              }
+            />
+            <Route path="/explore" element={<Explore />} />
+            <Route path="/create" element={<Create />} />
+          </Routes>
+        </ThemeProvider>
+      </React.Fragment>
     );
   }
 
-  async componentDidMount() {
-    // let gCountries = await axios.get(this.BASE_API_URL + '/countries/cities');
-    // let gCategories = await axios.get(this.BASE_API_URL + '/categories/subcats');
-    // let gArticles = await axios.get(this.BASE_API_URL + '/articles');
+  setRedirectFilter = (evt, val) => {
+    this.setState({
+      redirectFilter: val
+    });
+  }
 
-    // this.setState({
-    //   countriesData: gCountries.data,
-    //   categoriesData: gCategories.data,
-    //   articlesData: gArticles.data
-    // });
-};
+  setSearchText = evt => {
+    this.setState({
+      searchText: evt.target.value
+    });
+  }
+
+  searchArticles = async evt => {
+    if (evt.key === 'Enter') {
+      let query = await API.axiosBase.get(API.dataPaths.articles, {
+        params: {
+          text: this.state.searchText
+        }
+      });
+      if (query.data) {
+        this.setState({
+          redirectFilter: true
+        });
+      }
+    }
+  }
 }
