@@ -3,7 +3,7 @@ import mgwTheme from "./utils/mgwTheme";
 import { API } from "./utils/const";
 import React from "react";
 import { ThemeProvider } from "@mui/material";
-import { Routes, Route } from "react-router-dom";
+import { Navigate, Routes, Route } from "react-router-dom";
 import { NavBar } from "./components/collection.js";
 import { Home, Explore, Create } from "./views/collection.js";
 
@@ -13,7 +13,8 @@ export default class Main extends React.Component {
     redirectFilter: false,
     countriesData: [],
     categoriesData: [],
-    articlesData: []
+    articlesData: [],
+    loaded: false
   };
 
   componentDidMount() {
@@ -36,21 +37,28 @@ export default class Main extends React.Component {
     return (
       <React.Fragment>
         <ThemeProvider theme={mgwTheme}>
+          {
+
+          }
           <NavBar />
           <Routes>
-            <Route path="/" 
+            <Route index path="/" 
               element={
-                this.state.redirectFilter ? 
-                <Explore 
-                  redirect={this.setRedirectFilter()}
-                /> :
+                this.state.redirectFilter ?
+                <Navigate replace to="/explore" /> :
                 <Home 
                   searchText={this.setSearchText} 
                   search={this.searchArticles}
                 />
               }
             />
-            <Route path="/explore" element={<Explore />} />
+            <Route path="/explore" 
+              element={
+                <Explore 
+                  redirect={this.setRedirectFilter}
+                />
+              }
+            />
             <Route path="/create" element={<Create />} />
           </Routes>
         </ThemeProvider>
@@ -58,7 +66,7 @@ export default class Main extends React.Component {
     );
   }
 
-  setRedirectFilter = (evt, val) => {
+  setRedirectFilter = val => {
     this.setState({
       redirectFilter: val
     });
