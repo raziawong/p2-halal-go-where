@@ -4,9 +4,8 @@ import { API } from "./utils/const";
 import React from "react";
 import { ThemeProvider } from "@mui/material";
 import { Navigate, Routes, Route } from "react-router-dom";
-import { NavBar } from "./components/collection.js";
+import { Loader, NavBar } from "./components/collection.js";
 import { Home, Explore, Create } from "./views/collection.js";
-import Loader from "./components/Loader";
 
 export default class Main extends React.Component {
   state = {
@@ -37,35 +36,36 @@ export default class Main extends React.Component {
 
   render() {
     return (
-      <React.Fragment>
-        <ThemeProvider theme={mgwTheme}>
-          {
-            // this.state.loaded ? "" : 
-            <Loader />
-          }
-          <NavBar />
-          <Routes>
-            <Route index path="/" 
-              element={
-                this.state.redirectFilter ?
-                <Navigate replace to="/explore" /> :
-                <Home 
-                  searchText={this.setSearchText} 
-                  search={this.searchArticles}
-                />
-              }
-            />
-            <Route path="/explore" 
-              element={
-                <Explore 
-                  redirect={this.setRedirectFilter}
-                />
-              }
-            />
-            <Route path="/create" element={<Create />} />
-          </Routes>
-        </ThemeProvider>
-      </React.Fragment>
+      <ThemeProvider theme={mgwTheme}>
+        {
+          this.state.loaded ? 
+          <React.Fragment>
+            <NavBar />
+            <Routes>
+              <Route index path="/" 
+                element={
+                  this.state.redirectFilter ?
+                  <Navigate replace to="/explore" /> :
+                  <Home 
+                    searchText={this.setSearchText} 
+                    search={this.searchArticles}
+                  />
+                }
+              />
+              <Route path="/explore" 
+                element={
+                  <Explore 
+                    redirect={this.setRedirectFilter}
+                  />
+                }
+              />
+              <Route path="/create" element={<Create />} />
+            </Routes>
+          </React.Fragment>
+          : 
+          <Loader />
+        }
+      </ThemeProvider>
     );
   }
 

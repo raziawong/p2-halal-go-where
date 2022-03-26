@@ -1,3 +1,4 @@
+import Loader from "./Loader";
 import NavBar from "./NavBar";
 
-export { NavBar};
+export { Loader, NavBar };
