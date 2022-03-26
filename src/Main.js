@@ -91,15 +91,19 @@ export default class Main extends Component {
     let { name, value } = evt.target;
     this.setState({
       filterOpts: {
-        [name]: value,
+        ...this.state.filterOpts, [name]: value
       },
     });
   };
 
   searchArticles = async (evt) => {
-    if (evt.key === "Enter") {
+    let { type, key } = evt;
+    let { value } = evt.target;
+    value = value ? value : this.state.filterOpts.stext;
+    
+    if (type === "mousedown" || type === "click" || (type === "" && key === "Enter")) {
       let query = await getArticles({
-        text: this.state.searchText,
+        text: value
       });
       if (query.data) {
         this.setState({

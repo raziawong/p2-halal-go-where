@@ -1,7 +1,7 @@
 import React from "react";
 import {
   Box, Container, FormControl, InputAdornment,
-  Typography, Stack, OutlinedInput
+  IconButton, Typography, Stack, OutlinedInput
 } from "@mui/material";
 import { SearchSharp } from "@mui/icons-material";
 
@@ -17,14 +17,20 @@ export default function Home(props) {
               <OutlinedInput
                 id="home-search"
                 name="stext"
-                arial-label="search"
+                label="Search"
+                arial-label="Search"
                 value={searchText}
                 onChange={setOpts}
                 onKeyDown={execSearch}
-                onClick={execSearch}
                 startAdornment={
                   <InputAdornment position="start">
-                    <SearchSharp sx={{ color: "white", mr: 1, my: 0.5 }} />
+                    <IconButton
+                      aria-label="Submit Search"
+                      onClick={execSearch}
+                      onMouseDown={execSearch}
+                    >
+                      <SearchSharp sx={{ color: "white", mr: 1, my: 0.5 }} />
+                    </IconButton>
                   </InputAdornment>
                 }
               />
