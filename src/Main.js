@@ -13,7 +13,7 @@ export default class Main extends Component {
     filterOpts: {
       stext: "",
       country: "none",
-      city: "",
+      city: "none",
       categories: "none",
       subcategories: [],
     },
@@ -67,7 +67,7 @@ export default class Main extends Component {
                     execSearch={this.searchArticles}
                     countries={this.state.countriesData}
                     categories={this.state.categoriesData}
-                    articles={this.state.filteredData}
+                    articles={this.state.articlesData}
                   />
                 }
               />
@@ -100,7 +100,7 @@ export default class Main extends Component {
     let { type, key } = evt;
     let { value } = evt.target;
     value = value ? value : this.state.filterOpts.stext;
-    
+
     if (type === "mousedown" || type === "click" || (type === "" && key === "Enter")) {
       let query = await getArticles({
         text: value
