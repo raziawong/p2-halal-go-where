@@ -1,9 +1,9 @@
-import { API } from "./const.js"
+import { mgwRequests } from "./const.js"
 
 const getMgwData = async () => {
-    let gCountries = API.axiosBase.get(API.dataPaths.countries);
-    let gCategories = API.axiosBase.get(API.dataPaths.categories);
-    let gArticles = API.axiosBase.get(API.dataPaths.articles);
+    let gCountries = mgwRequests.axiosBase.get(mgwRequests.dataPaths.countries);
+    let gCategories = mgwRequests.axiosBase.get(mgwRequests.dataPaths.categories);
+    let gArticles = mgwRequests.axiosBase.get(mgwRequests.dataPaths.articles);
     let data = {};
 
     await Promise.all([gCountries, gCategories, gArticles]).then(r => {
@@ -13,15 +13,22 @@ const getMgwData = async () => {
         articles: r[2].data
       };
     }).catch(err => {
-      console.log("Cannot get data from API. Please contact administrator.");
+      console.log("Cannot get data from APIs. Please contact administrator.");
     });
 
     return data;
 }
 
 const getArticles = async (params) => {
-    let query = await API.axiosBase.get(API.dataPaths.articles, { params });
-    return query;
+  return await mgwRequests.axiosBase.get(mgwRequests.queryPaths.articles, { params });
 }
 
-export { getMgwData, getArticles };
+const getCountries = async (params) => {
+  return await mgwRequests.axiosBase.get(mgwRequests.queryPaths.countries, { params });
+}
+
+const getCategories = async (params) => {
+  return await mgwRequests.axiosBase.get(mgwRequests.queryPaths.categories, { params });
+}
+
+export { getMgwData, getArticles, getCountries, getCategories };

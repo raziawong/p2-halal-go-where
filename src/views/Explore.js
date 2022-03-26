@@ -1,4 +1,4 @@
-import { CATS } from "../utils/const";
+import { mgwCategoriesMap } from "../utils/const";
 import React, { Fragment, useEffect, useState } from "react";
 import {
   Card,
@@ -121,7 +121,7 @@ export default function Explore(props) {
               let cat = card.categories.length ? card.categories[0].catId : "";
               let imgUrl = card.photos.length
                 ? card.photos[0]
-                : CATS.attractions.default;
+                : mgwCategoriesMap.attractions.default;
               return (
                 <Card key={card._id}>
                   <CardMedia component="img" image={imgUrl} />

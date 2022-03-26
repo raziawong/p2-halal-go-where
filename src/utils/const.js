@@ -4,9 +4,9 @@ import defaultFood from "../assets/image/default-food.jpg";
 import defaultMasjid from "../assets/image/default-masjid.jpg";
 import defaultMusolla from "../assets/image/default-musolla.jpg";
 
-const API = {
+const mgwRequests = {
     axiosBase: axios.create({
-        baseURL: "https://muslim-go-where-api.herokuapp.com"
+        baseURL: "http://localhost:3388"
     }),
     dataPaths: {
         countries: "/countries/cities",
@@ -27,7 +27,7 @@ const API = {
     }
 }
 
-const CATS = {
+const mgwCategoriesMap = {
     attractions: {
         title: "Islamic Attractions",
         value: "attractions",
@@ -54,4 +54,4 @@ const CATS = {
     }
 }
 
-export { API, CATS };
+export { mgwRequests, mgwCategoriesMap };
