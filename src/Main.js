@@ -46,9 +46,10 @@ export default class Main extends React.Component {
                 element={
                   this.state.redirectFilter ?
                   <Navigate replace to="/explore" /> :
-                  <Home 
-                    searchText={this.setSearchText} 
-                    search={this.searchArticles}
+                  <Home
+                    search={this.state.searchText}
+                    setText={this.setSearchText} 
+                    execSearch={this.searchArticles}
                   />
                 }
               />

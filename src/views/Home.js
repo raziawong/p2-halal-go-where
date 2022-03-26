@@ -15,9 +15,10 @@ export default function Home(props) {
               <OutlinedInput
                 id="home-search"
                 arial-label="search"
-                onChange={props.searchText}
-                onKeyDown={props.search}
-                onClick={props.search}
+                value={props.search}
+                onChange={props.setText}
+                onKeyDown={props.execSearch}
+                onClick={props.execSearch}
                 startAdornment={
                   <InputAdornment position="start">
                     <SearchSharp sx={{ color: "white", mr: 1, my: 0.5 }} />
