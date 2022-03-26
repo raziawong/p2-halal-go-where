@@ -12,16 +12,16 @@ export default class Main extends Component {
     redirectFilter: false,
     filterOpts: {
       stext: "",
-      country: "",
+      country: "none",
       city: "",
-      categories: [],
-      subcategories: []
+      categories: "none",
+      subcategories: [],
     },
     filteredData: [],
     countriesData: [],
     categoriesData: [],
     articlesData: [],
-    loaded: false
+    loaded: false,
   };
 
   async componentDidMount() {
@@ -31,34 +31,40 @@ export default class Main extends Component {
       countriesData: data.countries,
       categoriesData: data.categories,
       articlesData: data.articles,
-      loaded: true
+      loaded: true,
     });
   }
 
   render() {
     return (
       <ThemeProvider theme={mgwTheme}>
-        {
-          this.state.loaded ? 
+        {this.state.loaded ? (
           <Fragment>
             <NavBar />
             <Routes>
-              <Route index path="/" 
+              <Route
+                index
+                path="/"
                 element={
-                  this.state.redirectFilter ?
-                  <Navigate replace to="/explore" /> :
-                  <Home
-                    searchText={this.state.filterOpts.stext}
-                    setOpts={this.setFilterOpts} 
-                    execSearch={this.searchArticles}
-                  />
+                  this.state.redirectFilter ? (
+                    <Navigate replace to="/explore" />
+                  ) : (
+                    <Home
+                      searchText={this.state.filterOpts.stext}
+                      setOpts={this.setFilterOpts}
+                      execSearch={this.searchArticles}
+                    />
+                  )
                 }
               />
-              <Route path="/explore" 
+              <Route
+                path="/explore"
                 element={
-                  <Explore 
+                  <Explore
                     redirect={this.setRedirectFilter}
-                    searchOpt={this.state.filterOpts}
+                    searchOpts={this.state.filterOpts}
+                    setOpts={this.setFilterOpts}
+                    execSearch={this.searchArticles}
                     countries={this.state.countriesData}
                     categories={this.state.categoriesData}
                     articles={this.state.filteredData}
@@ -68,39 +74,39 @@ export default class Main extends Component {
               <Route path="/create" element={<Create />} />
             </Routes>
           </Fragment>
-          : 
+        ) : (
           <Loader />
-        }
+        )}
       </ThemeProvider>
     );
   }
 
-  setRedirectFilter = val => {
+  setRedirectFilter = (val) => {
     this.setState({
-      redirectFilter: val
+      redirectFilter: val,
     });
-  }
+  };
 
-  setFilterOpts = evt => {
+  setFilterOpts = (evt) => {
     let { name, value } = evt.target;
     this.setState({
       filterOpts: {
-        [name]: value
-      }
+        [name]: value,
+      },
     });
-  }
+  };
 
-  searchArticles = async evt => {
-    if (evt.key === 'Enter') {
-      let query = await getArticles ({
-          text: this.state.searchText
+  searchArticles = async (evt) => {
+    if (evt.key === "Enter") {
+      let query = await getArticles({
+        text: this.state.searchText,
       });
       if (query.data) {
         this.setState({
           redirectFilter: true,
-          filteredData: query.data
+          filteredData: query.data,
         });
       }
     }
-  }
+  };
 }
