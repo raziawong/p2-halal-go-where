@@ -6,6 +6,8 @@ import {
 import { SearchSharp } from "@mui/icons-material";
 
 export default function Home(props) {
+  let { searchText, setOpts, execSearch } = props;
+
   return (
     <React.Fragment>
       <Container maxWidth="xl" disableGutters>
@@ -14,11 +16,12 @@ export default function Home(props) {
             <FormControl>
               <OutlinedInput
                 id="home-search"
+                name="stext"
                 arial-label="search"
-                value={props.search}
-                onChange={props.setText}
-                onKeyDown={props.execSearch}
-                onClick={props.execSearch}
+                value={searchText}
+                onChange={setOpts}
+                onKeyDown={execSearch}
+                onClick={execSearch}
                 startAdornment={
                   <InputAdornment position="start">
                     <SearchSharp sx={{ color: "white", mr: 1, my: 0.5 }} />

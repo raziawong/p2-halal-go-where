@@ -1,36 +1,37 @@
-import "./assets/main.css";
+import "./assets/custom.css";
 import mgwTheme from "./utils/mgwTheme";
-import { API } from "./utils/const";
-import React from "react";
+import { getMgwData, getArticles } from "./utils/data";
+import React, { Component, Fragment } from "react";
 import { ThemeProvider } from "@mui/material";
 import { Navigate, Routes, Route } from "react-router-dom";
 import { Loader, NavBar } from "./components/collection.js";
 import { Home, Explore, Create } from "./views/collection.js";
 
-export default class Main extends React.Component {
+export default class Main extends Component {
   state = {
-    searchText: "",
     redirectFilter: false,
+    filterOpts: {
+      stext: "",
+      country: "",
+      city: "",
+      categories: [],
+      subcategories: []
+    },
+    filteredData: [],
     countriesData: [],
     categoriesData: [],
     articlesData: [],
     loaded: false
   };
 
-  componentDidMount() {
-    let gCountries = API.axiosBase.get(API.dataPaths.countries);
-    let gCategories = API.axiosBase.get(API.dataPaths.categories);
-    let gArticles = API.axiosBase.get(API.dataPaths.articles);
+  async componentDidMount() {
+    let data = await getMgwData();
 
-    Promise.all([gCountries, gCategories, gArticles]).then(r => {
-      this.setState({
-        countriesData: r[0].data,
-        categoriesData: r[1].data,
-        articlesData: r[2].data,
-        loaded: true
-      });
-    }).catch(err => {
-      console.log("Cannot get data from API. Please contact administrator.");
+    this.setState({
+      countriesData: data.countries,
+      categoriesData: data.categories,
+      articlesData: data.articles,
+      loaded: true
     });
   }
 
@@ -39,7 +40,7 @@ export default class Main extends React.Component {
       <ThemeProvider theme={mgwTheme}>
         {
           this.state.loaded ? 
-          <React.Fragment>
+          <Fragment>
             <NavBar />
             <Routes>
               <Route index path="/" 
@@ -47,8 +48,8 @@ export default class Main extends React.Component {
                   this.state.redirectFilter ?
                   <Navigate replace to="/explore" /> :
                   <Home
-                    search={this.state.searchText}
-                    setText={this.setSearchText} 
+                    searchText={this.state.filterOpts.stext}
+                    setOpts={this.setFilterOpts} 
                     execSearch={this.searchArticles}
                   />
                 }
@@ -57,12 +58,16 @@ export default class Main extends React.Component {
                 element={
                   <Explore 
                     redirect={this.setRedirectFilter}
+                    searchOpt={this.state.filterOpts}
+                    countries={this.state.countriesData}
+                    categories={this.state.categoriesData}
+                    articles={this.state.filteredData}
                   />
                 }
               />
               <Route path="/create" element={<Create />} />
             </Routes>
-          </React.Fragment>
+          </Fragment>
           : 
           <Loader />
         }
@@ -76,22 +81,24 @@ export default class Main extends React.Component {
     });
   }
 
-  setSearchText = evt => {
+  setFilterOpts = evt => {
+    let { name, value } = evt.target;
     this.setState({
-      searchText: evt.target.value
+      filterOpts: {
+        [name]: value
+      }
     });
   }
 
   searchArticles = async evt => {
     if (evt.key === 'Enter') {
-      let query = await API.axiosBase.get(API.dataPaths.articles, {
-        params: {
+      let query = await getArticles ({
           text: this.state.searchText
-        }
       });
       if (query.data) {
         this.setState({
-          redirectFilter: true
+          redirectFilter: true,
+          filteredData: query.data
         });
       }
     }
