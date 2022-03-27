@@ -1,6 +1,6 @@
 import React from "react";
 import logo from "../assets/image/mgw-logo.svg";
-import { Link } from "react-router-dom";
+import { NavBarLogo, NavBarLink } from "../utils/mgwStyle";
 import { AppBar, Box, Container, Toolbar } from "@mui/material";
 import { CollectionsBookmarkSharp, NoteAddSharp, ViewListSharp } from "@mui/icons-material";
 import NavDrawer from "./NavDrawer";
@@ -11,27 +11,27 @@ export default function NavBar() {
         <AppBar position="static">
           <Container maxWidth="xl">
           <Toolbar>
-            <Link to="/" className="nav-logo">
+            <NavBarLogo to="/">
               <img src={ logo } alt="Muslim Go Where" />
-            </Link>
-            <div className="nav-link">
+            </NavBarLogo>
+            <Box sx={{ display: "flex", marginLeft: "1rem"}}>
               <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
                 <NavDrawer />
               </Box>
               <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-                <Link to="/explore" className="nav-link-item">
+                <NavBarLink to="/explore">
                   <ViewListSharp fontSize="small" sx={{ mx: 1}} />
                   Explore
-                </Link>
+                </NavBarLink>
                 {/* <Link to="/curate" className={nav-link-item}>
                   <CollectionsBookmarkSharp fontSize="small" /> Curate
                 </Link> */}
-                <Link to="/create" className="nav-link-item">
+                <NavBarLink to="/create">
                   <NoteAddSharp fontSize="small" sx={{ mx: 1}} />
                   Create
-                </Link>
+                </NavBarLink>
               </Box>
-            </div>
+            </Box>
           </Toolbar>
           </Container>
         </AppBar>
