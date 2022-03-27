@@ -1,17 +1,10 @@
 import "../assets/loader.css";
-import { Box } from "@mui/material";
+import { LoaderContainer } from "../utils/mgwStyle";
 
 export default function Loader() {
     return (
-      <Box sx={{ width: "100vw", height: "100vh", display: "flex", alignItems: "center", justifyContent: "center"}}>
-          {
-          }
-        <svg
-          viewBox="307.252 49.757 126.737 142.018"
-          width="126.73699951171875"
-          height="142.01800537109375"
-          xmlns="http://www.w3.org/2000/svg"
-        >
+      <LoaderContainer>
+        <svg width="127" height="142" viewBox="307.252 49.757 126.737 142.018" xmlns="http://www.w3.org/2000/svg">
           <g transform="matrix(1, 0, 0, -1, 0.333115, 499.376465)">
             <g transform="translate(314.4023 370.9849)">
               <path
@@ -71,6 +64,6 @@ export default function Loader() {
             </g>
           </g>
         </svg>
-      </Box>
+      </LoaderContainer>
     );
 }

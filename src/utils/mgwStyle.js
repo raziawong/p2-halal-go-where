@@ -3,6 +3,16 @@ import { Link } from "react-router-dom";
 import { Box, Drawer } from "@mui/material";
 import { mgwColors } from './mgwTheme';
 
+const LoaderContainer = styled(Box, {
+    shouldForwardProp: (prop) => prop !== "width" || prop !== "height",
+  })(({ width, height, theme }) => ({
+    width: width || "100vw",
+    height: height || "100vh",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center"
+}));
+
 const NavBarLogo = styled(Link)(({ theme }) => ({
     flexGrow: 1,
     cursor: "pointer",
@@ -68,4 +78,4 @@ const HeroOverlay = styled(Box)(({ theme }) => ({
     position: "absolute"
 }));
 
-export { NavBarDrawer, NavBarLogo, NavBarLink, HeroBanner, HeroOverlay };
+export { LoaderContainer, NavBarDrawer, NavBarLogo, NavBarLink, HeroBanner, HeroOverlay };
