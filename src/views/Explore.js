@@ -1,4 +1,4 @@
-import { mgwCategoriesMap } from "../utils/const";
+import { mgwCategoriesMap } from "../utils/data";
 import React, { Fragment, useEffect, useState } from "react";
 import {
   Card,
