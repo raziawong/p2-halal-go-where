@@ -1,11 +1,12 @@
 import "./assets/custom.css";
 import mgwTheme from "./utils/mgwTheme";
-import { getMgwFixed, getMgwArticles, getArticles } from "./utils/data";
 import React, { Component, Fragment } from "react";
+import { getMgwFixed, getMgwArticles, getArticles } from "./utils/data";
 import { ThemeProvider } from "@mui/material";
 import { Navigate, Routes, Route } from "react-router-dom";
 import { Loader, NavBar } from "./components/collection.js";
 import { Home, Explore, Create } from "./views/collection.js";
+import Article from "./views/Article";
 
 export default class Main extends Component {
   state = {
@@ -43,7 +44,9 @@ export default class Main extends Component {
   async componentDidMount() {
     let fixed = await getMgwFixed();
     let articles = await getMgwArticles();
-    let uniqueTags = articles.tags.results.reduce((a, r) => [...a, ...r.tags], []).filter((v,i,a) => a.indexOf(v) == i );
+    let uniqueTags = articles.tags.results
+      .reduce((a, r) => [...a, ...r.tags], [])
+      .filter((v, i, a) => a.indexOf(v) == i);
 
     this.setState({
       allCountries: fixed.countries,
@@ -77,26 +80,30 @@ export default class Main extends Component {
                 }
               />
               <Route
-                path="/explore"
+                path="explore"
                 element={
                   <Explore
-                    redirect={this.setRedirectFilter}
                     searchOpts={this.state.filterOpts}
+                    countries={this.state.allCountries}
+                    categories={this.state.allCategories}
+                    articles={this.state.allArticles}
+                    redirect={this.setRedirectFilter}
                     setOpts={this.setFilterOpts}
                     execSearch={this.searchArticles}
-                    countries={this.state.countriesData}
-                    categories={this.state.categoriesData}
-                    articles={this.state.articlesData}
                   />
                 }
               />
-              <Route path="/create" element={
-                <Create
-                  tagOpts={this.state.allTags}
-                  article={this.state.articleInputs}
-                  submitArticle={this.submitArticle}
-                />
-              } />
+              <Route
+                path="create"
+                element={
+                  <Create
+                    tagOpts={this.state.allTags}
+                    article={this.state.articleInputs}
+                    submitArticle={this.submitArticle}
+                  />
+                }
+              />
+              <Route path="article/:id" element={<Article />} />
             </Routes>
           </Fragment>
         ) : (
@@ -116,7 +123,8 @@ export default class Main extends Component {
     let { name, value } = evt.target;
     this.setState({
       filterOpts: {
-        ...this.state.filterOpts, [name]: value
+        ...this.state.filterOpts,
+        [name]: value,
       },
     });
   };
@@ -126,9 +134,13 @@ export default class Main extends Component {
     let { value } = evt.target;
     value = value ? value : this.state.filterOpts.stext;
 
-    if (type === "mousedown" || type === "click" || (type === "" && key === "Enter")) {
+    if (
+      type === "mousedown" ||
+      type === "click" ||
+      (type === "" && key === "Enter")
+    ) {
       let query = await getArticles({
-        text: value
+        text: value,
       });
       if (query.data) {
         this.setState({

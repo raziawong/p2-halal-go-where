@@ -1,11 +1,14 @@
 import { mgwCategoriesMap } from "../utils/data";
 import React, { Fragment, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import {
   Card,
+  CardActions,
   CardContent,
   CardMedia,
   Container,
   Box,
+  Button,
   FormControl,
   InputLabel,
   MenuItem,
@@ -139,14 +142,27 @@ export default function Explore(props) {
                     >
                       {card.description}
                     </Typography>
-                    <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                    <Box
+                      sx={{ display: "flex", justifyContent: "space-between" }}
+                    >
                       {card.tags.map((tag, i) => (
-                        <Typography key={i} variant="subtitle2" component="span">
+                        <Typography
+                          key={i}
+                          variant="subtitle2"
+                          component="span"
+                        >
                           {tag}
                         </Typography>
                       ))}
                     </Box>
                   </CardContent>
+                  <CardActions>
+                    <Link to={`/article/${card._id}`}>
+                      <Button size="small" color="primary">
+                        Find out more
+                      </Button>
+                    </Link>
+                  </CardActions>
                 </Card>
               );
             })}
