@@ -1,4 +1,14 @@
-import { createTheme } from "@mui/material";
+import { createTheme, alpha } from "@mui/material";
+
+const mgwColors = {
+  primary: "#1C7C54",
+  secondary: "#F0BCD4",
+  priText: "#0A2E36",
+  secText: "#ECA72C",
+  priAccent: "#C6C5B9",
+  secAccent: "#EBB9DF",
+  background: "#F7F7FF"
+}
 
 const mgwTheme = createTheme({
   palette: {
@@ -31,11 +41,12 @@ const mgwTheme = createTheme({
     MuiAppBar: {
       styleOverrides: {
         root: {
-          backgroundColor: "rgba(198, 197, 185, 0.8)"
+          backgroundColor: alpha(mgwColors.background, 0.5)
         }
       }
     }
   }
 });
 
+export { mgwColors };
 export default mgwTheme;

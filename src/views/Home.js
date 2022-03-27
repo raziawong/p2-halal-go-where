@@ -1,18 +1,26 @@
-import React from "react";
+import React, { Fragment } from "react";
 import {
-  Box, Container, FormControl, InputAdornment,
-  IconButton, Typography, Stack, OutlinedInput
+  Box,
+  Container,
+  FormControl,
+  InputAdornment,
+  IconButton,
+  Typography,
+  Stack,
+  OutlinedInput,
 } from "@mui/material";
+import banner from "../assets/image/banner.jpg"
+import { HeroBanner, HeroOverlay } from "../utils/mgwStyle";
 import { SearchSharp } from "@mui/icons-material";
 
 export default function Home(props) {
-  let { searchText, setOpts, execSearch } = props;
+  const { searchText, setOpts, execSearch } = props;
 
   return (
-    <React.Fragment>
+    <Fragment>
       <Container maxWidth="xl" disableGutters>
-        <Box className="hero-banner" sx={{ my: 0 }}>
-          <Box className="hero-overlay">
+        <HeroBanner bgImg={banner}>
+          <HeroOverlay>
             <FormControl>
               <OutlinedInput
                 id="home-search"
@@ -28,6 +36,7 @@ export default function Home(props) {
                       aria-label="Submit Search"
                       onClick={execSearch}
                       onMouseDown={execSearch}
+                      onKeyDown={execSearch}
                     >
                       <SearchSharp sx={{ color: "white", mr: 1, my: 0.5 }} />
                     </IconButton>
@@ -35,8 +44,8 @@ export default function Home(props) {
                 }
               />
             </FormControl>
-          </Box>
-        </Box>
+          </HeroOverlay>
+        </HeroBanner>
         <Box sx={{ m: 2 }}>
           <Typography component="h2" variant="h3">
             What's New
@@ -70,6 +79,6 @@ export default function Home(props) {
           </Stack>
         </Box>
       </Container>
-    </React.Fragment>
+    </Fragment>
   );
 }
