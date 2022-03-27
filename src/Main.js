@@ -71,7 +71,11 @@ export default class Main extends Component {
                   />
                 }
               />
-              <Route path="/create" element={<Create />} />
+              <Route path="/create" element={
+                <Create
+                  submitArticle={this.submitArticle}
+                />
+              } />
             </Routes>
           </Fragment>
         ) : (
@@ -112,5 +116,9 @@ export default class Main extends Component {
         });
       }
     }
+  };
+
+  submitArticle = (data) => {
+    console.log(data);
   };
 }
