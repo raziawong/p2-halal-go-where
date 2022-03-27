@@ -44,6 +44,33 @@ const mgwTheme = createTheme({
           backgroundColor: alpha(mgwColors.background, 0.5)
         }
       }
+    },
+    MUIRichTextEditor: {
+      styleOverrides: {
+        root: {
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          overflow: "hidden"
+        },
+        container: {
+          margin: 0,
+          minHeight: 200,
+          display: "flex",
+          flexDirection: "column"
+        },
+        toolbar: {
+          flexShrink: 0
+        },
+        placeHolder: {
+          position: "static"
+        },
+        editor: {
+          flexGrow: 1,
+          overflowY: "auto",
+          borderBottom: "1px solid gray"
+        }
+      }
     }
   }
 });

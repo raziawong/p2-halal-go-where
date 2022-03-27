@@ -1,7 +1,15 @@
 import React, { Fragment, useState } from "react";
 import { useForm } from "react-hook-form";
-import valHelper, { valPatterns } from "../utils/validation"
-import { Button, Container, Grid, MenuItem, TextField } from "@mui/material";
+import valHelper, { valPatterns } from "../utils/validation";
+import { default as Editor } from "mui-rte";
+import {
+  Box,
+  Button,
+  Container,
+  Grid,
+  MenuItem,
+  TextField,
+} from "@mui/material";
 
 export default function Create(props) {
   const initialState = {
@@ -19,7 +27,11 @@ export default function Create(props) {
     city: "",
     tags: [],
   };
-  const { register, handleSubmit, formState: {errors} } = useForm({defaultValues: {...initialState} });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ defaultValues: { ...initialState } });
   const liftData = (data) => {
     props.submitArticle(data);
   };
@@ -27,62 +39,109 @@ export default function Create(props) {
   return (
     <Fragment>
       <Container maxWidth="xl" disableGutters>
-        <Grid container spacing={2} sx={{ m: 4}}>
+        <Box sx={{ m: 4 }}>
+          <Grid container spacing={2}>
             <Grid item md={6}>
-                <TextField
+              <TextField
                 fullWidth
                 label="Display Name"
                 name="displayName"
-                {...register("displayName", { maxLength: 80, pattern: valPatterns.displayName })}
-                {...valHelper(errors.displayName, {pattern: "displayName", length: 80})}
-                />
+                {...register("displayName", {
+                  maxLength: 80,
+                  pattern: valPatterns.displayName,
+                })}
+                {...valHelper(errors.displayName, {
+                  pattern: "displayName",
+                  length: 80,
+                })}
+              />
             </Grid>
             <Grid item md={6}>
-                <TextField
+              <TextField
                 fullWidth
                 label="Contact Name"
                 name="name"
-                {...register("name", { required: true, maxLength: 80, pattern: valPatterns.displayName })}
-                {...valHelper(errors.name, {length: 80, pattern: "displayName"})}
-                />
+                {...register("name", {
+                  required: true,
+                  maxLength: 80,
+                  pattern: valPatterns.displayName,
+                })}
+                {...valHelper(errors.name, {
+                  length: 80,
+                  pattern: "displayName",
+                })}
+              />
             </Grid>
             <Grid item md={6}>
-                <TextField
+              <TextField
                 fullWidth
                 label="Email"
                 name="email"
-                {...register("email", { required: true, pattern: valPatterns.email })}
-                {...valHelper(errors.email, {pattern: "email"})}
-                />
+                {...register("email", {
+                  required: true,
+                  pattern: valPatterns.email,
+                })}
+                {...valHelper(errors.email, { pattern: "email" })}
+              />
             </Grid>
             <Grid item md={6}>
-                <TextField
+              <TextField
                 fullWidth
                 label="Title"
                 name="title"
-                {...register("title", { required: true, maxLength: 50, pattern: valPatterns.displayName })}
-                {...valHelper(errors.title, {length: 50, pattern: "displayName"})}
-                />
+                {...register("title", {
+                  required: true,
+                  maxLength: 50,
+                  pattern: valPatterns.displayName,
+                })}
+                {...valHelper(errors.title, {
+                  length: 50,
+                  pattern: "displayName",
+                })}
+              />
             </Grid>
             <Grid item md={6}>
-                <TextField
+              <TextField
                 fullWidth
                 label="Description"
                 name="description"
                 {...register("description", { required: true, maxLength: 150 })}
-                {...valHelper(errors.description, {length: 150, pattern: "displayName"})}
-                />
+                {...valHelper(errors.description, {
+                  length: 150,
+                  pattern: "displayName",
+                })}
+              />
             </Grid>
             <Grid item md={6}>
-                <TextField
+              <TextField
+                fullWidth
+                label="Header"
+                name="header"
+                {...register("header", { maxLength: 50, pattern: valPatterns.displayName })}
+                {...valHelper(errors.header, {
+                    length: 50,
+                    pattern: "displayName",
+                })}
+              />
+            </Grid>
+            <Grid item md={12}>
+              <Editor
+                toolbarButtonSize="small"
+                inlineToolbar
+                label="Start typing"
+                onChange={(value) => {}}
+              />
+            </Grid>
+            <Grid item md={6}>
+              <TextField
                 fullWidth
                 label="Address"
                 name="address"
                 {...register("address")}
-                />
+              />
             </Grid>
             <Grid item md={6}>
-                <TextField
+              <TextField
                 select
                 fullWidth
                 label="Country"
@@ -90,12 +149,12 @@ export default function Create(props) {
                 defaultValue="none"
                 {...register("country", { required: true })}
                 {...valHelper(errors.country)}
-                >
-                    <MenuItem value="none">None</MenuItem>
-                </TextField>
+              >
+                <MenuItem value="none">None</MenuItem>
+              </TextField>
             </Grid>
             <Grid item md={6}>
-                <TextField
+              <TextField
                 select
                 fullWidth
                 label="City"
@@ -103,11 +162,11 @@ export default function Create(props) {
                 defaultValue="none"
                 {...register("city", { required: true })}
                 {...valHelper(errors.city)}
-                >
-                    <MenuItem value="none">None</MenuItem>
-                </TextField>
+              >
+                <MenuItem value="none">None</MenuItem>
+              </TextField>
             </Grid>
-            {/* <Grid item md={6}>
+            <Grid item md={6}>
                 <TextField
                 select
                 fullWidth
@@ -132,13 +191,26 @@ export default function Create(props) {
                 >
                     <MenuItem value="none">None</MenuItem>
                 </TextField>
-            </Grid> */}
-            <Grid item md={12}>
-                <Button type="submit" variant="contained" onClick={handleSubmit(liftData)}>
-                    Submit
-                </Button>
             </Grid>
-        </Grid>
+            <Grid item md={6}>
+              <TextField
+                fullWidth
+                label="Tags"
+                name="tags"
+                {...register("tags")}
+              />
+            </Grid>
+            <Grid item md={12}>
+              <Button
+                type="submit"
+                variant="contained"
+                onClick={handleSubmit(liftData)}
+              >
+                Submit
+              </Button>
+            </Grid>
+          </Grid>
+        </Box>
       </Container>
     </Fragment>
   );
