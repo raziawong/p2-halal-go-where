@@ -19,7 +19,6 @@ const valTemplates = {
 
 const valHelper = (err, { pattern, length }= {}) => {
   let helperText = "";
-  console.log(err);
   if (err) {
     if (err.type === "pattern") {
       helperText = pattern === "displayName" ? valTemplates.special

@@ -11,7 +11,8 @@ const mgwRequests = {
     dataPaths: {
         countries: "/countries/cities",
         categories : "/categories/subcats",
-        articles: "/articles"
+        articles: "/articles",
+        articlesTags: "/articles/tags"
     },
     queryPaths: {
         countries: "/countries",
@@ -54,17 +55,32 @@ const mgwCategoriesMap = {
     }
 }
 
-const getMgwData = async () => {
-    let gCountries = mgwRequests.axiosBase.get(mgwRequests.dataPaths.countries);
-    let gCategories = mgwRequests.axiosBase.get(mgwRequests.dataPaths.categories);
+const getMgwFixed = async () => {
+  let gCountries = mgwRequests.axiosBase.get(mgwRequests.dataPaths.countries);
+  let gCategories = mgwRequests.axiosBase.get(mgwRequests.dataPaths.categories);
+  let data = {};
+
+  await Promise.all([gCountries, gCategories]).then(r => {
+    data = {
+      countries: r[0].data,
+      categories: r[1].data
+    };
+  }).catch(err => {
+    console.log("Cannot get countries and categories data from APIs. Please contact administrator.");
+  });
+
+  return data;
+}
+
+const getMgwArticles = async () => {
     let gArticles = mgwRequests.axiosBase.get(mgwRequests.dataPaths.articles);
+    let gArticleTags = mgwRequests.axiosBase.get(mgwRequests.dataPaths.articlesTags);
     let data = {};
 
-    await Promise.all([gCountries, gCategories, gArticles]).then(r => {
+    await Promise.all([gArticles, gArticleTags]).then(r => {
       data = {
-        countries: r[0].data,
-        categories: r[1].data,
-        articles: r[2].data
+        main: r[0].data,
+        tags: r[1].data
       };
     }).catch(err => {
       console.log("Cannot get data from APIs. Please contact administrator.");
@@ -85,4 +101,4 @@ const getCategories = async (params) => {
   return await mgwRequests.axiosBase.get(mgwRequests.queryPaths.categories, { params });
 }
 
-export { mgwCategoriesMap, getMgwData, getArticles, getCountries, getCategories };
+export { mgwCategoriesMap, getMgwFixed, getMgwArticles, getArticles, getCountries, getCategories };

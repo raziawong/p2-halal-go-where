@@ -1,6 +1,6 @@
 import "./assets/custom.css";
 import mgwTheme from "./utils/mgwTheme";
-import { getMgwData, getArticles } from "./utils/data";
+import { getMgwFixed, getMgwArticles, getArticles } from "./utils/data";
 import React, { Component, Fragment } from "react";
 import { ThemeProvider } from "@mui/material";
 import { Navigate, Routes, Route } from "react-router-dom";
@@ -18,19 +18,38 @@ export default class Main extends Component {
       subcategories: [],
     },
     filteredData: [],
-    countriesData: [],
-    categoriesData: [],
-    articlesData: [],
+    articleInputs: {
+      displayName: "",
+      name: "",
+      email: "",
+      allowPublic: false,
+      title: "",
+      description: "",
+      details: [],
+      photos: [],
+      categories: [],
+      address: "",
+      country: "",
+      city: "",
+      tags: [],
+    },
+    allCountries: [],
+    allCategories: [],
+    allArticles: [],
+    allTags: [],
     loaded: false,
   };
 
   async componentDidMount() {
-    let data = await getMgwData();
+    let fixed = await getMgwFixed();
+    let articles = await getMgwArticles();
+    let uniqueTags = articles.tags.results.reduce((a, r) => [...a, ...r.tags], []).filter((v,i,a) => a.indexOf(v) == i );
 
     this.setState({
-      countriesData: data.countries,
-      categoriesData: data.categories,
-      articlesData: data.articles,
+      allCountries: fixed.countries,
+      allCategories: fixed.categories,
+      allArticles: articles.main,
+      allTags: uniqueTags,
       loaded: true,
     });
   }
@@ -73,6 +92,8 @@ export default class Main extends Component {
               />
               <Route path="/create" element={
                 <Create
+                  tagOpts={this.state.allTags}
+                  article={this.state.articleInputs}
                   submitArticle={this.submitArticle}
                 />
               } />

@@ -3,8 +3,10 @@ import { useForm } from "react-hook-form";
 import valHelper, { valPatterns } from "../utils/validation";
 import { default as Editor } from "mui-rte";
 import {
+  Autocomplete,
   Box,
   Button,
+  Chip,
   Container,
   Grid,
   MenuItem,
@@ -12,28 +14,14 @@ import {
 } from "@mui/material";
 
 export default function Create(props) {
-  const initialState = {
-    displayName: "test",
-    name: "",
-    email: "",
-    allowPublic: false,
-    title: "",
-    description: "",
-    details: [],
-    photos: [],
-    categories: [],
-    address: "",
-    country: "",
-    city: "",
-    tags: [],
-  };
+  const { tagOpts, article, submitArticle } = props;
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({ defaultValues: { ...initialState } });
+  } = useForm({ defaultValues: { ...article } });
   const liftData = (data) => {
-    props.submitArticle(data);
+    submitArticle(data);
   };
 
   return (
@@ -117,16 +105,33 @@ export default function Create(props) {
                 fullWidth
                 label="Header"
                 name="header"
-                {...register("header", { maxLength: 50, pattern: valPatterns.displayName })}
+                {...register("header", {
+                  maxLength: 50,
+                  pattern: valPatterns.displayName,
+                })}
                 {...valHelper(errors.header, {
-                    length: 50,
-                    pattern: "displayName",
+                  length: 50,
+                  pattern: "displayName",
                 })}
               />
             </Grid>
             <Grid item md={12}>
               <Editor
                 toolbarButtonSize="small"
+                controls={[
+                  "bold",
+                  "italic",
+                  "underline",
+                  "strikethrough",
+                  "highlight",
+                  "undo",
+                  "redo",
+                  "link",
+                  "numberList",
+                  "bulletList",
+                  "quote",
+                  "code",
+                ]}
                 inlineToolbar
                 label="Start typing"
                 onChange={(value) => {}}
@@ -142,8 +147,7 @@ export default function Create(props) {
             </Grid>
             <Grid item md={6}>
               <TextField
-                select
-                fullWidth
+                select fullWidth
                 label="Country"
                 name="country"
                 defaultValue="none"
@@ -155,8 +159,7 @@ export default function Create(props) {
             </Grid>
             <Grid item md={6}>
               <TextField
-                select
-                fullWidth
+                select fullWidth
                 label="City"
                 name="city"
                 defaultValue="none"
@@ -167,37 +170,43 @@ export default function Create(props) {
               </TextField>
             </Grid>
             <Grid item md={6}>
-                <TextField
-                select
-                fullWidth
+              <TextField
+                select fullWidth
                 label="Categories"
                 name="categories"
                 defaultValue="none"
                 {...register("country", { required: true })}
                 {...valHelper(errors.country)}
-                >
-                    <MenuItem value="none">None</MenuItem>
-                </TextField>
+              >
+                <MenuItem value="none">None</MenuItem>
+              </TextField>
             </Grid>
             <Grid item md={6}>
-                <TextField
-                select
-                fullWidth
+              <TextField
+                select fullWidth
                 label="City"
                 name="city"
                 defaultValue="none"
                 {...register("city", { required: true })}
                 {...valHelper(errors.city)}
-                >
-                    <MenuItem value="none">None</MenuItem>
-                </TextField>
+              >
+                <MenuItem value="none">None</MenuItem>
+              </TextField>
             </Grid>
             <Grid item md={6}>
-              <TextField
-                fullWidth
-                label="Tags"
+              <Autocomplete
+                autoSelect freeSolo multiple fullWidth
                 name="tags"
-                {...register("tags")}
+                options={tagOpts}
+                renderInput={(params) => (
+                  <TextField {...params} label="Tags" />
+                )}
+                renderTags={(value, getTagProps) =>
+                    value.map((option, index) => (
+                      <Chip variant="outlined" label={option} {...getTagProps({ index })} />
+                    ))
+                }
+                onChange={(evt, value) => console.log(value)}
               />
             </Grid>
             <Grid item md={12}>
