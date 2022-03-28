@@ -3,7 +3,8 @@ import React, { Component, Fragment } from "react";
 import { ThemeProvider } from "@mui/material";
 import { Navigate, Routes, Route } from "react-router-dom";
 import { getMgwFixed, getMgwArticles, getArticles } from "./utils/data";
-import helper from "./utils/helper"
+import helper from "./utils/helper";
+import { SiteContainer, ViewContainer } from "./utils/mgwStyle";
 import { Home, Explore, Create, Article, Loader, NavBar } from "./site";
 
 export default class Main extends Component {
@@ -17,7 +18,7 @@ export default class Main extends Component {
     allTags: [],
     isRedirectArticle: false,
     isRedirectListing: false,
-    isLoaded: false
+    isLoaded: false,
   };
 
   async componentDidMount() {
@@ -40,67 +41,69 @@ export default class Main extends Component {
   render() {
     return (
       <ThemeProvider theme={mgwTheme}>
-        <Fragment>
-          {this.state.isLoaded ? <></> : <Loader />}
-          <NavBar />
-          <Routes>
-            <Route
-              index
-              path="/"
-              element={
-                this.state.isRedirectListing ? (
-                  <Navigate replace to="/explore" />
-                ) : (
-                  <Home
+        <SiteContainer sx={{ overflow: this.state.isLoaded ? "" : "hidden"}}>
+          <ViewContainer>
+            <NavBar />
+            <Routes>
+              <Route
+                index
+                path="/"
+                element={
+                  this.state.isRedirectListing ? (
+                    <Navigate replace to="/explore" />
+                  ) : (
+                    <Home
+                      filterOpts={this.state.filterOpts}
+                      setOpts={this.setFilterOpts}
+                      execSearch={this.searchArticles}
+                    />
+                  )
+                }
+              />
+              <Route
+                path="explore"
+                element={
+                  <Explore
                     filterOpts={this.state.filterOpts}
+                    countries={this.state.allCountries}
+                    categories={this.state.allCategories}
+                    articles={this.state.filteredData}
+                    setMgwState={this.setMgwState}
                     setOpts={this.setFilterOpts}
                     execSearch={this.searchArticles}
                   />
-                )
-              }
-            />
-            <Route
-              path="explore"
-              element={
-                <Explore
-                  filterOpts={this.state.filterOpts}
-                  countries={this.state.allCountries}
-                  categories={this.state.allCategories}
-                  articles={this.state.filteredData}
-                  setMgwState={this.setMgwState}
-                  setOpts={this.setFilterOpts}
-                  execSearch={this.searchArticles}
-                />
-              }
-            />
-            <Route
-              path="create"
-              element={
-                <Create
-                  tagOpts={this.state.allTags}
-                  article={this.state.articleInputs}
-                  submitArticle={this.submitArticle}
-                />
-              }
-            />
-            <Route
-              path="article/:id"
-              element={
-                <Article
-                  article={this.state.articleInputs}
-                  setMgwState={this.setMgwState}
-                />
-              }
-            />
-          </Routes>
-        </Fragment>
+                }
+              />
+              <Route
+                path="create"
+                element={
+                  <Create
+                    tagOpts={this.state.allTags}
+                    article={this.state.articleInputs}
+                    submitArticle={this.submitArticle}
+                  />
+                }
+              />
+              <Route
+                path="article/:id"
+                element={
+                  <Article
+                    article={this.state.articleInputs}
+                    setMgwState={this.setMgwState}
+                  />
+                }
+              />
+            </Routes>
+          </ViewContainer>
+          <Loader toShow={!this.state.isLoaded}/>
+        </SiteContainer>
       </ThemeProvider>
     );
   }
 
   setMgwState = (pairs) => {
-    this.setState({...pairs});
-  }
+    this.setState({ ...pairs });
+  };
 
   setFilterOpts = (evt) => {
     let { name, value } = evt.target;
@@ -114,28 +117,28 @@ export default class Main extends Component {
 
   searchArticles = async (evt, viewType) => {
     let { type, key } = evt;
-    if ( type === "mousedown" || type === "click" || key === "Enter") {
+    if (type === "mousedown" || type === "click" || key === "Enter") {
       this.setState({
-        isLoaded: false
+        isLoaded: false,
       });
 
       if (viewType === helper.exploreView) {
         let params = Object.fromEntries(
           Object.entries(this.state.filterOpts).filter(
-            ([k, v]) => typeof(v) !== "undefined" && (v.length || v)
+            ([k, v]) => typeof v !== "undefined" && (v.length || v)
           )
         );
         let query = await getArticles(params);
         this.setState({
           isRedirectListing: true,
-          filteredData: query.data ? query.data : []
+          filteredData: query.data ? query.data : [],
         });
       } else if (viewType === helper.articleView) {
         let query = await getArticles({ articleId: this.state.filterOpts.id });
         this.setState({
           filterOpts: { ...helper.initFilterOpts },
           isRedirectArticle: true,
-          filteredData: query.data ? query.data : []
+          filteredData: query.data ? query.data : [],
         });
       }
     }

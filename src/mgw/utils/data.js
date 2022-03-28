@@ -6,7 +6,7 @@ import defaultMusolla from "../../assets/image/default-musolla.jpg";
 
 const mgwRequests = {
     axiosBase: axios.create({
-        baseURL: "http://localhost:3388"
+        baseURL: "https://muslim-go-where-api.herokuapp.com"
     }),
     dataPaths: {
         countries: "/countries/cities",

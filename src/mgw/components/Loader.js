@@ -1,9 +1,9 @@
 import "../../assets/loader.css"
-import { LoaderContainer } from "../utils/mgwStyle";
+import { LoaderBackdrop } from "../utils/mgwStyle";
 
-export default function Loader() {
+export default function Loader(props) {
     return (
-      <LoaderContainer>
+      <LoaderBackdrop open={props.toShow}>
         <svg width="127" height="142" viewBox="307.252 49.757 126.737 142.018" xmlns="http://www.w3.org/2000/svg">
           <g transform="matrix(1, 0, 0, -1, 0.333115, 499.376465)">
             <g transform="translate(314.4023 370.9849)">
@@ -64,6 +64,6 @@ export default function Loader() {
             </g>
           </g>
         </svg>
-      </LoaderContainer>
+      </LoaderBackdrop>
     );
 }

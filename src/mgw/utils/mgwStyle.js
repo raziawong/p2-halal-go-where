@@ -1,13 +1,30 @@
 import { alpha, styled } from '@mui/material/styles';
 import { Link } from "react-router-dom";
-import { Box, Drawer } from "@mui/material";
+import { Backdrop, Box, Drawer } from "@mui/material";
 import { mgwColors } from './mgwTheme';
 
-const LoaderContainer = styled(Box, {
+const SiteContainer = styled(Box)(({ theme }) => ({
+    position: "relative",
+    height: "100vh",
+    width: "100vw"
+}));
+
+const ViewContainer = styled(Box)(({ theme }) => ({
+    top: 0,
+    left: 0,
+    position: "absolute",
+    width: "100%"
+}));
+
+const LoaderBackdrop = styled(Backdrop, {
     shouldForwardProp: (prop) => prop !== "width" || prop !== "height",
   })(({ width, height, theme }) => ({
+    top: 0,
+    left: 0,
     width: width || "100vw",
     height: height || "100vh",
+    overflow: "hidden",
+    position: "absolute",
     display: "flex",
     alignItems: "center",
     justifyContent: "center"
@@ -78,4 +95,4 @@ const HeroOverlay = styled(Box)(({ theme }) => ({
     position: "absolute"
 }));
 
-export { LoaderContainer, NavBarDrawer, NavBarLogo, NavBarLink, HeroBanner, HeroOverlay };
+export { SiteContainer, ViewContainer, LoaderBackdrop, NavBarDrawer, NavBarLogo, NavBarLink, HeroBanner, HeroOverlay };
