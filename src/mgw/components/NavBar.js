@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "../assets/image/mgw-logo.svg";
+import logo from "../../assets/image/mgw-logo.svg";
 import { NavBarLogo, NavBarLink } from "../utils/mgwStyle";
 import { AppBar, Box, Container, Toolbar } from "@mui/material";
 import { CollectionsBookmarkSharp, NoteAddSharp, ViewListSharp } from "@mui/icons-material";

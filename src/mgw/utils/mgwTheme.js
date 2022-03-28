@@ -75,5 +75,5 @@ const mgwTheme = createTheme({
   }
 });
 
-export { mgwColors };
 export default mgwTheme;
+export { mgwColors };

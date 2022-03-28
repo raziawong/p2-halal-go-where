@@ -1,8 +1,8 @@
 import axios from "axios";
-import defaultAttractions from "../assets/image/default-attractions.jpg";
-import defaultFood from "../assets/image/default-food.jpg";
-import defaultMasjid from "../assets/image/default-masjid.jpg";
-import defaultMusolla from "../assets/image/default-musolla.jpg";
+import defaultAttractions from "../../assets/image/default-attractions.jpg";
+import defaultFood from "../../assets/image/default-food.jpg";
+import defaultMasjid from "../../assets/image/default-masjid.jpg";
+import defaultMusolla from "../../assets/image/default-musolla.jpg";
 
 const mgwRequests = {
     axiosBase: axios.create({

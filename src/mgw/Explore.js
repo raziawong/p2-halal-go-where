@@ -1,4 +1,4 @@
-import { mgwCategoriesMap } from "../utils/data";
+import { mgwCategoriesMap } from "./utils/data";
 import React, { Fragment, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
@@ -31,11 +31,8 @@ export default function Explore(props) {
   } = props;
 
   useEffect(() => {
-    if (!mount) {
-      setMount(true);
-      setMgwState({ isRedirectListing: false });
-    }
-  }, [setMgwState, mount]);
+    setMgwState({ isLoaded: true, isRedirectListing: false });
+  }, [setMgwState]);
 
   return (
     <Fragment>

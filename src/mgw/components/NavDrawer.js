@@ -1,6 +1,6 @@
 import React from "react";
 import { NavBarDrawer, NavBarLink } from "../utils/mgwStyle";
-import { Drawer, IconButton, List, ListItem, ListItemText } from "@mui/material";
+import { IconButton, List, ListItem, ListItemText } from "@mui/material";
 import { CollectionsBookmarkSharp, HomeSharp, MenuSharp, NoteAddSharp, ViewListSharp } from "@mui/icons-material";
 
 export default class NavDrawer extends React.Component {

@@ -10,9 +10,9 @@ import {
   OutlinedInput,
 } from "@mui/material";
 import banner from "../assets/image/banner.jpg"
-import { HeroBanner, HeroOverlay } from "../utils/mgwStyle";
+import { HeroBanner, HeroOverlay } from "./utils/mgwStyle";
 import { SearchSharp } from "@mui/icons-material";
-import helper from "../utils/helper";
+import helper from "./utils/helper";
 
 export default function Home(props) {
   const { filterOpts, setOpts, execSearch } = props;

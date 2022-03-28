@@ -1,4 +1,4 @@
-import "../assets/loader.css";
+import "../../assets/loader.css"
 import { LoaderContainer } from "../utils/mgwStyle";
 
 export default function Loader() {
