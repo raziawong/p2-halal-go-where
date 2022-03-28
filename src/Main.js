@@ -7,38 +7,20 @@ import { Navigate, Routes, Route } from "react-router-dom";
 import { Loader, NavBar } from "./components/collection.js";
 import { Home, Explore, Create } from "./views/collection.js";
 import Article from "./views/Article";
+import helper from "./utils/helper";
 
 export default class Main extends Component {
   state = {
-    redirectFilter: false,
-    filterOpts: {
-      stext: "",
-      country: "none",
-      city: "none",
-      categories: "none",
-      subcategories: [],
-    },
+    filterOpts: { ...helper.initFilterOpts },
     filteredData: [],
-    articleInputs: {
-      displayName: "",
-      name: "",
-      email: "",
-      allowPublic: false,
-      title: "",
-      description: "",
-      details: [],
-      photos: [],
-      categories: [],
-      address: "",
-      country: "",
-      city: "",
-      tags: [],
-    },
+    articleInputs: { ...helper.initArticleInputs },
     allCountries: [],
     allCategories: [],
     allArticles: [],
     allTags: [],
-    loaded: false,
+    isRedirectArticle: false,
+    isRedirectListing: false,
+    isLoaded: false
   };
 
   async componentDidMount() {
@@ -52,49 +34,46 @@ export default class Main extends Component {
       allCountries: fixed.countries,
       allCategories: fixed.categories,
       allArticles: articles.main,
+      filteredData: articles.main,
       allTags: uniqueTags,
-      loaded: true,
+      isLoaded: true,
     });
   }
 
   render() {
     return (
       <ThemeProvider theme={mgwTheme}>
-        {this.state.loaded ? (
+        {this.state.isLoaded ? (
           <Fragment>
             <NavBar />
             <Routes>
-              <Route
-                index
-                path="/"
+              <Route index path="/"
                 element={
-                  this.state.redirectFilter ? (
+                  this.state.isRedirectListing ? (
                     <Navigate replace to="/explore" />
                   ) : (
                     <Home
-                      searchText={this.state.filterOpts.stext}
+                      filterOpts={this.state.filterOpts}
                       setOpts={this.setFilterOpts}
                       execSearch={this.searchArticles}
                     />
                   )
                 }
               />
-              <Route
-                path="explore"
+              <Route path="explore"
                 element={
                   <Explore
-                    searchOpts={this.state.filterOpts}
+                    filterOpts={this.state.filterOpts}
                     countries={this.state.allCountries}
                     categories={this.state.allCategories}
-                    articles={this.state.allArticles}
-                    redirect={this.setRedirectFilter}
+                    articles={this.state.filteredData}
+                    setMgwState={this.setMgwState}
                     setOpts={this.setFilterOpts}
                     execSearch={this.searchArticles}
                   />
                 }
               />
-              <Route
-                path="create"
+              <Route path="create"
                 element={
                   <Create
                     tagOpts={this.state.allTags}
@@ -103,7 +82,12 @@ export default class Main extends Component {
                   />
                 }
               />
-              <Route path="article/:id" element={<Article />} />
+              <Route path="article/:id" element={
+                <Article
+                  article={this.state.articleInputs}
+                  setMgwState={this.setMgwState}
+                />} 
+              />
             </Routes>
           </Fragment>
         ) : (
@@ -113,11 +97,9 @@ export default class Main extends Component {
     );
   }
 
-  setRedirectFilter = (val) => {
-    this.setState({
-      redirectFilter: val,
-    });
-  };
+  setMgwState = (pairs) => {
+    this.setState(pairs);
+  }
 
   setFilterOpts = (evt) => {
     let { name, value } = evt.target;
@@ -129,23 +111,27 @@ export default class Main extends Component {
     });
   };
 
-  searchArticles = async (evt) => {
+  searchArticles = async (evt, viewType) => {
     let { type, key } = evt;
-    let { value } = evt.target;
-    value = value ? value : this.state.filterOpts.stext;
-
-    if (
-      type === "mousedown" ||
-      type === "click" ||
-      (type === "" && key === "Enter")
-    ) {
-      let query = await getArticles({
-        text: value,
-      });
-      if (query.data) {
+    console.log(type, key);
+    if ( type === "mousedown" || type === "click" || key === "Enter") {
+      if (viewType === helper.exploreView) {
+        let params = Object.fromEntries(
+          Object.entries(this.state.filterOpts).filter(
+            ([k, v]) => typeof(v) !== "undefined" && (v.length || v)
+          )
+        );
+        let query = await getArticles(params);
         this.setState({
-          redirectFilter: true,
-          filteredData: query.data,
+          isRedirectListing: true,
+          filteredData: query.data
+        });
+      } else if (viewType === helper.articleView) {
+        let query = await getArticles({ articleId: this.state.filterOpts.id });
+        this.setState({
+          filterOpts: { ...helper.initFilterOpts },
+          isRedirectArticle: true,
+          filteredData: query.data
         });
       }
     }

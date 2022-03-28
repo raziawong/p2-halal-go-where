@@ -12,9 +12,10 @@ import {
 import banner from "../assets/image/banner.jpg"
 import { HeroBanner, HeroOverlay } from "../utils/mgwStyle";
 import { SearchSharp } from "@mui/icons-material";
+import helper from "../utils/helper";
 
 export default function Home(props) {
-  const { searchText, setOpts, execSearch } = props;
+  const { filterOpts, setOpts, execSearch } = props;
 
   return (
     <Fragment>
@@ -24,19 +25,19 @@ export default function Home(props) {
             <FormControl>
               <OutlinedInput
                 id="home-search"
-                name="stext"
+                name="text"
                 label="Search"
                 arial-label="Search"
-                value={searchText}
+                value={filterOpts.text}
                 onChange={setOpts}
-                onKeyDown={execSearch}
+                onKeyDown={(evt) => execSearch(evt, helper.exploreView)}
                 startAdornment={
                   <InputAdornment position="start">
                     <IconButton
                       aria-label="Submit Search"
-                      onClick={execSearch}
-                      onMouseDown={execSearch}
-                      onKeyDown={execSearch}
+                      onClick={(evt) => execSearch(evt, helper.exploreView)}
+                      onMouseDown={(evt) => execSearch(evt, helper.exploreView)}
+                      onKeyDown={(evt) => execSearch(evt, helper.exploreView)}
                     >
                       <SearchSharp sx={{ color: "white", mr: 1, my: 0.5 }} />
                     </IconButton>

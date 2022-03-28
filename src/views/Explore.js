@@ -21,21 +21,21 @@ import { Masonry } from "@mui/lab";
 export default function Explore(props) {
   const [mount, setMount] = useState(false);
   const {
-    redirect,
-    searchOpts,
+    setMgwState,
     setOpts,
+    filterOpts,
     execSearch,
     countries,
     categories,
-    articles,
+    articles
   } = props;
 
   useEffect(() => {
     if (!mount) {
       setMount(true);
-      redirect(false);
+      setMgwState({ isRedirectListing: false });
     }
-  }, [redirect, mount]);
+  }, [setMgwState, mount]);
 
   return (
     <Fragment>
@@ -47,9 +47,9 @@ export default function Explore(props) {
               id="explore-search"
               label="Search"
               arial-label="Search"
-              name="stext"
+              name="text"
               size="small"
-              value={searchOpts.stext}
+              value={filterOpts.text}
               onChange={setOpts}
             />
           </FormControl>
@@ -61,14 +61,14 @@ export default function Explore(props) {
               arial-label="Country"
               name="country"
               size="small"
-              value={searchOpts.country}
+              value={filterOpts.countryId}
               onChange={setOpts}
             >
               <MenuItem value="none">
                 <em>None</em>
               </MenuItem>
               {countries.results.map((country) => (
-                <MenuItem key={country._id} value={country.code}>
+                <MenuItem key={country._id} value={country._id}>
                   {country.name}
                 </MenuItem>
               ))}
@@ -82,15 +82,15 @@ export default function Explore(props) {
               arial-label="City"
               name="city"
               size="small"
-              value={searchOpts.city}
+              value={filterOpts.cityId}
               onChange={setOpts}
-              disabled={searchOpts.city ? false : true}
+              disabled={filterOpts.cityId ? false : true}
             >
               <MenuItem value="none">
                 <em>Select country first</em>
               </MenuItem>
               {countries.results.map((country) => (
-                <MenuItem key={country._id} value={country.code}>
+                <MenuItem key={country._id} value={country._id}>
                   {country.name}
                 </MenuItem>
               ))}
@@ -104,14 +104,14 @@ export default function Explore(props) {
               arial-label="Categories"
               name="categories"
               size="small"
-              value={searchOpts.categories}
+              value={filterOpts.catIds}
               onChange={setOpts}
             >
               <MenuItem value="none">
                 <em>None</em>
               </MenuItem>
               {categories.results.map((cat) => (
-                <MenuItem key={cat._id} value={cat.value}>
+                <MenuItem key={cat._id} value={cat._id}>
                   {cat.name}
                 </MenuItem>
               ))}
@@ -157,11 +157,14 @@ export default function Explore(props) {
                     </Box>
                   </CardContent>
                   <CardActions>
-                    <Link to={`/article/${card._id}`}>
-                      <Button size="small" color="primary">
-                        Find out more
-                      </Button>
-                    </Link>
+                    <Button
+                      component={Link}
+                      to={`/article/${card._id}`}
+                      size="small"
+                      color="primary"
+                    >
+                      Find out more
+                    </Button>
                   </CardActions>
                 </Card>
               );
