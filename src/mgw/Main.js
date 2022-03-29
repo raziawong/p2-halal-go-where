@@ -16,9 +16,11 @@ export default class Main extends Component {
     allCategories: [],
     allArticles: [],
     allTags: [],
+
     isRedirectArticle: false,
     isRedirectListing: false,
     isLoaded: false,
+    test: {}
   };
 
   async componentDidMount() {
@@ -92,6 +94,8 @@ export default class Main extends Component {
                   <Article
                     articleInputs={this.state.articleInputs}
                     article={this.state.filteredData}
+                    loaded={this.state.isLoaded}
+                    setFilterOpts={this.setFilterOpts}
                     setMgwState={this.setMgwState}
                     execSearch={this.searchArticles}
                   />
@@ -121,15 +125,15 @@ export default class Main extends Component {
   };
 
   setFilterOpts = ({name, value}) => {
+    let opts = this.state.filterOpts;
+    opts[name] = value;
     this.setState({
-      filterOpts: {
-        ...this.state.filterOpts,
-        [name]: value
-      },
+      filterOpts: { ...opts }
     });
   };
 
   searchArticles = async (viewType) => {
+    console.log("Options: ", this.state);
     this.setState({ isLoaded: false });
     let params, query = {};
 
@@ -146,9 +150,9 @@ export default class Main extends Component {
     query = await getArticles(params);
     if (query.data && query.data.count) {
       this.setState({
-        filterOpts: viewType === helper.articleView ?  { ...helper.initFilterOpts } : this.state.filterOpts,
+        // filterOpts: viewType === helper.articleView ?  { ...helper.initFilterOpts } : this.state.filterOpts,
         [viewType === helper.articleView ? "isRedirectArticle" : "isRedirectListing" ]: true,
-        filteredData: query.data.results || [],
+        filteredData: [...query.data.results] || [],
         isLoaded: true
       });
     }

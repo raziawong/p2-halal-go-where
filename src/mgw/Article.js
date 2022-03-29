@@ -1,30 +1,26 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import {
-    Container,
-    Box,
-    Typography
-  } from "@mui/material";
-import { getArticles } from "./utils/data";
+import { Container, Box, Typography } from "@mui/material";
+import helper from "./utils/helper";
 
-export default async function Article(props) {
-  const { article, setMgwState } = props;
+export default function Article(props) {
+  const { articleInputs, article, loaded, setMgwState, setFilterOpts, execSearch } = props;
   const params = useParams();
-  const fetchArticle = async (id) => {
-    let articleData = await getArticles({articleId: id});
-    setMgwState({
-      isLoaded: true,
-      articleInputs: articleData.data ? articleData.data : {}
-    });
-  }
+
+  useEffect(async () => {
+    setFilterOpts({ name: "id", value: params.id });
+    await execSearch(helper.articleView);
+    setMgwState({ isRedirectArticle: false });
+  }, [execSearch]);
 
   return (
     <Fragment>
       <Container maxWidth="xl" disableGutters>
-        <Box sx={{ m: 4, display: "flex" }}>
-            Article {params.id}
-            
-        </Box>
+        {!loaded ? (
+          <></>
+        ) : (
+          <Box sx={{ m: 4, display: "flex" }}>{article[0].title}</Box>
+        )}
       </Container>
     </Fragment>
   );

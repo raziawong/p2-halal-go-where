@@ -171,11 +171,7 @@ export default function Explore(props) {
                         component={Link}
                         to={`/article/${card._id}`}
                         size="small"
-                        color="primary"
-                        onClick={() =>
-                          setFilterOpts({ name: "articleId", value: card._id })
-                        }
-                      >
+                        color="primary">
                         Find out more
                       </Button>
                     </CardActions>
