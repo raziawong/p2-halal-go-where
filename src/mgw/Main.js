@@ -32,7 +32,7 @@ export default class Main extends Component {
       allCountries: fixed.countries,
       allCategories: fixed.categories,
       allArticles: articles.main,
-      filteredData: articles.main,
+      filteredData: articles.main.count ? articles.main.results : [],
       allTags: uniqueTags,
       isLoaded: true,
     });
@@ -41,7 +41,7 @@ export default class Main extends Component {
   render() {
     return (
       <ThemeProvider theme={mgwTheme}>
-        <SiteContainer sx={{ overflow: this.state.isLoaded ? "" : "hidden"}}>
+        <SiteContainer sx={{ overflow: this.state.isLoaded ? "" : "hidden" }}>
           <ViewContainer>
             <NavBar />
             <Routes>
@@ -54,8 +54,8 @@ export default class Main extends Component {
                   ) : (
                     <Home
                       filterOpts={this.state.filterOpts}
-                      setOpts={this.setFilterOpts}
-                      execSearch={this.searchArticles}
+                      detectFilter={this.detectFilter}
+                      detectSearch={this.detectSearch}
                     />
                   )
                 }
@@ -68,9 +68,11 @@ export default class Main extends Component {
                     countries={this.state.allCountries}
                     categories={this.state.allCategories}
                     articles={this.state.filteredData}
+                    loaded={this.state.isLoaded}
                     setMgwState={this.setMgwState}
-                    setOpts={this.setFilterOpts}
-                    execSearch={this.searchArticles}
+                    setFilterOpts={this.setFilterOpts}
+                    detectFilter={this.detectFilter}
+                    detectSearch={this.detectSearch}
                   />
                 }
               />
@@ -88,59 +90,67 @@ export default class Main extends Component {
                 path="article/:id"
                 element={
                   <Article
-                    article={this.state.articleInputs}
+                    articleInputs={this.state.articleInputs}
+                    article={this.state.filteredData}
                     setMgwState={this.setMgwState}
+                    execSearch={this.searchArticles}
                   />
                 }
               />
             </Routes>
           </ViewContainer>
-          <Loader toShow={!this.state.isLoaded}/>
+          <Loader toShow={!this.state.isLoaded} />
         </SiteContainer>
       </ThemeProvider>
     );
+  }
+
+  detectSearch = (evt, viewType) => {
+    let { type, key } = evt;
+    if (type === "mousedown" || type === "click" || key === "Enter") {
+      this.searchArticles(viewType);
+    }
+  };
+  
+  detectFilter = (evt) => {
+    this.setFilterOpts(evt.target);
   }
 
   setMgwState = (pairs) => {
     this.setState({ ...pairs });
   };
 
-  setFilterOpts = (evt) => {
-    let { name, value } = evt.target;
+  setFilterOpts = ({name, value}) => {
     this.setState({
       filterOpts: {
         ...this.state.filterOpts,
-        [name]: value,
+        [name]: value
       },
     });
   };
 
-  searchArticles = async (evt, viewType) => {
-    let { type, key } = evt;
-    if (type === "mousedown" || type === "click" || key === "Enter") {
-      this.setState({
-        isLoaded: false,
-      });
+  searchArticles = async (viewType) => {
+    this.setState({ isLoaded: false });
+    let params, query = {};
 
-      if (viewType === helper.exploreView) {
-        let params = Object.fromEntries(
-          Object.entries(this.state.filterOpts).filter(
-            ([k, v]) => typeof v !== "undefined" && (v.length || v)
-          )
-        );
-        let query = await getArticles(params);
-        this.setState({
-          isRedirectListing: true,
-          filteredData: query.data ? query.data : [],
-        });
-      } else if (viewType === helper.articleView) {
-        let query = await getArticles({ articleId: this.state.filterOpts.id });
-        this.setState({
-          filterOpts: { ...helper.initFilterOpts },
-          isRedirectArticle: true,
-          filteredData: query.data ? query.data : [],
-        });
-      }
+    if (viewType === helper.exploreView) {
+      params = Object.fromEntries(
+        Object.entries(this.state.filterOpts).filter(
+          ([k, v]) => typeof v !== "undefined" && (v.length || v)
+        )
+      );
+    } else if (viewType === helper.articleView) {
+      params = { articleId: this.state.filterOpts.id };
+    }
+
+    query = await getArticles(params);
+    if (query.data && query.data.count) {
+      this.setState({
+        filterOpts: viewType === helper.articleView ?  { ...helper.initFilterOpts } : this.state.filterOpts,
+        [viewType === helper.articleView ? "isRedirectArticle" : "isRedirectListing" ]: true,
+        filteredData: query.data.results || [],
+        isLoaded: true
+      });
     }
   };
 

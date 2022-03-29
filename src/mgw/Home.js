@@ -15,7 +15,7 @@ import { SearchSharp } from "@mui/icons-material";
 import helper from "./utils/helper";
 
 export default function Home(props) {
-  const { filterOpts, setOpts, execSearch } = props;
+  const { filterOpts, detectFilter, detectSearch } = props;
 
   return (
     <Fragment>
@@ -29,15 +29,15 @@ export default function Home(props) {
                 label="Search"
                 arial-label="Search"
                 value={filterOpts.text}
-                onChange={setOpts}
-                onKeyDown={(evt) => execSearch(evt, helper.exploreView)}
+                onChange={detectFilter}
+                onKeyDown={(evt) => detectSearch(evt, helper.exploreView)}
                 startAdornment={
                   <InputAdornment position="start">
                     <IconButton
                       aria-label="Submit Search"
-                      onClick={(evt) => execSearch(evt, helper.exploreView)}
-                      onMouseDown={(evt) => execSearch(evt, helper.exploreView)}
-                      onKeyDown={(evt) => execSearch(evt, helper.exploreView)}
+                      onClick={(evt) => detectSearch(evt, helper.exploreView)}
+                      onMouseDown={(evt) => detectSearch(evt, helper.exploreView)}
+                      onKeyDown={(evt) => detectSearch(evt, helper.exploreView)}
                     >
                       <SearchSharp sx={{ color: "white", mr: 1, my: 0.5 }} />
                     </IconButton>
