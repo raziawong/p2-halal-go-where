@@ -10,6 +10,7 @@ const mgwRequests = {
     }),
     dataPaths: {
         countries: "/countries/cities",
+        locationTagged: "/countries/cities/tagged",
         categories : "/categories/subcats",
         articles: "/articles",
         articlesTags: "/articles/tags"
@@ -75,15 +76,17 @@ const getMgwFixed = async () => {
 const getMgwArticles = async () => {
     let gArticles = mgwRequests.axiosBase.get(mgwRequests.dataPaths.articles);
     let gArticleTags = mgwRequests.axiosBase.get(mgwRequests.dataPaths.articlesTags);
+    let gCountriesTagged = mgwRequests.axiosBase.get(mgwRequests.dataPaths.locationTagged);
     let data = {};
 
-    await Promise.all([gArticles, gArticleTags]).then(r => {
+    await Promise.all([gArticles, gArticleTags, gCountriesTagged]).then(r => {
       data = {
         main: r[0].data,
-        tags: r[1].data
+        tags: r[1].data,
+        location: r[2].data
       };
     }).catch(err => {
-      console.log("Cannot get data from APIs. Please contact administrator.");
+      console.log("Cannot get articles data from APIs. Please contact administrator.");
     });
 
     return data;

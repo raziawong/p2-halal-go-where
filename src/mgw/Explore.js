@@ -6,11 +6,13 @@ import {
   CardActions,
   CardContent,
   CardMedia,
+  Checkbox,
   Container,
   Box,
   Button,
   FormControl,
   InputLabel,
+  ListItemText,
   MenuItem,
   OutlinedInput,
   Select,
@@ -35,6 +37,44 @@ export default function Explore(props) {
     setMgwState({ isRedirectListing: false });
   }, [setMgwState]);
 
+  const countryOptDisplay = () => {
+    return countries.length
+      ? countries.map((country) => (
+          <MenuItem key={country._id} value={country._id}>
+            {country.name}
+          </MenuItem>
+        ))
+      : [];
+  };
+
+  const cityOptDisplay = () => {
+    let c = countries.length
+      ? filterOpts.countryId
+        ? countries.filter((country) => country._id === filterOpts.countryId)
+        : countries
+      : [];
+    return c.length
+      ? c.map((country) =>
+          country.cities.map((city) => (
+            <MenuItem key={city._id} value={city._id}>
+              {city.name}
+            </MenuItem>
+          ))
+        )
+      : [];
+  };
+
+  const categoriesOptDispay = () => {
+    return categories.count
+      ? categories.results.map((cat) => (
+          <MenuItem key={cat._id} value={cat._id}>
+            <Checkbox checked={filterOpts.catIds.indexOf(cat._id) > -1} />
+            <ListItemText primary={cat.name} />
+          </MenuItem>
+        ))
+      : [];
+  };
+
   return (
     <Container maxWidth="xl" disableGutters>
       {!loaded ? (
@@ -57,65 +97,57 @@ export default function Explore(props) {
             <FormControl sx={{ width: "100%" }}>
               <InputLabel htmlFor="explore-country">Country</InputLabel>
               <Select
+                displayEmpty
                 id="explore-country"
                 label="Country"
                 arial-label="Country"
-                name="country"
+                name="countryId"
                 size="small"
                 value={filterOpts.countryId}
                 onChange={detectFilter}
               >
-                <MenuItem value="none">
+                <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
-                {countries.results.map((country) => (
-                  <MenuItem key={country._id} value={country._id}>
-                    {country.name}
-                  </MenuItem>
-                ))}
+                {countryOptDisplay()}
               </Select>
             </FormControl>
             <FormControl sx={{ width: "100%" }}>
               <InputLabel htmlFor="explore-city">City</InputLabel>
               <Select
+                displayEmpty
                 id="explore-city"
                 label="city"
                 arial-label="City"
-                name="city"
+                name="cityId"
                 size="small"
                 value={filterOpts.cityId}
                 onChange={detectFilter}
-                disabled={filterOpts.cityId ? false : true}
               >
-                <MenuItem value="none">
-                  <em>Select country first</em>
+                <MenuItem value="">
+                  <em>None</em>
                 </MenuItem>
-                {countries.results.map((country) => (
-                  <MenuItem key={country._id} value={country._id}>
-                    {country.name}
-                  </MenuItem>
-                ))}
+                {cityOptDisplay()}
               </Select>
             </FormControl>
             <FormControl sx={{ width: "100%" }}>
               <InputLabel htmlFor="explore-categories">Categories</InputLabel>
               <Select
+                multiple
+                displayEmpty
                 id="explore-categories"
                 label="categories"
                 arial-label="Categories"
-                name="categories"
+                name="catIds"
                 size="small"
                 value={filterOpts.catIds}
                 onChange={detectFilter}
+                renderValue={(sel) => sel.length ? sel.join(", ") : <em>None</em>}
               >
-                <MenuItem value="none">
-                  <em>None</em>
+                <MenuItem value="">
+                  <em>All</em>
                 </MenuItem>
-                {categories.results.map((cat) => (
-                  <MenuItem key={cat._id} value={cat._id}>
-                    {cat.name}
-                  </MenuItem>
-                ))}
+                {categoriesOptDispay()}
               </Select>
             </FormControl>
           </Box>
@@ -171,7 +203,8 @@ export default function Explore(props) {
                         component={Link}
                         to={`/article/${card._id}`}
                         size="small"
-                        color="primary">
+                        color="primary"
+                      >
                         Find out more
                       </Button>
                     </CardActions>

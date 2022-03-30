@@ -10,13 +10,13 @@ import { Home, Explore, Create, Article, Loader, NavBar } from "./site";
 export default class Main extends Component {
   state = {
     filterOpts: { ...helper.initFilterOpts },
-    filteredData: [],
     articleInputs: { ...helper.initArticleInputs },
     allCountries: [],
     allCategories: [],
     allArticles: [],
-    allTags: [],
-
+    articlesFetched: [],
+    articlesTags: [],
+    articlesLocations: [],
     isRedirectArticle: false,
     isRedirectListing: false,
     isLoaded: false,
@@ -34,9 +34,10 @@ export default class Main extends Component {
       allCountries: fixed.countries,
       allCategories: fixed.categories,
       allArticles: articles.main,
-      filteredData: articles.main.count ? articles.main.results : [],
-      allTags: uniqueTags,
-      isLoaded: true,
+      articlesFetched: articles.main.count ? articles.main.results : [],
+      articlesTags: uniqueTags,
+      articlesLocations: articles.location.count ? articles.location.results: [],
+      isLoaded: true
     });
   }
 
@@ -67,9 +68,9 @@ export default class Main extends Component {
                 element={
                   <Explore
                     filterOpts={this.state.filterOpts}
-                    countries={this.state.allCountries}
+                    countries={this.state.articlesLocations}
                     categories={this.state.allCategories}
-                    articles={this.state.filteredData}
+                    articles={this.state.articlesFetched}
                     loaded={this.state.isLoaded}
                     setMgwState={this.setMgwState}
                     setFilterOpts={this.setFilterOpts}
@@ -82,7 +83,7 @@ export default class Main extends Component {
                 path="create"
                 element={
                   <Create
-                    tagOpts={this.state.allTags}
+                    tagOpts={this.state.articlesTags}
                     article={this.state.articleInputs}
                     submitArticle={this.submitArticle}
                   />
@@ -93,7 +94,7 @@ export default class Main extends Component {
                 element={
                   <Article
                     articleInputs={this.state.articleInputs}
-                    article={this.state.filteredData}
+                    article={this.state.articlesFetched}
                     loaded={this.state.isLoaded}
                     setFilterOpts={this.setFilterOpts}
                     setMgwState={this.setMgwState}
@@ -133,7 +134,6 @@ export default class Main extends Component {
   };
 
   searchArticles = async (viewType) => {
-    console.log("Options: ", this.state);
     this.setState({ isLoaded: false });
     let params, query = {};
 
@@ -152,7 +152,7 @@ export default class Main extends Component {
       this.setState({
         // filterOpts: viewType === helper.articleView ?  { ...helper.initFilterOpts } : this.state.filterOpts,
         [viewType === helper.articleView ? "isRedirectArticle" : "isRedirectListing" ]: true,
-        filteredData: [...query.data.results] || [],
+        articlesFetched: [...query.data.results] || [],
         isLoaded: true
       });
     }
