@@ -141,7 +141,7 @@ export default class Main extends Component {
     let inputs = {...this.state.articleInputs};
     inputs.details.push(detailObj);
     this.setState({
-      filterOpts: inputs
+      articleInputs: inputs
     });
   };
 
@@ -149,7 +149,7 @@ export default class Main extends Component {
     let inputs = {...this.state.articleInputs};
     inputs.details.splice(index, 1);
     this.setState({
-      filterOpts: inputs
+      articleInputs: inputs
     });
   }
 

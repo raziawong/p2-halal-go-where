@@ -24,7 +24,7 @@ export default function Article(props) {
             <h1>{view.title}</h1>
             <h5>{view.description}</h5>
             {
-              view.details.length > 0 && view.details.map((d, i) =>
+              view.details && view.details.length > 0 && view.details.map((d, i) =>
                 <Fragment key={i}>
                   <h6>{d.sectionName}</h6>
                   {d.content}
