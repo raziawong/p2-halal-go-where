@@ -11,7 +11,7 @@ const helper = {
     cityId: "",
     catIds: [],
     subcatIds: [],
-    rating: [0, 5],
+    rating: [0, 5]
   },
   emptyDetail: {
     sectionName: "", 
@@ -33,33 +33,15 @@ const helper = {
     address: "",
     country: "",
     city: "",
-    tags: [],
+    tags: []
   },
   ratingMarks: [
-    {
-      value: 0,
-      text: "No Rating",
-    },
-    {
-      value: 1,
-      text: "1",
-    },
-    {
-      value: 2,
-      text: "2",
-    },
-    {
-      value: 3,
-      text: "3",
-    },
-    {
-      value: 4,
-      text: "4",
-    },
-    {
-      value: 5,
-      text: "5",
-    },
+    { value: 0, text: "No Rating" },
+    { value: 1, text: "1" },
+    { value: 2, text: "2" },
+    { value: 3, text: "3" },
+    { value: 4, text: "4" },
+    { value: 5, text: "5" }
   ],
   rteControls: [
     "bold",
@@ -132,7 +114,7 @@ const helper = {
     displayName: /^[A-Za-zÀ-ȕ\s-]*$/,
     optionValue: /^[A-Za-z0-9-]*$/,
     email: /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
-    url: /^[(http(s)?)://(www.)?a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)$/,
+    url: /^[(http(s)?)://(www.)?a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)$/
   },
   templates: {
     required: `This is required`,
@@ -142,7 +124,7 @@ const helper = {
     maxLength: (length) =>
       `This cannot exceed ${length} characters including spaces`,
     email: `This is not a valid email address`,
-    url: `This is not a valid URL`,
+    url: `This is not a valid URL`
   },
   validate: (err, { pattern, length }= {}) => {
     let helperText = "";

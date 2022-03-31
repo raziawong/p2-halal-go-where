@@ -38,7 +38,7 @@ export default function Explore(props) {
   useEffect(() => {
     setMgwState({ isRedirectListing: false });
   }, [setMgwState]);
-  
+
   return (
     <Container maxWidth="xl" disableGutters>
       {!loaded ? (
@@ -47,10 +47,8 @@ export default function Explore(props) {
         <Fragment>
           <Box sx={{ m: 4}}>
             <FormControl sx={{ width: "50%" }}>
-              <InputLabel htmlFor="explore-search">Search</InputLabel>
               <OutlinedInput
                 id="explore-search"
-                label="Search"
                 arial-label="Search"
                 name="text"
                 size="small"
@@ -59,11 +57,9 @@ export default function Explore(props) {
               />
             </FormControl>
             <FormControl sx={{ width: "100%" }}>
-              <InputLabel htmlFor="explore-country">Country</InputLabel>
               <Select
                 displayEmpty
                 id="explore-country"
-                label="Country"
                 arial-label="Country"
                 name="countryId"
                 size="small"
@@ -77,11 +73,9 @@ export default function Explore(props) {
               </Select>
             </FormControl>
             <FormControl sx={{ width: "100%" }}>
-              <InputLabel htmlFor="explore-city">City</InputLabel>
               <Select
                 displayEmpty
                 id="explore-city"
-                label="City"
                 arial-label="City"
                 name="cityId"
                 size="small"
@@ -95,12 +89,9 @@ export default function Explore(props) {
               </Select>
             </FormControl>
             <FormControl sx={{ width: "100%" }}>
-              <InputLabel htmlFor="explore-categories">Categories</InputLabel>
               <Select
-                multiple
-                displayEmpty
+                multiple displayEmpty
                 id="explore-categories"
-                label="Categories"
                 arial-label="Categories"
                 name="catIds"
                 size="small"
@@ -115,12 +106,9 @@ export default function Explore(props) {
               </Select>
             </FormControl>
             <FormControl sx={{ width: "100%" }}>
-              <InputLabel htmlFor="explore-subcategories">Sub-categories</InputLabel>
               <Select
-                multiple
-                displayEmpty
+                multiple displayEmpty
                 id="explore-subcategories"
-                label="Sub-categories"
                 arial-label="Sub-Categories"
                 name="subcatIds"
                 size="small"
@@ -135,7 +123,6 @@ export default function Explore(props) {
               </Select>
             </FormControl>
             <FormControl sx={{ width: "100%" }}>
-              <InputLabel htmlFor="explore-rating">Rating</InputLabel>
               <Slider
                 id="explore-rating"
                 marks={helper.ratingMarks}
