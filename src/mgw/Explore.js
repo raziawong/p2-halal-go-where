@@ -77,13 +77,30 @@ export default function Explore(props) {
       : [];
   };
 
+  const subcategoriesOptDispay = () => {
+    let c = categories.results.length
+      ? filterOpts.catIds.length > 0
+        ? categories.results.filter((cat) => filterOpts.catIds.indexOf(cat._id) > 0)
+        : categories.results
+      : [];
+    return c.length
+      ? c.map((cat) =>
+          cat.subcats.map((subcat) => (
+            <MenuItem key={subcat._id} value={subcat._id}>
+              {subcat.name}
+            </MenuItem>
+          ))
+        )
+      : [];
+  };
+
   return (
     <Container maxWidth="xl" disableGutters>
       {!loaded ? (
         <></>
       ) : (
         <Fragment>
-          <Box sx={{ m: 4, display: "flex" }}>
+          <Box sx={{ m: 4}}>
             <FormControl sx={{ width: "50%" }}>
               <InputLabel htmlFor="explore-search">Search</InputLabel>
               <OutlinedInput
@@ -119,7 +136,7 @@ export default function Explore(props) {
               <Select
                 displayEmpty
                 id="explore-city"
-                label="city"
+                label="City"
                 arial-label="City"
                 name="cityId"
                 size="small"
@@ -138,7 +155,7 @@ export default function Explore(props) {
                 multiple
                 displayEmpty
                 id="explore-categories"
-                label="categories"
+                label="Categories"
                 arial-label="Categories"
                 name="catIds"
                 size="small"
@@ -147,23 +164,45 @@ export default function Explore(props) {
                 renderValue={(sel) => sel.length ? sel.join(", ") : <em>None</em>}
               >
                 <MenuItem value="">
-                  <em>All</em>
+                  <em>None</em>
                 </MenuItem>
                 {categoriesOptDispay()}
               </Select>
             </FormControl>
             <FormControl sx={{ width: "100%" }}>
-            <Slider
-              marks={helper.ratingMarks}
-              min={helper.ratingMarks[0].value} 
-              max={helper.ratingMarks.slice(-1)[0].value}
-              getAriaLabel={() => "Rating range"}
-              valueLabelDisplay="auto"
-              name="rating"
-              size="small"
-              value={filterOpts.rating}
-              onChange={detectFilter}
-            />
+              <InputLabel htmlFor="explore-subcategories">Sub-categories</InputLabel>
+              <Select
+                multiple
+                displayEmpty
+                id="explore-subcategories"
+                label="Sub-categories"
+                arial-label="Sub-Categories"
+                name="subcatIds"
+                size="small"
+                value={filterOpts.subcatIds}
+                onChange={detectFilter}
+                renderValue={(sel) => sel.length ? sel.join(", ") : <em>None</em>}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {subcategoriesOptDispay()}
+              </Select>
+            </FormControl>
+            <FormControl sx={{ width: "100%" }}>
+              <InputLabel htmlFor="explore-rating">Rating</InputLabel>
+              <Slider
+                id="explore-rating"
+                marks={helper.ratingMarks}
+                min={helper.ratingMarks[0].value} 
+                max={helper.ratingMarks.slice(-1)[0].value}
+                getAriaLabel={() => "Rating range"}
+                valueLabelDisplay="auto"
+                name="rating"
+                size="small"
+                value={filterOpts.rating}
+                onChange={detectFilter}
+              />
             </FormControl>
             <Button
                 type="submit"
