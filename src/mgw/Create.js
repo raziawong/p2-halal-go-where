@@ -1,6 +1,8 @@
 import React, { Fragment, useState } from "react";
 import { useForm } from "react-hook-form";
-import valHelper, { valPatterns } from "./utils/validation";
+import helper from "./utils/helper";
+import { convertToRaw } from "draft-js";
+import { draftToMarkdown, markdownToDraft } from "markdown-draft-js";
 import { default as Editor } from "mui-rte";
 import {
   Autocomplete,
@@ -9,20 +11,38 @@ import {
   Chip,
   Container,
   Grid,
+  IconButton,
   MenuItem,
   TextField,
 } from "@mui/material";
+import { AddCircleOutlineSharp, RemoveCircleOutlineSharpIcon } from '@mui/icons-material';
 
 export default function Create(props) {
   const { tagOpts, article, submitArticle } = props;
+
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    getValues,
+    formState: { errors }
   } = useForm({ defaultValues: { ...article } });
+
   const liftData = (data) => {
+    console.log(data);
     submitArticle(data);
   };
+
+  const changeDetail = (evt, index) => {
+    let { name, value } = evt.target;
+  };
+
+  const removeDetail = () => {
+
+  };
+
+  const addDetail = () => {
+
+;  }
 
   return (
     <Fragment>
@@ -36,9 +56,9 @@ export default function Create(props) {
                 name="displayName"
                 {...register("displayName", {
                   maxLength: 80,
-                  pattern: valPatterns.displayName,
+                  pattern: helper.regex.displayName,
                 })}
-                {...valHelper(errors.displayName, {
+                {...helper.validate(errors.displayName, {
                   pattern: "displayName",
                   length: 80,
                 })}
@@ -52,9 +72,9 @@ export default function Create(props) {
                 {...register("name", {
                   required: true,
                   maxLength: 80,
-                  pattern: valPatterns.displayName,
+                  pattern: helper.regex.displayName,
                 })}
-                {...valHelper(errors.name, {
+                {...helper.validate(errors.name, {
                   length: 80,
                   pattern: "displayName",
                 })}
@@ -67,9 +87,9 @@ export default function Create(props) {
                 name="email"
                 {...register("email", {
                   required: true,
-                  pattern: valPatterns.email,
+                  pattern: helper.regex.email,
                 })}
-                {...valHelper(errors.email, { pattern: "email" })}
+                {...helper.validate(errors.email, { pattern: "email" })}
               />
             </Grid>
             <Grid item md={6}>
@@ -80,9 +100,9 @@ export default function Create(props) {
                 {...register("title", {
                   required: true,
                   maxLength: 50,
-                  pattern: valPatterns.displayName,
+                  pattern: helper.regex.displayName,
                 })}
-                {...valHelper(errors.title, {
+                {...helper.validate(errors.title, {
                   length: 50,
                   pattern: "displayName",
                 })}
@@ -94,48 +114,46 @@ export default function Create(props) {
                 label="Description"
                 name="description"
                 {...register("description", { required: true, maxLength: 150 })}
-                {...valHelper(errors.description, {
+                {...helper.validate(errors.description, {
                   length: 150,
                   pattern: "displayName",
                 })}
               />
             </Grid>
-            <Grid item md={6}>
-              <TextField
-                fullWidth
-                label="Header"
-                name="header"
-                {...register("header", {
-                  maxLength: 50,
-                  pattern: valPatterns.displayName,
-                })}
-                {...valHelper(errors.header, {
-                  length: 50,
-                  pattern: "displayName",
-                })}
-              />
-            </Grid>
             <Grid item md={12}>
-              <Editor
-                toolbarButtonSize="small"
-                controls={[
-                  "bold",
-                  "italic",
-                  "underline",
-                  "strikethrough",
-                  "highlight",
-                  "undo",
-                  "redo",
-                  "link",
-                  "numberList",
-                  "bulletList",
-                  "quote",
-                  "code",
-                ]}
-                inlineToolbar
-                label="Start typing"
-                onChange={(value) => {}}
-              />
+              <Box sx={{ m: 4 }}>
+                <TextField
+                  fullWidth
+                  label="Header"
+                  name="header"
+                  {...register("header", {
+                    maxLength: 50,
+                    pattern: helper.regex.displayName,
+                  })}
+                  {...helper.validate(errors.header, {
+                    length: 50,
+                    pattern: "displayName",
+                  })}
+                />
+                <Editor
+                  toolbarButtonSize="small"
+                  controls={helper.rteControls}
+                  inlineToolbar
+                  label="Start typing"
+                  onChange={(evt) => 
+                    {
+                      let rte = draftToMarkdown(
+                        convertToRaw(evt.getCurrentContent())
+                      );
+                      return rte;
+                    }
+                  }
+                />             
+              </Box>
+
+              <IconButton color="primary" aria-label="Add Details">
+                <AddCircleOutlineSharp />
+              </IconButton>
             </Grid>
             <Grid item md={6}>
               <TextField
@@ -152,7 +170,7 @@ export default function Create(props) {
                 name="country"
                 defaultValue="none"
                 {...register("country", { required: true })}
-                {...valHelper(errors.country)}
+                {...helper.validate(errors.country)}
               >
                 <MenuItem value="none">None</MenuItem>
               </TextField>
@@ -164,7 +182,7 @@ export default function Create(props) {
                 name="city"
                 defaultValue="none"
                 {...register("city", { required: true })}
-                {...valHelper(errors.city)}
+                {...helper.validate(errors.city)}
               >
                 <MenuItem value="none">None</MenuItem>
               </TextField>
@@ -176,7 +194,7 @@ export default function Create(props) {
                 name="categories"
                 defaultValue="none"
                 {...register("country", { required: true })}
-                {...valHelper(errors.country)}
+                {...helper.validate(errors.country)}
               >
                 <MenuItem value="none">None</MenuItem>
               </TextField>
@@ -188,7 +206,7 @@ export default function Create(props) {
                 name="city"
                 defaultValue="none"
                 {...register("city", { required: true })}
-                {...valHelper(errors.city)}
+                {...helper.validate(errors.city)}
               >
                 <MenuItem value="none">None</MenuItem>
               </TextField>

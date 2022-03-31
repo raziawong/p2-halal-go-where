@@ -54,12 +54,14 @@ const mgwTheme = createTheme({
           overflow: "hidden"
         },
         container: {
+          width: "100%",
           margin: 0,
           minHeight: 200,
           display: "flex",
           flexDirection: "column"
         },
         toolbar: {
+          width: "100%",
           flexShrink: 0
         },
         placeHolder: {

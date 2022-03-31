@@ -53,6 +53,20 @@ const helper = {
       text: "5",
     },
   ],
+  rteControls: [
+    "bold",
+    "italic",
+    "underline",
+    "strikethrough",
+    "highlight",
+    "undo",
+    "redo",
+    "link",
+    "numberList",
+    "bulletList",
+    "quote",
+    "code"
+  ],
   countryOptDisplay: (countries) => {
     return countries.length
       ? countries.map((country) => (
@@ -105,6 +119,41 @@ const helper = {
         )
       : [];
   },
+  regex: {
+    spaces: /^[\s]*$/,
+    displayName: /^[A-Za-zÀ-ȕ\s\-]*$/,
+    optionValue: /^[A-Za-z0-9\-]*$/,
+    email: /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+    url: /^[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/,
+  },
+  templates: {
+    required: `This is required`,
+    spaces: `This cannot contain only space(s)`,
+    special: `This cannot contain special characters`,
+    specialSpace: `This cannot contain special characters and/or spaces`,
+    maxLength: (length) =>
+      `This cannot exceed ${length} characters including spaces`,
+    email: `This is not a valid email address`,
+    url: `This is not a valid URL`,
+  },
+  validate: (err, { pattern, length }= {}) => {
+    let helperText = "";
+    if (err) {
+      if (err.type === "pattern") {
+        helperText = pattern === "displayName" ? helper.templates.special
+            : pattern === "optionValue" ? helper.templates.optionValue
+            : pattern === "email" ? helper.templates.email
+            : pattern === "url" ? helper.templates.url
+            : "";
+      } else if (err.type === "maxLength") {
+        helperText = helper.templates.maxLength(length);
+      } else if (err.type === "required") {
+        helperText = helper.templates.required;
+      }
+    }
+    return helperText ? { error: true, helperText } : {error: false};
+  }
 };
+
 
 export default helper;
