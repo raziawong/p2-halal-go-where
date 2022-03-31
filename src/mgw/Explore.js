@@ -38,62 +38,7 @@ export default function Explore(props) {
   useEffect(() => {
     setMgwState({ isRedirectListing: false });
   }, [setMgwState]);
-
-  const countryOptDisplay = () => {
-    return countries.length
-      ? countries.map((country) => (
-          <MenuItem key={country._id} value={country._id}>
-            {country.name}
-          </MenuItem>
-        ))
-      : [];
-  };
-
-  const cityOptDisplay = () => {
-    let c = countries.length
-      ? filterOpts.countryId
-        ? countries.filter((country) => country._id === filterOpts.countryId)
-        : countries
-      : [];
-    return c.length
-      ? c.map((country) =>
-          country.cities.map((city) => (
-            <MenuItem key={city._id} value={city._id}>
-              {city.name}
-            </MenuItem>
-          ))
-        )
-      : [];
-  };
-
-  const categoriesOptDispay = () => {
-    return categories.count
-      ? categories.results.map((cat) => (
-          <MenuItem key={cat._id} value={cat._id}>
-            <Checkbox checked={filterOpts.catIds.indexOf(cat._id) > -1} />
-            <ListItemText primary={cat.name} />
-          </MenuItem>
-        ))
-      : [];
-  };
-
-  const subcategoriesOptDispay = () => {
-    let c = categories.results.length
-      ? filterOpts.catIds.length > 0
-        ? categories.results.filter((cat) => filterOpts.catIds.indexOf(cat._id) > 0)
-        : categories.results
-      : [];
-    return c.length
-      ? c.map((cat) =>
-          cat.subcats.map((subcat) => (
-            <MenuItem key={subcat._id} value={subcat._id}>
-              {subcat.name}
-            </MenuItem>
-          ))
-        )
-      : [];
-  };
-
+  
   return (
     <Container maxWidth="xl" disableGutters>
       {!loaded ? (
@@ -128,7 +73,7 @@ export default function Explore(props) {
                 <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
-                {countryOptDisplay()}
+                {helper.countryOptDisplay(countries)}
               </Select>
             </FormControl>
             <FormControl sx={{ width: "100%" }}>
@@ -146,7 +91,7 @@ export default function Explore(props) {
                 <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
-                {cityOptDisplay()}
+                {helper.cityOptDisplay(countries, filterOpts.countryId)}
               </Select>
             </FormControl>
             <FormControl sx={{ width: "100%" }}>
@@ -166,7 +111,7 @@ export default function Explore(props) {
                 <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
-                {categoriesOptDispay()}
+                {helper.categoriesOptDispay(categories.count > 0 ? categories.results : [], filterOpts.catIds)}
               </Select>
             </FormControl>
             <FormControl sx={{ width: "100%" }}>
@@ -186,7 +131,7 @@ export default function Explore(props) {
                 <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
-                {subcategoriesOptDispay()}
+                {helper.subcategoriesOptDispay(categories.count > 0 ? categories.results : [], filterOpts.catIds, filterOpts.subcatIds)}
               </Select>
             </FormControl>
             <FormControl sx={{ width: "100%" }}>
