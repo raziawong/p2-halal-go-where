@@ -24,9 +24,9 @@ export default class Main extends Component {
   };
 
   async componentDidMount() {
-    let fixed = await getMgwFixed();
-    let articles = await getMgwArticles();
-    let uniqueTags = articles.tags.results
+    const fixed = await getMgwFixed();
+    const articles = await getMgwArticles();
+    const uniqueTags = articles.tags.results
       .reduce((a, r) => [...a, ...r.tags], [])
       .filter((v, i, a) => a.indexOf(v) === i);
 
@@ -85,6 +85,10 @@ export default class Main extends Component {
                   <Create
                     tagOpts={this.state.articlesTags}
                     article={this.state.articleInputs}
+                    countries={this.state.allCountries}
+                    categories={this.state.allCategories}
+                    setDetail={this.setArticleDetail}
+                    removeDetail={this.removeArticleDetail}
                     submitArticle={this.submitArticle}
                   />
                 }
@@ -111,7 +115,7 @@ export default class Main extends Component {
   }
 
   detectSearch = (evt, viewType) => {
-    let { type, key } = evt;
+    const { type, key } = evt;
     if (type === "mousedown" || type === "click" || key === "Enter") {
       this.searchArticles(viewType);
     }
@@ -126,12 +130,28 @@ export default class Main extends Component {
   };
 
   setFilterOpts = ({name, value}) => {
-    let opts = this.state.filterOpts;
+    let opts = { ...this.state.filterOpts };
     opts[name] = value;
     this.setState({
-      filterOpts: { ...opts }
+      filterOpts: opts
     });
   };
+
+  setArticleDetail = (detailObj) => {
+    let inputs = {...this.state.articleInputs};
+    inputs.details.push(detailObj);
+    this.setState({
+      filterOpts: inputs
+    });
+  };
+
+  removeArticleDetail = (index) => {
+    let inputs = {...this.state.articleInputs};
+    inputs.details.splice(index, 1);
+    this.setState({
+      filterOpts: inputs
+    });
+  }
 
   searchArticles = async (viewType) => {
     this.setState({ isLoaded: false });

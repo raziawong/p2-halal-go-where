@@ -1,4 +1,5 @@
 import { Checkbox, ListItemText, MenuItem } from "@mui/material";
+import { EditorState, convertToRaw } from "draft-js";
 
 const helper = {
   exploreView: "listing",
@@ -12,6 +13,10 @@ const helper = {
     subcatIds: [],
     rating: [0, 5],
   },
+  emptyDetail: {
+    sectionName: "", 
+    content: JSON.stringify(convertToRaw(EditorState.createEmpty().getCurrentContent()))
+  },
   initArticleInputs: {
     displayName: "",
     name: "",
@@ -19,7 +24,10 @@ const helper = {
     allowPublic: false,
     title: "",
     description: "",
-    details: [],
+    details: [{
+      sectionName: "", 
+      content: JSON.stringify(convertToRaw(EditorState.createEmpty().getCurrentContent()))
+    }],
     photos: [],
     categories: [],
     address: "",
@@ -77,7 +85,7 @@ const helper = {
       : [];
   },
   cityOptDisplay: (countries, countryId) => {
-    let c = countries.length
+    const c = countries.length
       ? countryId
         ? countries.filter((country) => country._id === countryId)
         : countries
@@ -103,7 +111,7 @@ const helper = {
       : [];
   },
   subcategoriesOptDispay: (categories, catIds, subcatIds) => {
-    let c = categories
+    const c = categories
       ? catIds.length > 0
         ? categories.filter((cat) => catIds.indexOf(cat._id) > -1)
         : categories
@@ -121,10 +129,10 @@ const helper = {
   },
   regex: {
     spaces: /^[\s]*$/,
-    displayName: /^[A-Za-zÀ-ȕ\s\-]*$/,
-    optionValue: /^[A-Za-z0-9\-]*$/,
+    displayName: /^[A-Za-zÀ-ȕ\s-]*$/,
+    optionValue: /^[A-Za-z0-9-]*$/,
     email: /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
-    url: /^[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/,
+    url: /^[(http(s)?)://(www.)?a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)$/,
   },
   templates: {
     required: `This is required`,

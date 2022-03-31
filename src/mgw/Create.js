@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from "react";
 import { useForm } from "react-hook-form";
 import helper from "./utils/helper";
-import { convertToRaw } from "draft-js";
+import { EditorState, convertToRaw, convertFromRaw } from "draft-js";
 import { draftToMarkdown, markdownToDraft } from "markdown-draft-js";
 import { default as Editor } from "mui-rte";
 import {
@@ -15,10 +15,10 @@ import {
   MenuItem,
   TextField,
 } from "@mui/material";
-import { AddCircleOutlineSharp, RemoveCircleOutlineSharpIcon } from '@mui/icons-material';
+import { AddCircleOutlineSharp, RemoveCircleOutlineSharp } from '@mui/icons-material';
 
 export default function Create(props) {
-  const { tagOpts, article, submitArticle } = props;
+  const { tagOpts, article, setDetail, removeDetail, submitArticle } = props;
 
   const {
     register,
@@ -29,20 +29,25 @@ export default function Create(props) {
 
   const liftData = (data) => {
     console.log(data);
-    submitArticle(data);
+    //submitArticle(data);
   };
 
   const changeDetail = (evt, index) => {
+    if (evt.target) {
     let { name, value } = evt.target;
+    console.log(name, value);
+    } else {
+      console.log(evt)
+    }
   };
 
-  const removeDetail = () => {
-
+  const handleRemoveDetail = (evt, i) => {
+    removeDetail(i);
   };
 
-  const addDetail = () => {
-
-;  }
+  const handleAddDetail = (evt) => {
+    setDetail(helper.emptyDetail);
+  };
 
   return (
     <Fragment>
@@ -121,39 +126,62 @@ export default function Create(props) {
               />
             </Grid>
             <Grid item md={12}>
-              <Box sx={{ m: 4 }}>
-                <TextField
-                  fullWidth
-                  label="Header"
-                  name="header"
-                  {...register("header", {
-                    maxLength: 50,
-                    pattern: helper.regex.displayName,
-                  })}
-                  {...helper.validate(errors.header, {
-                    length: 50,
-                    pattern: "displayName",
-                  })}
-                />
-                <Editor
-                  toolbarButtonSize="small"
-                  controls={helper.rteControls}
-                  inlineToolbar
-                  label="Start typing"
-                  onChange={(evt) => 
-                    {
-                      let rte = draftToMarkdown(
-                        convertToRaw(evt.getCurrentContent())
-                      );
-                      return rte;
-                    }
-                  }
-                />             
-              </Box>
-
-              <IconButton color="primary" aria-label="Add Details">
-                <AddCircleOutlineSharp />
-              </IconButton>
+              {article.details.map((dtl, i) => {
+                return (
+                  <Fragment key={i}>
+                    <Box sx={{ m: 4 }}>
+                      <TextField
+                        fullWidth
+                        label="Header"
+                        name="sectionName"
+                        value={dtl.sectionName}
+                        onChange={(evt) => changeDetail(evt, i)}
+                        {...register("sectionName", {
+                          maxLength: 50,
+                          pattern: helper.regex.displayName,
+                        })}
+                        {...helper.validate(errors.sectionName, {
+                          length: 50,
+                          pattern: "displayName",
+                        })}
+                      />
+                      <Editor
+                        toolbarButtonSize="small"
+                        controls={helper.rteControls}
+                        inlineToolbar
+                        label="Start typing"
+                        name="content"
+                        value={dtl.content}
+                        onChange={(evt) => changeDetail(evt, i)}
+                        // onChange={(evt) => {
+                        //   let rte = draftToMarkdown(
+                        //     convertToRaw(evt.getCurrentContent())
+                        //   );
+                        //   return rte;
+                        // }}
+                      />
+                    </Box>
+                    {article.details.length !== 1 && (
+                      <IconButton
+                        color="secondary"
+                        aria-label="Remove Detail"
+                        onClick={(evt) => handleRemoveDetail(evt, i)}
+                      >
+                        <RemoveCircleOutlineSharp />
+                      </IconButton>
+                    )}
+                    {article.details.length - 1 === i && (
+                      <IconButton
+                        color="primary"
+                        aria-label="Add Details"
+                        onClick={handleAddDetail}
+                      >
+                        <AddCircleOutlineSharp />
+                      </IconButton>
+                    )}
+                  </Fragment>
+                );
+              })}
             </Grid>
             <Grid item md={6}>
               <TextField
@@ -165,7 +193,8 @@ export default function Create(props) {
             </Grid>
             <Grid item md={6}>
               <TextField
-                select fullWidth
+                select
+                fullWidth
                 label="Country"
                 name="country"
                 defaultValue="none"
@@ -177,7 +206,8 @@ export default function Create(props) {
             </Grid>
             <Grid item md={6}>
               <TextField
-                select fullWidth
+                select
+                fullWidth
                 label="City"
                 name="city"
                 defaultValue="none"
@@ -189,7 +219,8 @@ export default function Create(props) {
             </Grid>
             <Grid item md={6}>
               <TextField
-                select fullWidth
+                select
+                fullWidth
                 label="Categories"
                 name="categories"
                 defaultValue="none"
@@ -201,7 +232,8 @@ export default function Create(props) {
             </Grid>
             <Grid item md={6}>
               <TextField
-                select fullWidth
+                select
+                fullWidth
                 label="City"
                 name="city"
                 defaultValue="none"
@@ -213,16 +245,21 @@ export default function Create(props) {
             </Grid>
             <Grid item md={6}>
               <Autocomplete
-                autoSelect freeSolo multiple fullWidth
+                autoSelect
+                freeSolo
+                multiple
+                fullWidth
                 name="tags"
                 options={tagOpts}
-                renderInput={(params) => (
-                  <TextField {...params} label="Tags" />
-                )}
+                renderInput={(params) => <TextField {...params} label="Tags" />}
                 renderTags={(value, getTagProps) =>
-                    value.map((option, index) => (
-                      <Chip variant="outlined" label={option} {...getTagProps({ index })} />
-                    ))
+                  value.map((option, index) => (
+                    <Chip
+                      variant="outlined"
+                      label={option}
+                      {...getTagProps({ index })}
+                    />
+                  ))
                 }
                 onChange={(evt, value) => console.log(value)}
               />
