@@ -16,9 +16,11 @@ import {
   MenuItem,
   OutlinedInput,
   Select,
+  Slider,
   Typography,
 } from "@mui/material";
 import { Masonry } from "@mui/lab";
+import helper from "./utils/helper";
 
 export default function Explore(props) {
   const {
@@ -150,6 +152,26 @@ export default function Explore(props) {
                 {categoriesOptDispay()}
               </Select>
             </FormControl>
+            <FormControl sx={{ width: "100%" }}>
+            <Slider
+              marks={helper.ratingMarks}
+              min={helper.ratingMarks[0].value} 
+              max={helper.ratingMarks.slice(-1)[0].value}
+              getAriaLabel={() => "Rating range"}
+              valueLabelDisplay="auto"
+              name="rating"
+              size="small"
+              value={filterOpts.rating}
+              onChange={detectFilter}
+            />
+            </FormControl>
+            <Button
+                type="submit"
+                variant="contained"
+                onClick={(evt) => detectSearch(evt, helper.exploreView)}
+              >
+                Submit
+              </Button>
           </Box>
           <Box sx={{ m: 4 }}>
             <Masonry columns={3} spacing={2}>

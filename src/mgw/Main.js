@@ -1,5 +1,5 @@
 import mgwTheme from "./utils/mgwTheme";
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { ThemeProvider } from "@mui/material";
 import { Navigate, Routes, Route } from "react-router-dom";
 import { getMgwFixed, getMgwArticles, getArticles } from "./utils/data";
@@ -19,8 +19,7 @@ export default class Main extends Component {
     articlesLocations: [],
     isRedirectArticle: false,
     isRedirectListing: false,
-    isLoaded: false,
-    test: {}
+    isLoaded: false
   };
 
   async componentDidMount() {
@@ -28,7 +27,7 @@ export default class Main extends Component {
     let articles = await getMgwArticles();
     let uniqueTags = articles.tags.results
       .reduce((a, r) => [...a, ...r.tags], [])
-      .filter((v, i, a) => a.indexOf(v) == i);
+      .filter((v, i, a) => a.indexOf(v) === i);
 
     this.setState({
       allCountries: fixed.countries,
@@ -140,15 +139,20 @@ export default class Main extends Component {
     if (viewType === helper.exploreView) {
       params = Object.fromEntries(
         Object.entries(this.state.filterOpts).filter(
-          ([k, v]) => typeof v !== "undefined" && (v.length || v)
+          ([k, v]) => typeof v !== "undefined" && v.length
         )
       );
+      
+      if (params.rating && params.rating.length === 2) {
+        params.ratingFrom = params.rating[0];
+        params.ratingTo = params.rating[1];
+      }
     } else if (viewType === helper.articleView) {
       params = { articleId: this.state.filterOpts.id };
     }
 
     query = await getArticles(params);
-    if (query.data && query.data.count) {
+    if (query.data) {
       this.setState({
         // filterOpts: viewType === helper.articleView ?  { ...helper.initFilterOpts } : this.state.filterOpts,
         [viewType === helper.articleView ? "isRedirectArticle" : "isRedirectListing" ]: true,
