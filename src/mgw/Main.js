@@ -15,6 +15,7 @@ export default class Main extends Component {
     allCategories: [],
     allArticles: [],
     articlesFetched: [],
+    articleDetail: [],
     articlesTags: [],
     articlesLocations: [],
     isRedirectArticle: false,
@@ -93,7 +94,7 @@ export default class Main extends Component {
                 element={
                   <Article
                     articleInputs={this.state.articleInputs}
-                    article={this.state.articlesFetched}
+                    article={this.state.articleDetail}
                     loaded={this.state.isLoaded}
                     setFilterOpts={this.setFilterOpts}
                     setMgwState={this.setMgwState}
@@ -151,12 +152,12 @@ export default class Main extends Component {
       params = { articleId: this.state.filterOpts.id };
     }
 
-    query = await getArticles(params);
+    query = await getArticles(params, viewType);
     if (query.data) {
       this.setState({
         // filterOpts: viewType === helper.articleView ?  { ...helper.initFilterOpts } : this.state.filterOpts,
         [viewType === helper.articleView ? "isRedirectArticle" : "isRedirectListing" ]: true,
-        articlesFetched: [...query.data.results] || [],
+        [viewType === helper.articleView ? "articleDetail" : "articlesFetched" ]: [...query.data.results] || [],
         isLoaded: true
       });
     }

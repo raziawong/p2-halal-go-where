@@ -12,7 +12,7 @@ const mgwRequests = {
         countries: "/countries/cities",
         locationTagged: "/countries/cities/tagged",
         categories : "/categories/subcats",
-        articles: "/articles",
+        articles: "/articles/listing",
         articlesTags: "/articles/tags"
     },
     queryPaths: {
@@ -92,8 +92,9 @@ const getMgwArticles = async () => {
     return data;
 }
 
-const getArticles = async (params) => {
-  return await mgwRequests.axiosBase.get(mgwRequests.queryPaths.articles, { params });
+const getArticles = async (params, viewType) => {
+  let qPath = mgwRequests.queryPaths.articles + '/' + viewType;
+  return await mgwRequests.axiosBase.get(qPath, { params });
 }
 
 const getCountries = async (params) => {

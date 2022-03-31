@@ -5,6 +5,7 @@ import helper from "./utils/helper";
 
 export default function Article(props) {
   const { articleInputs, article, loaded, setMgwState, setFilterOpts, execSearch } = props;
+  const view = article[0] || {};
   const params = useParams();
 
   useEffect(async () => {
@@ -19,7 +20,18 @@ export default function Article(props) {
         {!loaded ? (
           <></>
         ) : (
-          <Box sx={{ m: 4, display: "flex" }}>{article[0].title}</Box>
+          <Box sx={{ m: 4}}>
+            <h1>{view.title}</h1>
+            <h5>{view.description}</h5>
+            {
+              view.details.length > 0 && view.details.map((d, i) =>
+                <Fragment key={i}>
+                  <h6>{d.sectionName}</h6>
+                  {d.content}
+                </Fragment>
+              )
+            }
+          </Box>
         )}
       </Container>
     </Fragment>
