@@ -72,7 +72,9 @@ export default function FilterGroup(props) {
           size="small"
           value={filterOpts.catIds}
           onChange={detectFilter}
-          renderValue={(sel) => (sel.length ? sel.join(", ") : <em>None</em>)}
+          renderValue={(vals) => (vals.length ? 
+            categories.results.filter(c => vals.includes(c._id) ).map(f => f.name).join(", ")
+            : <em>None</em>)}
         >
           <MenuItem value="">
             <em>None</em>
@@ -93,7 +95,11 @@ export default function FilterGroup(props) {
           size="small"
           value={filterOpts.subcatIds}
           onChange={detectFilter}
-          renderValue={(sel) => (sel.length ? sel.join(", ") : <em>None</em>)}
+          renderValue={(vals) => (vals.length ? 
+            categories.results.reduce((pv, cv) => {
+              return pv.concat(cv.subcats.filter(sc => vals.includes(sc._id) ))
+            }, []).map(f => f.name).join(", ")
+            : <em>None</em>)}
         >
           <MenuItem value="">
             <em>None</em>
