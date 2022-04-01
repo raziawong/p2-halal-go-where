@@ -29,10 +29,11 @@ const helper = {
       content: JSON.stringify(convertToRaw(EditorState.createEmpty().getCurrentContent()))
     }],
     photos: [],
-    categories: [],
     address: "",
-    country: "",
-    city: "",
+    countryId: "",
+    cityId: "",
+    catIds: [],
+    subcatIds: [],
     tags: []
   },
   ratingMarks: [
@@ -58,7 +59,7 @@ const helper = {
     "code"
   ],
   countryOptDisplay: (countries) => {
-    return countries.length
+    return countries && countries.length
       ? countries.map((country) => (
           <MenuItem key={country._id} value={country._id}>
             {country.name}
@@ -67,7 +68,7 @@ const helper = {
       : [];
   },
   cityOptDisplay: (countries, countryId) => {
-    const c = countries.length
+    const c = countries && countries.length
       ? countryId
         ? countries.filter((country) => country._id === countryId)
         : countries

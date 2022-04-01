@@ -1,5 +1,5 @@
-import React, { Fragment, useState } from "react";
-import { useForm } from "react-hook-form";
+import React, { Fragment, useEffect, useState } from "react";
+import { useFieldArray, useForm } from "react-hook-form";
 import helper from "./utils/helper";
 import { EditorState, convertToRaw, convertFromRaw } from "draft-js";
 import { draftToMarkdown, markdownToDraft } from "markdown-draft-js";
@@ -10,22 +10,21 @@ import {
   Button,
   Chip,
   Container,
+  FormControl,
   Grid,
   IconButton,
   MenuItem,
+  Select,
   TextField,
 } from "@mui/material";
-import { AddCircleOutlineSharp, RemoveCircleOutlineSharp } from '@mui/icons-material';
+import { AddCircleOutlineSharp, Menu, RemoveCircleOutlineSharp } from '@mui/icons-material';
 
 export default function Create(props) {
-  const { tagOpts, article, setDetail, removeDetail, submitArticle } = props;
-
-  const {
-    register,
-    handleSubmit,
-    getValues,
-    formState: { errors }
-  } = useForm({ defaultValues: { ...article } });
+  const { tagOpts, article, countries, categories,
+      setDetail, removeDetail, submitArticle } = props;
+  const { getValues, register, control, formState: { errors }, handleSubmit, reset } = 
+    useForm({ defaultValues: { ...article } });
+  const { fields, append, remove } = useFieldArray({ name: "details", control });
 
   const liftData = (data) => {
     console.log(data);
@@ -43,10 +42,12 @@ export default function Create(props) {
 
   const handleRemoveDetail = (evt, i) => {
     removeDetail(i);
+    remove(i);
   };
 
   const handleAddDetail = (evt) => {
     setDetail(helper.emptyDetail);
+    append(helper.emptyDetail);
   };
 
   return (
@@ -55,19 +56,21 @@ export default function Create(props) {
         <Box sx={{ m: 4 }}>
           <Grid container spacing={2}>
             <Grid item md={6}>
-              <TextField
-                fullWidth
-                label="Display Name"
-                name="displayName"
-                {...register("displayName", {
-                  maxLength: 80,
-                  pattern: helper.regex.displayName,
-                })}
-                {...helper.validate(errors.displayName, {
-                  pattern: "displayName",
-                  length: 80,
-                })}
-              />
+              <FormControl sx={{ width: "100%" }}>
+                <TextField
+                  fullWidth
+                  label="Display Name"
+                  name="displayName"
+                  {...register("displayName", {
+                    maxLength: 80,
+                    pattern: helper.regex.displayName,
+                  })}
+                  {...helper.validate(errors.displayName, {
+                    pattern: "displayName",
+                    length: 80,
+                  })}
+                />
+              </FormControl>
             </Grid>
             <Grid item md={6}>
               <TextField
@@ -133,14 +136,13 @@ export default function Create(props) {
                       <TextField
                         fullWidth
                         label="Header"
-                        name="sectionName"
-                        value={dtl.sectionName}
+                        name={`details[${i}]sectionName`}
                         onChange={(evt) => changeDetail(evt, i)}
-                        {...register("sectionName", {
+                        {...register(`details.${i}.sectionName`, {
                           maxLength: 50,
                           pattern: helper.regex.displayName,
                         })}
-                        {...helper.validate(errors.sectionName, {
+                        {...helper.validate(errors.details, {
                           length: 50,
                           pattern: "displayName",
                         })}
@@ -149,9 +151,8 @@ export default function Create(props) {
                         toolbarButtonSize="small"
                         controls={helper.rteControls}
                         inlineToolbar
-                        label="Start typing"
-                        name="content"
-                        value={dtl.content}
+                        label="Insert content for section"
+                        name={`details[${i}]content`}
                         onChange={(evt) => changeDetail(evt, i)}
                         // onChange={(evt) => {
                         //   let rte = draftToMarkdown(
@@ -161,24 +162,26 @@ export default function Create(props) {
                         // }}
                       />
                     </Box>
-                    {article.details.length !== 1 && (
-                      <IconButton
-                        color="secondary"
-                        aria-label="Remove Detail"
-                        onClick={(evt) => handleRemoveDetail(evt, i)}
-                      >
-                        <RemoveCircleOutlineSharp />
-                      </IconButton>
-                    )}
-                    {article.details.length - 1 === i && (
-                      <IconButton
-                        color="primary"
-                        aria-label="Add Details"
-                        onClick={handleAddDetail}
-                      >
-                        <AddCircleOutlineSharp />
-                      </IconButton>
-                    )}
+                    <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                      {article.details.length !== 1 && (
+                        <IconButton
+                          color="secondary"
+                          aria-label="Remove Detail"
+                          onClick={(evt) => handleRemoveDetail(evt, i)}
+                        >
+                          <RemoveCircleOutlineSharp />
+                        </IconButton>
+                      )}
+                      {article.details.length - 1 === i && (
+                        <IconButton
+                          color="primary"
+                          aria-label="Add Details"
+                          onClick={handleAddDetail}
+                        >
+                          <AddCircleOutlineSharp />
+                        </IconButton>
+                      )}
+                    </Box>
                   </Fragment>
                 );
               })}
@@ -192,53 +195,50 @@ export default function Create(props) {
               />
             </Grid>
             <Grid item md={6}>
-              <TextField
-                select
-                fullWidth
+              <Select
+                fullWidth displayEmpty
                 label="Country"
-                name="country"
-                defaultValue="none"
-                {...register("country", { required: true })}
-                {...helper.validate(errors.country)}
+                arial-label="Country"
+                name="countryId"
+                {...register("countryId", { required: true })}
+                {...helper.validate(errors.countryId)}
               >
-                <MenuItem value="none">None</MenuItem>
-              </TextField>
+                {helper.countryOptDisplay(countries.results)}
+              </Select>
             </Grid>
             <Grid item md={6}>
-              <TextField
-                select
+              <Select
                 fullWidth
-                label="City"
-                name="city"
-                defaultValue="none"
-                {...register("city", { required: true })}
-                {...helper.validate(errors.city)}
+                displayEmpty
+                arial-label="City"
+                name="cityId"
+                {...register("cityId", { required: true })}
+                {...helper.validate(errors.cityId)}
               >
-                <MenuItem value="none">None</MenuItem>
-              </TextField>
+                {helper.cityOptDisplay(countries, getValues("countryId"))}
+              </Select>
             </Grid>
             <Grid item md={6}>
               <TextField
                 select
                 fullWidth
                 label="Categories"
-                name="categories"
-                defaultValue="none"
-                {...register("country", { required: true })}
-                {...helper.validate(errors.country)}
+                name="catIds"
+                {...register("catIds", { required: true })}
+                {...helper.validate(errors.catIds)}
               >
                 <MenuItem value="none">None</MenuItem>
+                {/* {helper.categoriesOptDispay(categories)} */}
               </TextField>
             </Grid>
             <Grid item md={6}>
               <TextField
                 select
                 fullWidth
-                label="City"
-                name="city"
-                defaultValue="none"
-                {...register("city", { required: true })}
-                {...helper.validate(errors.city)}
+                label="Sub-categories"
+                name="subcatIds"
+                {...register("subcatIds", { required: true })}
+                {...helper.validate(errors.subcatIds)}
               >
                 <MenuItem value="none">None</MenuItem>
               </TextField>
