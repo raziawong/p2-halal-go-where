@@ -28,7 +28,7 @@ const helper = {
       sectionName: "", 
       content: JSON.stringify(convertToRaw(EditorState.createEmpty().getCurrentContent()))
     }],
-    photos: [],
+    photos: [ "" ],
     address: "",
     countryId: "",
     cityId: "",

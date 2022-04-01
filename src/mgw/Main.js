@@ -87,8 +87,8 @@ export default class Main extends Component {
                     article={this.state.articleInputs}
                     countries={this.state.allCountries}
                     categories={this.state.allCategories}
-                    setDetail={this.setArticleDetail}
-                    removeDetail={this.removeArticleDetail}
+                    setArr={this.setArticleArrayVal}
+                    removeArr={this.removeArticleArrayVal}
                     submitArticle={this.submitArticle}
                   />
                 }
@@ -137,17 +137,17 @@ export default class Main extends Component {
     });
   };
 
-  setArticleDetail = (detailObj) => {
+  setArticleArrayVal = (name, val) => {
     let inputs = {...this.state.articleInputs};
-    inputs.details.push(detailObj);
+    inputs[name].push(val);
     this.setState({
       articleInputs: inputs
     });
   };
 
-  removeArticleDetail = (index) => {
+  removeArticleArrayVal = (name, index) => {
     let inputs = {...this.state.articleInputs};
-    inputs.details.splice(index, 1);
+    inputs[name].splice(index, 1);
     this.setState({
       articleInputs: inputs
     });

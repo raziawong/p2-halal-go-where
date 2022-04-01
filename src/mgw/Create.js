@@ -21,10 +21,11 @@ import { AddCircleOutlineSharp, Menu, RemoveCircleOutlineSharp } from '@mui/icon
 
 export default function Create(props) {
   const { tagOpts, article, countries, categories,
-      setDetail, removeDetail, submitArticle } = props;
+      setArr, removeArr, submitArticle } = props;
   const { getValues, register, control, formState: { errors }, handleSubmit, reset } = 
     useForm({ defaultValues: { ...article } });
-  const { fields, append, remove } = useFieldArray({ name: "details", control });
+  const { append: appendDetail, remove: deleteDetail } = useFieldArray({ name: "details", control });
+  const { append: appendPhoto, remove: deletePhoto } = useFieldArray({ name: "photos", control });
 
   const liftData = (data) => {
     console.log(data);
@@ -40,14 +41,24 @@ export default function Create(props) {
     }
   };
 
+  const handleRemovePhoto = (evt, i) => {
+    removeArr("photos", i);
+    deletePhoto(i);
+  };
+
+  const handleAddPhoto = (evt) => {
+    setArr("photos", "");
+    appendPhoto("");
+  };
+
   const handleRemoveDetail = (evt, i) => {
-    removeDetail(i);
-    remove(i);
+    removeArr("details", i);
+    deleteDetail(i);
   };
 
   const handleAddDetail = (evt) => {
-    setDetail(helper.emptyDetail);
-    append(helper.emptyDetail);
+    setArr("details", helper.emptyDetail);
+    appendDetail(helper.emptyDetail);
   };
 
   return (
@@ -128,6 +139,45 @@ export default function Create(props) {
                 })}
               />
             </Grid>
+            <Grid item md={6}>
+              {article.photos.map((photo, i) => (
+                <Fragment>
+                  <FormControl sx={{ width: "100%" }}>
+                    <TextField
+                      fullWidth
+                      label="Photo"
+                      name={`photo[${i}]`}
+                      {...register("photo[${i}]", {
+                        pattern: helper.templates.url,
+                      })}
+                      {...helper.validate(photo[i], {
+                        pattern: "url",
+                      })}
+                    />
+                  </FormControl>
+                  <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                    {article.photos.length !== 1 && (
+                      <IconButton
+                        color="secondary"
+                        aria-label="Remove Photo"
+                        onClick={(evt) => handleRemovePhoto(evt, i)}
+                      >
+                        <RemoveCircleOutlineSharp />
+                      </IconButton>
+                    )}
+                    {article.photos.length - 1 === i && (
+                      <IconButton
+                        color="primary"
+                        aria-label="Add Photo"
+                        onClick={handleAddPhoto}
+                      >
+                        <AddCircleOutlineSharp />
+                      </IconButton>
+                    )}
+                  </Box>
+                </Fragment>
+              ))}
+            </Grid>
             <Grid item md={12}>
               {article.details.map((dtl, i) => {
                 return (
@@ -196,7 +246,8 @@ export default function Create(props) {
             </Grid>
             <Grid item md={6}>
               <Select
-                fullWidth displayEmpty
+                fullWidth
+                displayEmpty
                 label="Country"
                 arial-label="Country"
                 name="countryId"
