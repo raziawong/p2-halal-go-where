@@ -93,10 +93,13 @@ export default class Mgw extends Component {
                     tagOpts={this.state.articlesTags}
                     locationOpts={this.state.allCountries}
                     catOpts={this.state.allCategories}
-                    articleWatch={this.state.articleInputs}
                     articleErrors={this.state.articleInputsErrors}
                     activeStep={this.state.createActiveStep}
                     setMgwState={this.setMgwState}
+                    articleState={this.state.articleInputs}
+                    setArticleState={this.setArticleInputs}
+                    articleError={this.state.articleInputsErrors}
+                    validateArticle={this.validateArticleInputs}
                     setArr={this.setArticleArrayVal}
                     removeArr={this.removeArticleArrayVal}
                     submitArticle={this.submitArticle}
@@ -147,13 +150,32 @@ export default class Mgw extends Component {
     });
   };
 
-  setArticleInputs = ({name, value}) => {
-    let inputs = { ...this.state.articleInputs };
-    inputs[name] = value;
+  setArticleInputs = ({ target }) => {
+    let {name, value, checked} = target;
+    value = name === "allowPublic" ? checked : value;
     this.setState({
-      articleInputs: inputs
+      articleInputs: {
+        ...this.state.articleInputs,
+        [name]: value
+      }
     });
   };
+
+  validateArticleInputs = (fields) => {
+    const validation = fields.map(fieldName => {
+      return helper.validate(fieldName, {...this.state.articleInputs});
+    }).filter(v => v).reduce((a, v) => ({...a, [v.fieldName] : v.message }), {});
+
+   this.setState({
+      articleInputsErrors: validation || []
+    }, () => {
+      if (!Object.entries(validation)) {
+        this.setState({
+          createActiveStep: this.state.createActiveStep + 1
+        });
+      }
+    });
+  }
 
   setArticleArrayVal = (name, val) => {
     let inputs = {...this.state.articleInputs};
@@ -171,34 +193,35 @@ export default class Mgw extends Component {
     });
   }
 
-  searchArticles = async (viewType) => {
-    this.setState({ isLoaded: false });
-    let params, query = {};
+  searchArticles = (viewType) => {
+    this.setState({ isLoaded: false }, async () => {
+      let params, query = {};
 
-    if (viewType === helper.exploreView) {
-      params = Object.fromEntries(
-        Object.entries(this.state.filterOpts).filter(
-          ([k, v]) => typeof v !== "undefined" && v.length
-        )
-      );
-      
-      if (params.rating && params.rating.length === 2) {
-        params.ratingFrom = params.rating[0];
-        params.ratingTo = params.rating[1];
+      if (viewType === helper.exploreView) {
+        params = Object.fromEntries(
+          Object.entries(this.state.filterOpts).filter(
+            ([k, v]) => typeof v !== "undefined" && v.length
+          )
+        );
+        
+        if (params.rating && params.rating.length === 2) {
+          params.ratingFrom = params.rating[0];
+          params.ratingTo = params.rating[1];
+        }
+      } else if (viewType === helper.articleView) {
+        params = { articleId: this.state.filterOpts.id };
       }
-    } else if (viewType === helper.articleView) {
-      params = { articleId: this.state.filterOpts.id };
-    }
-
-    query = await getArticles(params, viewType);
-    if (query.data) {
-      this.setState({
-        // filterOpts: viewType === helper.articleView ?  { ...helper.initFilterOpts } : this.state.filterOpts,
-        [viewType === helper.articleView ? "isRedirectArticle" : "isRedirectListing" ]: true,
-        [viewType === helper.articleView ? "articleDetail" : "articlesFetched" ]: [...query.data.results] || [],
-        isLoaded: true
-      });
-    }
+  
+      query = await getArticles(params, viewType);
+      if (query.data) {
+        this.setState({
+          // filterOpts: viewType === helper.articleView ?  { ...helper.initFilterOpts } : this.state.filterOpts,
+          [viewType === helper.articleView ? "isRedirectArticle" : "isRedirectListing" ]: true,
+          [viewType === helper.articleView ? "articleDetail" : "articlesFetched" ]: [...query.data.results] || [],
+          isLoaded: true
+        });
+      }      
+    });
   };
 
   submitArticle = (data) => {

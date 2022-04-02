@@ -3,7 +3,7 @@ import { Grid, TextField } from "@mui/material";
 
 
 export default function ArticleSummary(props) {
-  const { articleWatch, countries } = props;
+  const { articleState, countries } = props;
 
   return (
     <Grid container spacing={4} sx={{ justifyContent: "center" }}>

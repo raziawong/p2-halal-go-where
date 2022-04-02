@@ -5,17 +5,19 @@ import ArticleSummary from "../formgroups/ArticleSummary";
 import ArticleDetails from "../formgroups/ArticleDetails";
 import ArticleTags from "../formgroups/ArticleTags";
 
-export default function HorizontalStepper(props) {
-  const {
-    articleWatch,
-    locationOpts,
-    catOpts,
-    tagOpts,
-    activeStep,
-    setArr,
-    removeArr,
-    setMgwState,
-  } = props;
+export default function HorizontalStepper({
+  locationOpts,
+  catOpts,
+  tagOpts,
+  activeStep,
+  articleState,
+  setArticleState,
+  articleError,
+  validateArticle,
+  setArr,
+  removeArr,
+  setMgwState,
+}) {
 
   const isOptional = (step) => {
     return step === 2;
@@ -27,7 +29,7 @@ export default function HorizontalStepper(props) {
     setMgwState({ createActiveStep: activeStep + 1 });
   };
   const handleNext = () => {
-    setMgwState({ createActiveStep: activeStep + 1 });
+    validateArticle(helper.createSteps[activeStep].fields);
   };
   const handleBack = () => {
     setMgwState({ createActiveStep: activeStep - 1 });
@@ -36,30 +38,36 @@ export default function HorizontalStepper(props) {
   return (
     <Box sx={{ m: 4 }}>
       <Stepper activeStep={activeStep}>
-        {helper.createSteps.map((label, i) => (
-          <Step key={label}>
-            <StepLabel>{label}</StepLabel>
+        {helper.createSteps.map((step, i) => (
+          <Step key={step.title}>
+            <StepLabel>{step.title}</StepLabel>
           </Step>
         ))}
       </Stepper>
       <Box sx={{ m: 4 }}>
-        {activeStep === 0 && <NewAuthor articleWatch={articleWatch} />}
+        {activeStep === 0 && (
+          <NewAuthor
+            articleState={articleState}
+            setArticleState={setArticleState}
+            articleError={articleError}
+          />
+        )}
         {activeStep === 1 && (
           <ArticleSummary
-            articleWatch={articleWatch}
+            articleState={articleState}
             locationOpts={locationOpts}
           />
         )}
         {activeStep === 2 && (
           <ArticleDetails
-            articleWatch={articleWatch}
+            articleState={articleState}
             setArr={setArr}
             removeArr={removeArr}
           />
         )}
         {activeStep === 3 && (
           <ArticleTags
-            articleWatch={articleWatch}
+            articleState={articleState}
             catOpts={catOpts}
             tagOpts={tagOpts}
           />
@@ -68,9 +76,8 @@ export default function HorizontalStepper(props) {
       <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
         <Button
           color="inherit"
-          disabled={activeStep === 0}
           onClick={handleBack}
-          sx={{ mr: 1 }}
+          sx={{ mr: 1, display: activeStep === 0 ? "none" : "" }}
         >
           Back
         </Button>

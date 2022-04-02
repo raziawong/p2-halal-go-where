@@ -2,7 +2,7 @@ import helper from "../../utils/helper";
 import { Autocomplete, Chip, Grid, MenuItem, TextField } from "@mui/material";
 
 export default function ArticleTags(props) {
-  const { articleWatch, categories, tagOpts } = props;
+  const { articleState, categories, tagOpts } = props;
 
   return (
     <Grid container spacing={4} sx={{ justifyContent: "center" }}>

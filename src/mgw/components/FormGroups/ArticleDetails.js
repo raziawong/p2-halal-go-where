@@ -10,7 +10,7 @@ import {
 } from "@mui/icons-material";
 
 export default function ArticleDetails(props) {
-  const { articleWatch, setArr, removeArr } = props;
+  const { articleState, setArr, removeArr } = props;
 
   const handleRemovePhoto = (evt, i) => {
     removeArr("photos", i);
@@ -40,7 +40,7 @@ export default function ArticleDetails(props) {
   return (
     <Grid container spacing={4} sx={{ justifyContent: "center" }}>
       <Grid item xs={8}>
-        {articleWatch.photos.map((photo, i) => (
+        {articleState.photos.map((photo, i) => (
           <Fragment>
               <TextField
                 fullWidth
@@ -48,7 +48,7 @@ export default function ArticleDetails(props) {
                 name={`photo[${i}]`}
               />
             <Box sx={{ justifyContent: "flex-end" }}>
-              {articleWatch.photos.length !== 1 && (
+              {articleState.photos.length !== 1 && (
                 <IconButton
                   color="secondary"
                   aria-label="Remove Photo"
@@ -57,7 +57,7 @@ export default function ArticleDetails(props) {
                   <RemoveCircleOutlineSharp />
                 </IconButton>
               )}
-              {articleWatch.photos.length - 1 === i && (
+              {articleState.photos.length - 1 === i && (
                 <IconButton
                   color="primary"
                   aria-label="Add Photo"
@@ -71,7 +71,7 @@ export default function ArticleDetails(props) {
         ))}
       </Grid>
       <Grid item xs={8}>
-        {articleWatch.details.map((dtl, i) => {
+        {articleState.details.map((dtl, i) => {
           return (
             <Fragment key={i}>
               <Box sx={{ m: 4 }}>
@@ -97,7 +97,7 @@ export default function ArticleDetails(props) {
                 />
               </Box>
               <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-                {articleWatch.details.length !== 1 && (
+                {articleState.details.length !== 1 && (
                   <IconButton
                     color="secondary"
                     aria-label="Remove Detail"
@@ -106,7 +106,7 @@ export default function ArticleDetails(props) {
                     <RemoveCircleOutlineSharp />
                   </IconButton>
                 )}
-                {articleWatch.details.length - 1 === i && (
+                {articleState.details.length - 1 === i && (
                   <IconButton
                     color="primary"
                     aria-label="Add Details"

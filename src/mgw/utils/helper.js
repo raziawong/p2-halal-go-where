@@ -4,7 +4,12 @@ import { EditorState, convertToRaw } from "draft-js";
 const helper = {
   exploreView: "listing",
   articleView: "details",
-  createSteps: ["Author", "Summary", "Details", "Tags"],
+  createSteps: [
+    {title: "Author", fields: ["displayName", "name", "email", "allowPublic"]}, 
+    {title: "Summary", fields: ["title", "description", "address", "countryId", "cityId"]},
+    {title: "Details", fields: ["photos", "details"] },
+    {title: "Tags", fields: ["catIds", "subcatIds", "tags"]}
+  ],
   initFilterOpts: {
     id: "",
     text: "",
@@ -95,6 +100,7 @@ const helper = {
       : [];
   },
   subcategoriesOptDispay: (categories, catIds, subcatIds) => {
+    console.log(catIds, subcatIds)
     const c = categories
       ? catIds.length > 0
         ? categories.filter((cat) => catIds.indexOf(cat._id) > -1)
@@ -128,22 +134,49 @@ const helper = {
     email: `This is not a valid email address`,
     url: `This is not a valid URL`
   },
-  validate: (err, { pattern, length }= {}) => {
-    let helperText = "";
-    if (err) {
-      if (err.type === "pattern") {
-        helperText = pattern === "displayName" ? helper.templates.special
-            : pattern === "optionValue" ? helper.templates.optionValue
-            : pattern === "email" ? helper.templates.email
-            : pattern === "url" ? helper.templates.url
-            : "";
-      } else if (err.type === "maxLength") {
-        helperText = helper.templates.maxLength(length);
-      } else if (err.type === "required") {
-        helperText = helper.templates.required;
+  validate: (fieldName, inputs) => {
+    let val = inputs[fieldName];
+    if (fieldName === "displayName") {
+      if (!helper.regex.displayName.test(val)) {
+        return {fieldName, message: helper.templates.special};
       }
+      if (val?.length) {
+        return {fieldName, message: helper.templates.maxLength(80)};
+      }
+    } else if (fieldName === "name") {
+      if (!val) {
+        return {fieldName, message: helper.templates.required};
+      }
+      if (helper.regex.displayName.test(val)) {
+        return {fieldName, message: helper.templates.special};
+      }
+      if (val?.length) {
+        return {fieldName, message: helper.templates.maxLength(80)};
+      }
+    } else if (fieldName === "email") {
+      if (!val) {
+        return {fieldName, message: helper.templates.required};
+      }
+      if (helper.regex.email.test(val)) {
+        return {fieldName, message: helper.templates.email};
+      }
+    } else if (fieldName === "title") {
+      
+    } else if (fieldName === "description") {
+      
+    } else if (fieldName.startsWith("photos")) {
+      
+    } else if (fieldName.startsWith("details")) {
+      
+    } else if (fieldName === ("catIds")) {
+
+    } else if (fieldName === "subcatIds") {
+
+    } else if (fieldName === "tags") {
+
     }
-    return helperText ? { error: true, helperText } : {error: false};
+
+    return false;
   }
 };
 
