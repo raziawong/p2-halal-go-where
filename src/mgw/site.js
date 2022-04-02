@@ -12,5 +12,8 @@ import NavBar from "./components/NavBar";
 import FilterGroup from "./components/FilterGroup";
 import Listing from "./components/Listing";
 
+import HorizontalStepper from "./components/Create/HorizontalStepper";
+
 export default Main;
-export { Home, Explore, Create, Article, FilterGroup, Listing, Loader, NavBar };
+export { Home, Explore, Create, Article, 
+    FilterGroup, Listing, Loader, NavBar, HorizontalStepper  };

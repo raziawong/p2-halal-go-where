@@ -88,7 +88,9 @@ export default class Main extends Component {
                     article={this.state.articleInputs}
                     countries={this.state.allCountries}
                     categories={this.state.allCategories}
+                    active={this.state.createActiveStep}
                     setArr={this.setArticleArrayVal}
+                    setActive={this.setCreateActiveStep}
                     removeArr={this.removeArticleArrayVal}
                     submitArticle={this.submitArticle}
                   />
@@ -130,6 +132,12 @@ export default class Main extends Component {
     this.setState({ ...pairs });
   };
 
+  setCreateActiveStep = (index) => {
+    this.setState({
+      createActiveStep: index
+    });
+  }
+
   setFilterOpts = ({name, value}) => {
     let opts = { ...this.state.filterOpts };
     opts[name] = value;
@@ -145,6 +153,12 @@ export default class Main extends Component {
       articleInputs: inputs
     });
   };
+
+  setCreateActiveStep = (i) => {
+    this.setState({
+      createActiveStep: i
+    });
+  }
 
   removeArticleArrayVal = (name, index) => {
     let inputs = {...this.state.articleInputs};
