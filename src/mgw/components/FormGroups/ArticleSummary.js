@@ -3,7 +3,7 @@ import { Grid, TextField } from "@mui/material";
 
 
 export default function ArticleSummary(props) {
-  const { register, errors, countries } = props;
+  const { articleWatch, countries } = props;
 
   return (
     <Grid container spacing={4} sx={{ justifyContent: "center" }}>
@@ -14,13 +14,6 @@ export default function ArticleSummary(props) {
           arial-label="Title"
           name="title"
           defaultValue=""
-          error={!!errors?.title}
-          helperText={errors?.title?.message}
-          {...register("title", {
-            required: { value: true, message: helper.templates.required },
-            pattern: { value: helper.regex.displayName, message: helper.templates.special },
-            maxLength: { value: 50, message: helper.templates.maxLength(50) }
-          })}
         />
       </Grid>
       <Grid item xs={8}>
@@ -30,13 +23,7 @@ export default function ArticleSummary(props) {
           label="Description"
           arial-label="Description"
           name="description"
-          defaultValue=""
-          error={!!errors?.description}
-          helperText={errors?.description?.message}
-          {...register("description", {
-            required: { value: true, message: helper.templates.required },
-            maxLength: { value: 150, message: helper.templates.maxLength(150) }
-          })}
+          
         />
       </Grid>
       <Grid item xs={8}>
@@ -46,7 +33,6 @@ export default function ArticleSummary(props) {
           arial-label="Address"
           name="address"
           defaultValue=""
-          {...register("address")}
         />
       </Grid>
       <Grid item xs={8}>
@@ -56,11 +42,6 @@ export default function ArticleSummary(props) {
           arial-label="Country"
           name="countryId"
           defaultValue=""
-          error={!!errors?.countryId}
-          helperText={errors?.countryId?.message}
-          {...register("countryId", { 
-            required: { value: true, message: helper.templates.required } 
-          })}
         >
           {helper.countryOptDisplay(countries)}
         </TextField>
@@ -72,11 +53,6 @@ export default function ArticleSummary(props) {
           arial-label="City"
           name="cityId"
           defaultValue=""
-          error={!!errors?.cityId}
-          helperText={errors?.cityId?.message}
-          {...register("cityId", { 
-            required: { value: true, message: helper.templates.required } 
-          })}
         >
           {helper.cityOptDisplay(countries, "")}
         </TextField>

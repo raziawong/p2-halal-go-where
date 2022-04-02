@@ -10,7 +10,7 @@ import {
 } from "@mui/icons-material";
 
 export default function ArticleDetails(props) {
-  const { register, errors, article, setArr, removeArr } = props;
+  const { articleWatch, setArr, removeArr } = props;
 
   const handleRemovePhoto = (evt, i) => {
     removeArr("photos", i);
@@ -40,18 +40,15 @@ export default function ArticleDetails(props) {
   return (
     <Grid container spacing={4} sx={{ justifyContent: "center" }}>
       <Grid item xs={8}>
-        {article.photos.map((photo, i) => (
+        {articleWatch.photos.map((photo, i) => (
           <Fragment>
               <TextField
                 fullWidth
                 label="Photo"
                 name={`photo[${i}]`}
-                {...register("photo[${i}]", {
-                  pattern: { value: helper.regex.url, message: helper.templates.url }
-                })}
               />
             <Box sx={{ justifyContent: "flex-end" }}>
-              {article.photos.length !== 1 && (
+              {articleWatch.photos.length !== 1 && (
                 <IconButton
                   color="secondary"
                   aria-label="Remove Photo"
@@ -60,7 +57,7 @@ export default function ArticleDetails(props) {
                   <RemoveCircleOutlineSharp />
                 </IconButton>
               )}
-              {article.photos.length - 1 === i && (
+              {articleWatch.photos.length - 1 === i && (
                 <IconButton
                   color="primary"
                   aria-label="Add Photo"
@@ -74,7 +71,7 @@ export default function ArticleDetails(props) {
         ))}
       </Grid>
       <Grid item xs={8}>
-        {article.details.map((dtl, i) => {
+        {articleWatch.details.map((dtl, i) => {
           return (
             <Fragment key={i}>
               <Box sx={{ m: 4 }}>
@@ -83,11 +80,6 @@ export default function ArticleDetails(props) {
                   label="Header"
                   name={`details[${i}]sectionName`}
                   onChange={(evt) => changeDetail(evt, i)}
-                  {...register(`details.${i}.sectionName`, {
-                    required: { value: true, message: helper.templates.required },
-                    pattern: { value: helper.regex.displayName, message: helper.templates.special },
-                    maxLength: { value: 50, message: helper.templates.maxLength(50) }
-                  })}
                 />
                 <Editor
                   toolbarButtonSize="small"
@@ -105,7 +97,7 @@ export default function ArticleDetails(props) {
                 />
               </Box>
               <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-                {article.details.length !== 1 && (
+                {articleWatch.details.length !== 1 && (
                   <IconButton
                     color="secondary"
                     aria-label="Remove Detail"
@@ -114,7 +106,7 @@ export default function ArticleDetails(props) {
                     <RemoveCircleOutlineSharp />
                   </IconButton>
                 )}
-                {article.details.length - 1 === i && (
+                {articleWatch.details.length - 1 === i && (
                   <IconButton
                     color="primary"
                     aria-label="Add Details"

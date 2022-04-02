@@ -9,11 +9,11 @@ import { Home, Explore, Create, Article, Loader, NavBar } from "./site";
 
 export default class Mgw extends Component {
   state = {
-    filterOpts: { ...helper.initFilterOpts },
-    articleInputs: { ...helper.initArticleInputs },
     allCountries: [],
     allCategories: [],
     allArticles: [],
+    filterOpts: { ...helper.initFilterOpts },
+    articleInputs: { ...helper.initArticleInputs },
     articlesFetched: [],
     articleDetail: [],
     articlesTags: [],
@@ -85,12 +85,12 @@ export default class Mgw extends Component {
                 element={
                   <Create
                     tagOpts={this.state.articlesTags}
-                    article={this.state.articleInputs}
-                    countries={this.state.allCountries}
-                    categories={this.state.allCategories}
-                    active={this.state.createActiveStep}
+                    locationOpts={this.state.allCountries}
+                    catOpts={this.state.allCategories}
+                    articleWatch={this.state.articleInputs}
+                    activeStep={this.state.createActiveStep}
+                    setMgwState={this.setMgwState}
                     setArr={this.setArticleArrayVal}
-                    setActive={this.setCreateActiveStep}
                     removeArr={this.removeArticleArrayVal}
                     submitArticle={this.submitArticle}
                   />
@@ -128,21 +128,23 @@ export default class Mgw extends Component {
     this.setFilterOpts(evt.target);
   };
 
-  setMgwState = (pairs) => {
-    this.setState({ ...pairs });
+  setMgwState = (keyValuePair) => {
+    this.setState({ ...keyValuePair });
   };
-
-  setCreateActiveStep = (index) => {
-    this.setState({
-      createActiveStep: index
-    });
-  }
 
   setFilterOpts = ({name, value}) => {
     let opts = { ...this.state.filterOpts };
     opts[name] = value;
     this.setState({
       filterOpts: opts
+    });
+  };
+
+  setArticleInputs = ({name, value}) => {
+    let inputs = { ...this.state.articleInputs };
+    inputs[name] = value;
+    this.setState({
+      articleInputs: inputs
     });
   };
 
@@ -153,12 +155,6 @@ export default class Mgw extends Component {
       articleInputs: inputs
     });
   };
-
-  setCreateActiveStep = (i) => {
-    this.setState({
-      createActiveStep: i
-    });
-  }
 
   removeArticleArrayVal = (name, index) => {
     let inputs = {...this.state.articleInputs};

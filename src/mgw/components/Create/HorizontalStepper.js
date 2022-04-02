@@ -7,43 +7,35 @@ import ArticleTags from "../formgroups/ArticleTags";
 
 export default function HorizontalStepper(props) {
   const {
+    articleWatch,
+    locationOpts,
+    catOpts,
     tagOpts,
-    article,
-    countries,
-    categories,
+    activeStep,
     setArr,
     removeArr,
-    submitArticle,
-    control,
-    register,
-    errors,
-    getValues,
-    active,
-    setActive,
+    setMgwState,
   } = props;
 
   const isOptional = (step) => {
     return step === 2;
   };
-  const handleStepContent = (step) => {
-    // return <NewUser errors={errors} register={register} />;
-  };
   const handleSkip = () => {
-    if (!isOptional(active)) {
+    if (!isOptional(activeStep)) {
       throw new Error("You can't skip a step that isn't optional.");
     }
-    setActive(active + 1);
+    setMgwState({ createActiveStep: activeStep + 1 });
   };
   const handleNext = () => {
-    setActive(active + 1);
+    setMgwState({ createActiveStep: activeStep + 1 });
   };
   const handleBack = () => {
-    setActive(active - 1);
+    setMgwState({ createActiveStep: activeStep - 1 });
   };
 
   return (
     <Box sx={{ m: 4 }}>
-      <Stepper activeStep={active}>
+      <Stepper activeStep={activeStep}>
         {helper.createSteps.map((label, i) => (
           <Step key={label}>
             <StepLabel>{label}</StepLabel>
@@ -51,30 +43,24 @@ export default function HorizontalStepper(props) {
         ))}
       </Stepper>
       <Box sx={{ m: 4 }}>
-        {active === 0 && <NewAuthor register={register} errors={errors} />}
-        {active === 1 && (
+        {activeStep === 0 && <NewAuthor articleWatch={articleWatch} />}
+        {activeStep === 1 && (
           <ArticleSummary
-            register={register}
-            errors={errors}
-            countries={countries}
+            articleWatch={articleWatch}
+            locationOpts={locationOpts}
           />
         )}
-        {active === 2 && (
+        {activeStep === 2 && (
           <ArticleDetails
-            control={control}
-            register={register}
-            errors={errors}
-            article={article}
-            countries={countries}
+            articleWatch={articleWatch}
             setArr={setArr}
             removeArr={removeArr}
           />
         )}
-        {active === 3 && (
+        {activeStep === 3 && (
           <ArticleTags
-            register={register}
-            errors={errors}
-            categories={categories}
+            articleWatch={articleWatch}
+            catOpts={catOpts}
             tagOpts={tagOpts}
           />
         )}
@@ -82,19 +68,19 @@ export default function HorizontalStepper(props) {
       <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
         <Button
           color="inherit"
-          disabled={active === 0}
+          disabled={activeStep === 0}
           onClick={handleBack}
           sx={{ mr: 1 }}
         >
           Back
         </Button>
         <Box sx={{ flex: "1 1 auto" }} />
-        {isOptional(active) && (
+        {isOptional(activeStep) && (
           <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
             Skip
           </Button>
         )}
-        {active !== helper.createSteps.length - 1 && (
+        {activeStep !== helper.createSteps.length - 1 && (
           <Button onClick={handleNext}>Next</Button>
         )}
       </Box>
