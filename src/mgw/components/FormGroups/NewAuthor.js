@@ -1,14 +1,20 @@
-import helper from "../../utils/helper";
-import { Grid, Switch, TextField, Typography } from "@mui/material";
+import { Grid, Paper, Switch, TextField, Typography } from "@mui/material";
 
 export default function NewAuthor({
   articleState,
   setArticleState,
   articleError,
 }) {
-  console.log(articleError);
   return (
     <Grid container spacing={4} sx={{ justifyContent: "center" }}>
+      <Grid item xs={10}>
+        <Paper elevation={3}>
+          <Typography sx={{ padding: "1em" }}>
+            MGW require all submissions to have at least contact name and email
+            for editing verification and administrative communication purposes.
+          </Typography>
+        </Paper>
+      </Grid>
       <Grid item xs={8}>
         <TextField
           fullWidth

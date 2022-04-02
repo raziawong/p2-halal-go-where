@@ -151,13 +151,20 @@ export default class Mgw extends Component {
   };
 
   setArticleInputs = ({ target }) => {
+    let inputs = {...this.state.articleInputs};
     let {name, value, checked} = target;
     value = name === "allowPublic" ? checked : value;
+    inputs[name] = value;
+
+    if (name === "country") {
+      inputs.countryId = value._id;
+    }
+    if (name === "city") {
+      inputs.cityId = value._id;
+    }
+
     this.setState({
-      articleInputs: {
-        ...this.state.articleInputs,
-        [name]: value
-      }
+      articleInputs: inputs
     });
   };
 
@@ -167,9 +174,9 @@ export default class Mgw extends Component {
     }).filter(v => v).reduce((a, v) => ({...a, [v.fieldName] : v.message }), {});
 
    this.setState({
-      articleInputsErrors: validation || []
+      articleInputsErrors: validation || {}
     }, () => {
-      if (!Object.entries(validation)) {
+      if (!Object.entries(validation)?.length) {
         this.setState({
           createActiveStep: this.state.createActiveStep + 1
         });

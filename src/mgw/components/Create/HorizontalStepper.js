@@ -18,7 +18,7 @@ export default function HorizontalStepper({
   removeArr,
   setMgwState,
 }) {
-
+  const hasError = Object.entries(articleError)?.length !== 0;
   const isOptional = (step) => {
     return step === 2;
   };
@@ -40,7 +40,9 @@ export default function HorizontalStepper({
       <Stepper activeStep={activeStep}>
         {helper.createSteps.map((step, i) => (
           <Step key={step.title}>
-            <StepLabel>{step.title}</StepLabel>
+            <StepLabel error={activeStep === i && hasError}>
+              {step.title}
+            </StepLabel>
           </Step>
         ))}
       </Stepper>
@@ -55,6 +57,8 @@ export default function HorizontalStepper({
         {activeStep === 1 && (
           <ArticleSummary
             articleState={articleState}
+            setArticleState={setArticleState}
+            articleError={articleError}
             locationOpts={locationOpts}
           />
         )}
@@ -88,7 +92,9 @@ export default function HorizontalStepper({
           </Button>
         )}
         {activeStep !== helper.createSteps.length - 1 && (
-          <Button onClick={handleNext}>Next</Button>
+          <Button onClick={handleNext}>
+            Next
+          </Button>
         )}
       </Box>
     </Box>
