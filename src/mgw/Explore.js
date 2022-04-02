@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect } from "react";
 import { Container, Box, Typography } from "@mui/material";
-import { FilterGroup, Listing } from "./site";
+import FilterGroup from "./components/explore/FilterGroup";
+import Listing from "./components/explore/Listing";
 
 export default function Explore(props) {
   const {

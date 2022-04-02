@@ -1,11 +1,16 @@
-import mgwTheme from "./utils/mgwTheme";
 import React, { Component } from "react";
+import mgwTheme from "./utils/mgwTheme";
 import { ThemeProvider } from "@mui/material";
 import { Navigate, Routes, Route } from "react-router-dom";
 import { getMgwFixed, getMgwArticles, getArticles } from "./utils/data";
 import helper from "./utils/helper";
 import { SiteContainer, ViewContainer } from "./utils/mgwStyle";
-import { Home, Explore, Create, Article, Loader, NavBar } from "./site";
+import Loader from "./components/Loader";
+import Landing from "./Landing";
+import Explore from "./Explore";
+import Create from "./Create";
+import Article from "./Article";
+import NavBar from "./components/NavBar";
 
 export default class Mgw extends Component {
   state = {
@@ -14,6 +19,7 @@ export default class Mgw extends Component {
     allArticles: [],
     filterOpts: { ...helper.initFilterOpts },
     articleInputs: { ...helper.initArticleInputs },
+    articleInputsErrors: {},
     articlesFetched: [],
     articleDetail: [],
     articlesTags: [],
@@ -56,7 +62,7 @@ export default class Mgw extends Component {
                   this.state.isRedirectListing ? (
                     <Navigate replace to="/explore" />
                   ) : (
-                    <Home
+                    <Landing
                       filterOpts={this.state.filterOpts}
                       detectFilter={this.detectFilter}
                       detectSearch={this.detectSearch}
@@ -88,6 +94,7 @@ export default class Mgw extends Component {
                     locationOpts={this.state.allCountries}
                     catOpts={this.state.allCategories}
                     articleWatch={this.state.articleInputs}
+                    articleErrors={this.state.articleInputsErrors}
                     activeStep={this.state.createActiveStep}
                     setMgwState={this.setMgwState}
                     setArr={this.setArticleArrayVal}

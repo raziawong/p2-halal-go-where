@@ -14,7 +14,7 @@ import { HeroBanner, HeroOverlay } from "./utils/mgwStyle";
 import { SearchSharp } from "@mui/icons-material";
 import helper from "./utils/helper";
 
-export default function Home(props) {
+export default function Landing(props) {
   const { filterOpts, detectFilter, detectSearch } = props;
 
   return (
