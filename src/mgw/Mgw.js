@@ -158,6 +158,10 @@ export default class Mgw extends Component {
 
     if (name === "country") {
       inputs.countryId = value._id;
+      if (inputs.cityId.length) {
+        inputs.cityId = "";
+        inputs.city = helper.initArticleInputs.city;
+      }
     }
     if (name === "city") {
       inputs.cityId = value._id;
