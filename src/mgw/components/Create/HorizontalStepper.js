@@ -1,9 +1,9 @@
 import helper from "../../utils/helper";
 import { Box, Button, Step, StepLabel, Stepper } from "@mui/material";
-import NewAuthor from "../FormGroups/NewAuthor";
-import ArticleSummary from "../FormGroups/ArticleSummary";
-import ArticleDetails from "../FormGroups/ArticleDetails";
-import ArticleTags from "../FormGroups/ArticleTags";
+import NewAuthor from "../formgroups/NewAuthor";
+import ArticleSummary from "../formgroups/ArticleSummary";
+import ArticleDetails from "../formgroups/ArticleDetails";
+import ArticleTags from "../formgroups/ArticleTags";
 
 export default function HorizontalStepper(props) {
   const {

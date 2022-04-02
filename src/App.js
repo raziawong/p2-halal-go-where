@@ -1,10 +1,10 @@
 import React from "react";
-import Main from "./mgw/site";
+import Mgw from "./mgw/Mgw";
 
 export default function App() {
   return (
     <React.Fragment>
-      <Main />
+      <Mgw />
     </React.Fragment>
   );
 }

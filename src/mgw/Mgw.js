@@ -7,7 +7,7 @@ import helper from "./utils/helper";
 import { SiteContainer, ViewContainer } from "./utils/mgwStyle";
 import { Home, Explore, Create, Article, Loader, NavBar } from "./site";
 
-export default class Main extends Component {
+export default class Mgw extends Component {
   state = {
     filterOpts: { ...helper.initFilterOpts },
     articleInputs: { ...helper.initArticleInputs },

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { mgwCategoriesMap } from "../utils/data";
+import { mgwCategoriesMap } from "../../utils/data";
 import {
   Card,
   CardActions,

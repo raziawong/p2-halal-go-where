@@ -1,4 +1,4 @@
-import Main from "./Main";
+import Mgw from "./Mgw";
 
 // views
 import Home from "./Home";
@@ -9,11 +9,12 @@ import Article from "./Article";
 // components
 import Loader from "./components/Loader";
 import NavBar from "./components/NavBar";
-import FilterGroup from "./components/FilterGroup";
-import Listing from "./components/Listing";
 
-import HorizontalStepper from "./components/Create/HorizontalStepper";
+import FilterGroup from "./components/explore/FilterGroup";
+import Listing from "./components/explore/Listing";
 
-export default Main;
+import HorizontalStepper from "./components/create/HorizontalStepper";
+
+export default Mgw;
 export { Home, Explore, Create, Article, 
     FilterGroup, Listing, Loader, NavBar, HorizontalStepper  };

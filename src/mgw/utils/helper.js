@@ -4,6 +4,7 @@ import { EditorState, convertToRaw } from "draft-js";
 const helper = {
   exploreView: "listing",
   articleView: "details",
+  createSteps: ["Author", "Summary", "Details", "Tags"],
   initFilterOpts: {
     id: "",
     text: "",
