@@ -73,14 +73,14 @@ export default function FilterGroup(props) {
           value={filterOpts.catIds}
           onChange={detectFilter}
           renderValue={(vals) => (vals.length ? 
-            categories.results.filter(c => vals.includes(c._id) ).map(f => f.name).join(", ")
+            categories.filter(c => vals.includes(c) ).map(f => f.name).join(", ")
             : <em>None</em>)}
         >
           <MenuItem value="">
             <em>None</em>
           </MenuItem>
           {helper.categoriesOptDispay(
-            categories.count > 0 ? categories.results : [],
+            categories?.length > 0 ? categories : [],
             filterOpts.catIds
           )}
         </Select>
@@ -96,7 +96,7 @@ export default function FilterGroup(props) {
           value={filterOpts.subcatIds}
           onChange={detectFilter}
           renderValue={(vals) => (vals.length ? 
-            categories.results.reduce((pv, cv) => {
+            categories.reduce((pv, cv) => {
               return pv.concat(cv.subcats.filter(sc => vals.includes(sc._id) ))
             }, []).map(f => f.name).join(", ")
             : <em>None</em>)}
@@ -105,7 +105,7 @@ export default function FilterGroup(props) {
             <em>None</em>
           </MenuItem>
           {helper.subcategoriesOptDispay(
-            categories.count > 0 ? categories.results : [],
+            categories?.length > 0 ? categories : [],
             filterOpts.catIds,
             filterOpts.subcatIds
           )}

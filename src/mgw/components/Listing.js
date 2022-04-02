@@ -16,7 +16,7 @@ export default function Listing(props) {
     <Masonry columns={3} spacing={2}>
       {props.articles.map((card) => {
         const catId = card.categories.length ? card.categories[0].catId : "";
-        const catObj = props.allCategories.results.filter(c => c._id === catId );
+        const catObj = props.allCategories.filter(c => c._id === catId );
         const imgUrl = card.photos.length ? card.photos[0] : 
             catObj.length ? mgwCategoriesMap[catObj[0].value].default : mgwCategoriesMap.attractions.default;
         return (
