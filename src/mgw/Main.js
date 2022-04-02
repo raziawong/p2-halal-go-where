@@ -18,6 +18,7 @@ export default class Main extends Component {
     articleDetail: [],
     articlesTags: [],
     articlesLocations: [],
+    createActiveStep: 0,
     isRedirectArticle: false,
     isRedirectListing: false,
     isLoaded: false
@@ -31,8 +32,8 @@ export default class Main extends Component {
       .filter((v, i, a) => a.indexOf(v) === i);
 
     this.setState({
-      allCountries: fixed.countries,
-      allCategories: fixed.categories,
+      allCountries: fixed.countries.results,
+      allCategories: fixed.categories.results,
       allArticles: articles.main,
       articlesFetched: articles.main.count ? articles.main.results : [],
       articlesTags: uniqueTags,
@@ -123,7 +124,7 @@ export default class Main extends Component {
   
   detectFilter = (evt) => {
     this.setFilterOpts(evt.target);
-  }
+  };
 
   setMgwState = (pairs) => {
     this.setState({ ...pairs });
