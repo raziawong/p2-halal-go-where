@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import mgwTheme from "./utils/mgwTheme";
 import { ThemeProvider } from "@mui/material";
 import { Navigate, Routes, Route } from "react-router-dom";
-import { getMgwFixed, getMgwArticles, getArticles } from "./utils/data";
+import { getMgwFixed, getMgwArticles, getArticles, postArticle } from "./utils/data";
 import helper from "./utils/helper";
 import { SiteContainer, ViewContainer } from "./utils/mgwStyle";
 import Loader from "./components/Loader";
@@ -11,6 +11,7 @@ import Explore from "./Explore";
 import Create from "./Create";
 import Article from "./Article";
 import NavBar from "./components/NavBar";
+import { draftToMarkdown } from "markdown-draft-js";
 
 export default class Mgw extends Component {
   state = {
@@ -24,6 +25,7 @@ export default class Mgw extends Component {
     articleDetail: [],
     articlesTags: [],
     articlesLocations: [],
+    articlePosted: "",
     createActiveStep: 0,
     isRedirectArticle: false,
     isRedirectListing: false,
@@ -166,6 +168,14 @@ export default class Mgw extends Component {
     if (name === "city") {
       inputs.cityId = value._id;
     }
+    if (name === "catIds" || name === "subcatIds") {
+      const selCatIds = name === "catIds" ? inputs.catIds : this.state.articleInputs.catIds;
+      const selSubcatIds = name === "subcatIds" ? inputs.subcatIds : this.state.articleInputs.subcatIds;
+      let {catIds, subcatIds, depCatArr} = helper.getCatDep(this.state.allCategories, selCatIds, selSubcatIds);
+      inputs.catIds = catIds;
+      inputs.subcatIds = subcatIds;
+      inputs.categories = depCatArr;
+    }
 
     this.setState({
       articleInputs: inputs
@@ -179,11 +189,22 @@ export default class Mgw extends Component {
 
    this.setState({
       articleInputsErrors: validation || {}
-    }, () => {
+    }, async () => {
       if (!Object.entries(validation)?.length) {
-        this.setState({
-          createActiveStep: this.state.createActiveStep + 1
-        });
+        if (this.state.createActiveStep === helper.createSteps.length - 1) {
+          let pd = helper.transformArticle(this.state.articleInputs);
+          await postArticle(pd).then(resp => {
+            this.setState({
+              articleInputs: helper.initArticleInputs,
+              articleErrors: {},
+              articlePosted: resp.data.results.insertedId
+            });
+          });
+        } else {
+          this.setState({
+            createActiveStep: this.state.createActiveStep + 1
+          });
+        }
       }
     });
   }

@@ -3,7 +3,7 @@ import helper from "../../utils/helper";
 import { default as Editor } from "mui-rte";
 import { EditorState, convertToRaw, convertFromRaw } from "draft-js";
 import { draftToMarkdown, markdownToDraft } from "markdown-draft-js";
-import { Box, IconButton, Grid, TextField, Typography } from "@mui/material";
+import { Box, IconButton, FormHelperText, Grid, TextField, Typography } from "@mui/material";
 import {
   AddCircleOutlineSharp,
   RemoveCircleOutlineSharp,
@@ -30,10 +30,10 @@ export default function ArticleDetails({
     setArticleState({
       target: {
         name: "photos",
-        value: photos
-      }
+        value: photos,
+      },
     });
-  }
+  };
 
   const handleRemoveDetail = (evt, i) => {
     removeArr("details", i);
@@ -44,37 +44,35 @@ export default function ArticleDetails({
   };
 
   const handleDetailChange = (evt, i) => {
-    let details = JSON.parse(JSON.stringify(articleState.details));
+    let details = JSON.parse(JSON.stringify(articleState.details)) || {};
     if (evt.target) {
       details[i].sectionName = evt.target.value;
       console.log(evt.target.value, details);
     } else if (evt.getCurrentContent()) {
       // details[i].content = draftToMarkdown(convertToRaw(evt.getCurrentContent()));
-      details[i].content = JSON.stringify(convertToRaw(evt.getCurrentContent()));
+      details[i].content = JSON.stringify(
+        convertToRaw(evt.getCurrentContent())
+      );
     }
-    
+
     setArticleState({
       target: {
         name: "details",
-        value: details
-      }
+        value: details,
+      },
     });
   };
 
-  const checkError = (fieldName, i, innerKey=false) => {
+  const checkError = (fieldName, i, innerKey = false) => {
     const err = articleError[fieldName];
     if (err) {
       if (err.length >= i) {
-        if (innerKey && err[i][innerKey]){
-          return err[i][innerKey];
-        }
         return err[i];
       }
       return false;
     }
     return false;
-  } 
-
+  };
 
   return (
     <Grid container spacing={4} sx={{ justifyContent: "center" }}>
@@ -124,8 +122,8 @@ export default function ArticleDetails({
                 name={`details[${i}]sectionName`}
                 value={dtl.sectionName}
                 onChange={(evt) => handleDetailChange(evt, i)}
-                error={!!checkError("details", i, "sectionName")}
-                helperText={checkError("details", i, "sectionName")}
+                error={!!checkError("details", i)?.sectionName}
+                // helperText={checkError("details", i, "sectionName")}
               />
               <Editor
                 toolbarButtonSize="small"
@@ -136,6 +134,11 @@ export default function ArticleDetails({
                 value={dtl.content}
                 onChange={(evt) => handleDetailChange(evt, i)}
               />
+              {/* {checkError("details", i, "content") && (
+                <FormHelperText error={!!checkError("details", i, "content")}>
+                  {checkError("details", i, "content")}
+                </FormHelperText>
+              )} */}
             </Box>
             <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
               {articleState.details.length && (

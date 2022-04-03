@@ -46,6 +46,8 @@ export default function ArticleSummary({
           name="address"
           value={articleState.address}
           onChange={setArticleState}
+          error={!!articleError?.address}
+          helperText={articleError?.address}
         />
       </Grid>
       <Grid item xs={8}>

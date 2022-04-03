@@ -63,9 +63,11 @@ export default function ArticleTags({
               articleState.catIds
             )}
           </Select>
-          <FormHelperText error={!!articleError?.catIds}>
-            {articleError?.catIds}
-          </FormHelperText>
+          { articleError?.catIds &&
+            <FormHelperText error={!!articleError?.catIds}>
+              {articleError?.catIds}
+            </FormHelperText>
+          }
         </FormControl>
       </Grid>
       <Grid item xs={8}>
@@ -107,9 +109,11 @@ export default function ArticleTags({
               articleState.subcatIds
             )}
           </Select>
-          <FormHelperText error={!!articleError?.subcatIds}>
-            {articleError?.subcatIds}
-          </FormHelperText>
+          { articleError?.subcatIds &&
+            <FormHelperText error={!!articleError?.subcatIds}>
+              {articleError?.subcatIds}
+            </FormHelperText>
+          }
         </FormControl>
       </Grid>
       <Grid item xs={8}>

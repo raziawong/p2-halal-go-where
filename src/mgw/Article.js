@@ -3,8 +3,14 @@ import { useParams } from "react-router-dom";
 import { Container, Box, Typography } from "@mui/material";
 import helper from "./utils/helper";
 
-export default function Article(props) {
-  const { articleInputs, article, loaded, setMgwState, setFilterOpts, execSearch } = props;
+export default function Article({
+  articleInputs,
+  article,
+  loaded,
+  setMgwState,
+  setFilterOpts,
+  execSearch,
+}) {
   const view = article[0] || {};
   const params = useParams();
 
@@ -20,17 +26,17 @@ export default function Article(props) {
         {!loaded ? (
           <></>
         ) : (
-          <Box sx={{ m: 4}}>
+          <Box sx={{ m: 4 }}>
             <h1>{view.title}</h1>
             <h5>{view.description}</h5>
-            {
-              view.details && view.details.length > 0 && view.details.map((d, i) =>
+            {view.details &&
+              view.details.length > 0 &&
+              view.details.map((d, i) => (
                 <Fragment key={i}>
                   <h6>{d.sectionName}</h6>
                   {d.content}
                 </Fragment>
-              )
-            }
+              ))}
           </Box>
         )}
       </Container>

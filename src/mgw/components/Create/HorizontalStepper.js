@@ -99,12 +99,9 @@ export default function HorizontalStepper({
             Skip
           </Button>
         )}
-        {activeStep !== helper.createSteps.length - 1 && (
-          <Button onClick={handleNext}>Next</Button>
-        )}
-        {activeStep === helper.createSteps.length - 1 && (
-          <Button onClick={handleNext}>Submit</Button>
-        )}
+        <Button onClick={handleNext}>
+          {activeStep === helper.createSteps.length - 1 ? "Submit" : "Next"}
+        </Button>
       </Box>
     </Box>
   );
