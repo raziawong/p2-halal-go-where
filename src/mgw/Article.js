@@ -2,6 +2,7 @@ import React, { Fragment, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Container, Box, Typography } from "@mui/material";
 import helper from "./utils/helper";
+import ArticleRating from "./components/article/ArticleRating";
 
 export default function Article({
   articleInputs,
@@ -37,6 +38,7 @@ export default function Article({
                   {d.content}
                 </Fragment>
               ))}
+              <ArticleRating {...view.rating} />
           </Box>
         )}
       </Container>
