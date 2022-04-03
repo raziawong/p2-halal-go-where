@@ -100,8 +100,8 @@ export default class Mgw extends Component {
                     setArticleState={this.setArticleInputs}
                     articleError={this.state.articleInputsErrors}
                     validateArticle={this.validateArticleInputs}
-                    setArr={this.setArticleArrayVal}
-                    removeArr={this.removeArticleArrayVal}
+                    setArr={this.addArticleArraySize}
+                    removeArr={this.removeArticleArraySize}
                     submitArticle={this.submitArticle}
                   />
                 }
@@ -188,7 +188,7 @@ export default class Mgw extends Component {
     });
   }
 
-  setArticleArrayVal = (name, val) => {
+  addArticleArraySize = (name, val) => {
     let inputs = {...this.state.articleInputs};
     inputs[name].push(val);
     this.setState({
@@ -196,7 +196,7 @@ export default class Mgw extends Component {
     });
   };
 
-  removeArticleArrayVal = (name, index) => {
+  removeArticleArraySize = (name, index) => {
     let inputs = {...this.state.articleInputs};
     inputs[name].splice(index, 1);
     this.setState({

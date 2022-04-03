@@ -38,15 +38,8 @@ const helper = {
     allowPublic: false,
     title: "",
     description: "",
-    details: [
-      {
-        sectionName: "",
-        content: JSON.stringify(
-          convertToRaw(EditorState.createEmpty().getCurrentContent())
-        ),
-      },
-    ],
-    photos: [""],
+    details: [],
+    photos: [],
     address: "",
     country: { _id: "", name: "Not selected"},
     countryId: "",
@@ -214,11 +207,41 @@ const helper = {
         return { fieldName, message: helper.templates.required };
       }
     } else if (fieldName.startsWith("photos")) {
+      val = inputs.photos;
+      let err = val.map((p, i) => {
+        if(!helper.regex.url.test(p)) {
+          return helper.templates.url ;
+        }
+      }).filter(p => !!p);
+      if (err.length) {
+        return {fieldName, message: err};
+      }
     } else if (fieldName.startsWith("details")) {
-    } else if (fieldName === "catIds") {
-    } else if (fieldName === "subcatIds") {
-    } else if (fieldName === "tags") {
+      val = inputs.details;
+      let errList = val.map((d, i) => {
+        let err = {};
+        if (!d.sectionName) {
+          err.sectionName = helper.templates.required;
+        } else if(!helper.regex.displayName.test(d.sectionName)) {
+          err.sectionNasme = helper.templates.special;
+        } 
+        if (d.content) {
+          const content = JSON.parse(d.content);
+          if (d.sectionName && !content.text) {
+            err.content = "Content cannot be empty when Header is not"
+          } 
+        }
+        return err;
+      }).filter(d => !!d);
+
+      if (errList.length) {
+        return { fieldName, message: errList };
+      }
     }
+    //} else if (fieldName === "catIds") {
+    // } else if (fieldName === "subcatIds") {
+    // } else if (fieldName === "tags") {
+    // }
 
     return false;
   },

@@ -65,6 +65,8 @@ export default function HorizontalStepper({
         {activeStep === 2 && (
           <ArticleDetails
             articleState={articleState}
+            setArticleState={setArticleState}
+            articleError={articleError}
             setArr={setArr}
             removeArr={removeArr}
           />
