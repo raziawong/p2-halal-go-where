@@ -9,14 +9,12 @@ import {
   Stack,
   OutlinedInput,
 } from "@mui/material";
-import banner from "../assets/image/banner.jpg"
+import banner from "../assets/image/banner.jpg";
 import { HeroBanner, HeroOverlay } from "./utils/mgwStyle";
 import { SearchSharp } from "@mui/icons-material";
 import helper from "./utils/helper";
 
-export default function Landing(props) {
-  const { filterOpts, detectFilter, detectSearch } = props;
-
+export default function Landing({ filterOpts, detectFilter, detectSearch }) {
   return (
     <Fragment>
       <Container maxWidth="xl" disableGutters>
@@ -36,7 +34,9 @@ export default function Landing(props) {
                     <IconButton
                       aria-label="Submit Search"
                       onClick={(evt) => detectSearch(evt, helper.exploreView)}
-                      onMouseDown={(evt) => detectSearch(evt, helper.exploreView)}
+                      onMouseDown={(evt) =>
+                        detectSearch(evt, helper.exploreView)
+                      }
                       onKeyDown={(evt) => detectSearch(evt, helper.exploreView)}
                     >
                       <SearchSharp sx={{ color: "white", mr: 1, my: 0.5 }} />

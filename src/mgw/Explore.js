@@ -3,23 +3,20 @@ import { Container, Box, Typography } from "@mui/material";
 import FilterGroup from "./components/explore/FilterGroup";
 import Listing from "./components/explore/Listing";
 
-export default function Explore(props) {
-  const {
-    setMgwState,
-    setFilterOpts,
-    detectFilter,
-    detectSearch,
-    filterOpts,
-    countries,
-    categories,
-    articles,
-    loaded
-  } = props;
-
+export default function Explore({
+  setMgwState,
+  setFilterOpts,
+  detectFilter,
+  detectSearch,
+  filterOpts,
+  countries,
+  categories,
+  articles,
+  loaded,
+}) {
   useEffect(() => {
     setMgwState({ isRedirectListing: false });
   }, [setMgwState]);
-
   return (
     <Container maxWidth="xl" disableGutters>
       {!loaded ? (

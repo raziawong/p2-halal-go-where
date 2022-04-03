@@ -11,14 +11,17 @@ import {
 } from "@mui/material";
 import { Masonry } from "@mui/lab";
 
-export default function Listing(props) {
+export default function Listing({ articles, allCategories }) {
   return (
     <Masonry columns={3} spacing={2}>
-      {props.articles.map((card) => {
+      {articles.map((card) => {
         const catId = card.categories.length ? card.categories[0].catId : "";
-        const catObj = props.allCategories.filter(c => c._id === catId );
-        const imgUrl = card.photos.length ? card.photos[0] : 
-            catObj.length ? mgwCategoriesMap[catObj[0].value].default : mgwCategoriesMap.attractions.default;
+        const catObj = allCategories.filter((c) => c._id === catId);
+        const imgUrl = card.photos.length
+          ? card.photos[0]
+          : catObj.length
+          ? mgwCategoriesMap[catObj[0].value].default
+          : mgwCategoriesMap.attractions.default;
         return (
           <Card key={card._id}>
             <CardMedia component="img" image={imgUrl} />
@@ -32,7 +35,7 @@ export default function Listing(props) {
               <Typography gutterBottom variant="body2" color="text.secondary">
                 {card.description}
               </Typography>
-              <Box sx={{ display: "flex", justifyContent: "space-between"}}>
+              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                 {card.tags.map((tag, i) => (
                   <Typography key={i} variant="subtitle2" component="span">
                     {tag}

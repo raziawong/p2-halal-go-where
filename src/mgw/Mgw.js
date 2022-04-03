@@ -245,18 +245,20 @@ export default class Mgw extends Component {
       }
   
       query = await getArticles(params, viewType);
-      if (query.data) {
+      if (query.data.results) {
+        viewType === helper.articleView ? this.setState({
+          // filterOpts: viewType === helper.articleView ?  { ...helper.initFilterOpts } : this.state.filterOpts,
+          isRedirectArticle: true,
+          articleDetail: [...query.data.results][0] || [],
+          isLoaded: true
+        }) :
         this.setState({
           // filterOpts: viewType === helper.articleView ?  { ...helper.initFilterOpts } : this.state.filterOpts,
-          [viewType === helper.articleView ? "isRedirectArticle" : "isRedirectListing" ]: true,
-          [viewType === helper.articleView ? "articleDetail" : "articlesFetched" ]: [...query.data.results] || [],
+          isRedirectListing: true,
+          articlesFetched: [...query.data.results] || [],
           isLoaded: true
         });
       }      
     });
-  };
-
-  submitArticle = (data) => {
-    console.log(data);
   };
 }

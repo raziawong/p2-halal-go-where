@@ -12,7 +12,6 @@ export default function Article({
   setFilterOpts,
   execSearch,
 }) {
-  const view = article[0] || {};
   const params = useParams();
 
   useEffect(async () => {
@@ -28,17 +27,17 @@ export default function Article({
           <></>
         ) : (
           <Box sx={{ m: 4 }}>
-            <h1>{view.title}</h1>
-            <h5>{view.description}</h5>
-            {view.details &&
-              view.details.length > 0 &&
-              view.details.map((d, i) => (
+            <h1>{article.title}</h1>
+            <h5>{article.description}</h5>
+            {article.details &&
+              article.details.length > 0 &&
+              article.details.map((d, i) => (
                 <Fragment key={i}>
                   <h6>{d.sectionName}</h6>
                   {d.content}
                 </Fragment>
               ))}
-              <ArticleRating {...view.rating} />
+              <ArticleRating {...article.rating} />
           </Box>
         )}
       </Container>

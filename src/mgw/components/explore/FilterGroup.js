@@ -5,19 +5,17 @@ import {
   MenuItem,
   OutlinedInput,
   Select,
-  Slider
+  Slider,
 } from "@mui/material";
 import { Fragment } from "react";
 
-export default function FilterGroup(props) {
-  const {
-    detectFilter,
-    detectSearch,
-    filterOpts,
-    countries,
-    categories
-  } = props;
-
+export default function FilterGroup({
+  detectFilter,
+  detectSearch,
+  filterOpts,
+  countries,
+  categories,
+}) {
   return (
     <Fragment>
       <FormControl sx={{ width: "50%" }}>
@@ -72,9 +70,16 @@ export default function FilterGroup(props) {
           size="small"
           value={filterOpts.catIds}
           onChange={detectFilter}
-          renderValue={(vals) => (vals.length ? 
-            categories.filter(c => vals.includes(c._id) ).map(f => f.name).join(", ")
-            : <em>None</em>)}
+          renderValue={(vals) =>
+            vals.length ? (
+              categories
+                .filter((c) => vals.includes(c._id))
+                .map((f) => f.name)
+                .join(", ")
+            ) : (
+              <em>None</em>
+            )
+          }
         >
           <MenuItem value="">
             <em>None</em>
@@ -95,11 +100,20 @@ export default function FilterGroup(props) {
           size="small"
           value={filterOpts.subcatIds}
           onChange={detectFilter}
-          renderValue={(vals) => (vals.length ? 
-            categories.reduce((pv, cv) => {
-              return pv.concat(cv.subcats.filter(sc => vals.includes(sc._id) ))
-            }, []).map(f => f.name).join(", ")
-            : <em>None</em>)}
+          renderValue={(vals) =>
+            vals.length ? (
+              categories
+                .reduce((pv, cv) => {
+                  return pv.concat(
+                    cv.subcats.filter((sc) => vals.includes(sc._id))
+                  );
+                }, [])
+                .map((f) => f.name)
+                .join(", ")
+            ) : (
+              <em>None</em>
+            )
+          }
         >
           <MenuItem value="">
             <em>None</em>
