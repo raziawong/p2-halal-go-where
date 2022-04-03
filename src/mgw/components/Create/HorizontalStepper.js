@@ -74,6 +74,8 @@ export default function HorizontalStepper({
         {activeStep === 3 && (
           <ArticleTags
             articleState={articleState}
+            setArticleState={setArticleState}
+            articleError={articleError}
             catOpts={catOpts}
             tagOpts={tagOpts}
           />
@@ -81,7 +83,7 @@ export default function HorizontalStepper({
       </Box>
       <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
         <Button
-          color="inherit"
+          disabled={!!Object.entries(articleError).length}
           onClick={handleBack}
           sx={{ mr: 1, display: activeStep === 0 ? "none" : "" }}
         >
@@ -89,14 +91,19 @@ export default function HorizontalStepper({
         </Button>
         <Box sx={{ flex: "1 1 auto" }} />
         {isOptional(activeStep) && (
-          <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
+          <Button
+            disabled={!!Object.entries(articleError).length}
+            onClick={handleSkip}
+            sx={{ mr: 1 }}
+          >
             Skip
           </Button>
         )}
         {activeStep !== helper.createSteps.length - 1 && (
-          <Button onClick={handleNext}>
-            Next
-          </Button>
+          <Button onClick={handleNext}>Next</Button>
+        )}
+        {activeStep === helper.createSteps.length - 1 && (
+          <Button onClick={handleNext}>Submit</Button>
         )}
       </Box>
     </Box>

@@ -41,9 +41,9 @@ const helper = {
     details: [],
     photos: [],
     address: "",
-    country: { _id: "", name: "Not selected"},
+    country: { _id: "", name: "Not selected" },
     countryId: "",
-    city: { _id: "", name: "Not selected"},
+    city: { _id: "", name: "Not selected" },
     cityId: "",
     catIds: [],
     subcatIds: [],
@@ -79,8 +79,7 @@ const helper = {
           : countries
         : [];
     return c.length
-      ? c.map((country) => country.cities)
-        .reduce((a, v) => [...a, ...v], [])
+      ? c.map((country) => country.cities).reduce((a, v) => [...a, ...v], [])
       : [];
   },
   countryOptDisplay: (countries) => {
@@ -224,12 +223,12 @@ const helper = {
           err.sectionName = helper.templates.required;
         } else if(!helper.regex.displayName.test(d.sectionName)) {
           err.sectionNasme = helper.templates.special;
-        } 
+        }
         if (d.content) {
           const content = JSON.parse(d.content);
           if (d.sectionName && !content.text) {
             err.content = "Content cannot be empty when Header is not"
-          } 
+          }
         }
         return err;
       }).filter(d => !!d);
@@ -237,15 +236,25 @@ const helper = {
       if (errList.length) {
         return { fieldName, message: errList };
       }
+    } else if (fieldName === "catIds") {
+      if (!val.length) {
+        return { fieldName, message: helper.templates.required };
+      }
+    } else if (fieldName === "subcatIds") {
+      if (!val.length) {
+        return { fieldName, message: helper.templates.required };
+      }
+    } else if (fieldName === "tags") {
+      if (val && val?.length >= 1) {
+        let check = val?.filter((t) => !helper.regex.displayName.test(t));
+        if (check) {
+          return { fieldName, message: helper.templates.special };
+        }
+      }
     }
-    //} else if (fieldName === "catIds") {
-    // } else if (fieldName === "subcatIds") {
-    // } else if (fieldName === "tags") {
-    // }
 
     return false;
   },
 };
-
 
 export default helper;

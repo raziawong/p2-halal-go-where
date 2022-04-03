@@ -73,7 +73,7 @@ export default function FilterGroup(props) {
           value={filterOpts.catIds}
           onChange={detectFilter}
           renderValue={(vals) => (vals.length ? 
-            categories.filter(c => vals.includes(c) ).map(f => f.name).join(", ")
+            categories.filter(c => vals.includes(c._id) ).map(f => f.name).join(", ")
             : <em>None</em>)}
         >
           <MenuItem value="">

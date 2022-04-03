@@ -1,5 +1,5 @@
 import helper from "../../utils/helper";
-import { Autocomplete, Grid, MenuItem, TextField } from "@mui/material";
+import { Autocomplete, Grid, TextField } from "@mui/material";
 
 
 export default function ArticleSummary({
