@@ -36,8 +36,8 @@ export default class Mgw extends Component {
     editModal: false,
     userEmail: "",
     userVerified: false,
-    isRedirectArticle: false,
     isRedirectListing: false,
+    isMounted: false,
     isLoaded: false,
   };
 
@@ -57,6 +57,7 @@ export default class Mgw extends Component {
       articlesLocations: articles.location.count
         ? articles.location.results
         : [],
+      isMounted: true,
       isLoaded: true,
     });
   }
@@ -133,6 +134,7 @@ export default class Mgw extends Component {
                     removeArr={this.removeArticleArraySize}
                     activeStep={this.state.editActiveStep}
                     loaded={this.state.isLoaded}
+                    mounted={this.state.isMounted}
                     editModal={this.state.editModal}
                     userEmail={this.state.userEmail}
                     userVerified={this.state.userVerified}
@@ -226,10 +228,10 @@ export default class Mgw extends Component {
       },
       async () => {
         if (!Object.entries(validation)?.length) {
-          let {createActiveStep, editActiveStep, articleInputs} = this.state;
+          let { createActiveStep, editActiveStep, articleInputs } = this.state;
           if (type === "create") {
             if (createActiveStep === helper.createSteps.length - 1) {
-              let pd = helper.transformArticle(articleInputs);
+              let pd = helper.transformArticleForUpdate(articleInputs);
               await postArticle(pd).then((resp) => {
                 this.setState({
                   articleInputs: helper.initArticleInputs,
@@ -247,7 +249,14 @@ export default class Mgw extends Component {
 
           if (type === "edit") {
             if (editActiveStep === 0 && articleInputs.email) {
-              await this.verifyArticleUser(articleInputs._id, articleInputs.email);
+              await this.verifyArticleUser(
+                articleInputs._id,
+                articleInputs.email
+              );
+            } else {
+              this.setState({
+                editActiveStep: this.state.editActiveStep + 1
+              })
             }
           }
         }
@@ -272,11 +281,11 @@ export default class Mgw extends Component {
   };
 
   verifyArticleUser = async (articleId, email) => {
-    await getArticleContributor({ articleId, email }).then(resp => {
+    await getArticleContributor({ articleId, email }).then((resp) => {
       if (resp.data.count) {
         let update = {
           userEmail: email,
-          userVerified: true
+          userVerified: true,
         };
         if (this.state.editActiveStep === 0) {
           update.editActiveStep = 1;
@@ -285,7 +294,7 @@ export default class Mgw extends Component {
       } else {
         this.setState({
           userEmail: "",
-          userVerified: false
+          userVerified: false,
         });
       }
     });
@@ -293,26 +302,27 @@ export default class Mgw extends Component {
 
   searchArticles = (viewType) => {
     this.setState({ isLoaded: false }, async () => {
-      let params,
-        query = {};
+      let { filterOpts } = this.state;
+      let params, query = {};
 
       if (viewType === helper.exploreView) {
         params = Object.fromEntries(
-          Object.entries(this.state.filterOpts).filter(
+          Object.entries(filterOpts).filter(
             ([k, v]) => typeof v !== "undefined" && v.length
           )
         );
-
         if (params.rating && params.rating.length === 2) {
           params.ratingFrom = params.rating[0];
           params.ratingTo = params.rating[1];
         }
       } else if (viewType === helper.articleView) {
-        params = { articleId: this.state.filterOpts.id };
+        params = { articleId: filterOpts.id };
+        console.log(params);
       }
 
       query = await getArticles(params, viewType);
       if (query.data.results) {
+        let { articlesLocations, allCategories } = this.state;
         // const results = query.data.results.map(async r => {
         //   let locResp = await getCountriesCities({
         //     countryId: r.location.countryId,
@@ -327,19 +337,22 @@ export default class Mgw extends Component {
         //   return r;
         // });
 
+        let transformed = await helper.transformArticlesForRead(
+          query.data.results,
+          articlesLocations,
+          allCategories
+        )
+          console.log(transformed);
         viewType === helper.articleView
-          ? this.setState({
-              // filterOpts: viewType === helper.articleView ?  { ...helper.initFilterOpts } : this.state.filterOpts,
-              isRedirectArticle: true,
-              articleDetail: [...query.data.results][0] || [],
-              isLoaded: true,
-            })
-          : this.setState({
-              // filterOpts: viewType === helper.articleView ?  { ...helper.initFilterOpts } : this.state.filterOpts,
-              isRedirectListing: true,
-              articlesFetched: [...query.data.results] || [],
-              isLoaded: true,
-            });
+        ? this.setState({
+            articleDetail: [...transformed][0] || [],
+            isLoaded: true
+          })
+        : this.setState({
+            isRedirectListing: true,
+            articlesFetched: [...transformed] || [],
+            isLoaded: true
+          });
       }
     });
   };

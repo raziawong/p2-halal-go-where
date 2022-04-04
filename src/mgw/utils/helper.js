@@ -1,6 +1,7 @@
 import { Checkbox, ListItemText, MenuItem } from "@mui/material";
 import { EditorState, convertToRaw } from "draft-js";
 import { draftToMarkdown } from "markdown-draft-js";
+import { getCategories } from "./data";
 
 const helper = {
   exploreView: "listing",
@@ -146,23 +147,31 @@ const helper = {
         )
       : [];
   },
-  getCatDep: (allCats, selCats, selSubcats) => {
+  getCatDep: async (allCats, selCats, selSubcats) => {
+    const fetchedCats = await getCategories();
+    allCats = allCats.length
+      ? allCats
+      : fetchedCats.data.count
+      ? fetchedCats.data.results
+      : [];
     const catIds = [...selCats];
     let subcatIds = [];
     let depCatArr = catIds.map((cId, i) => {
-      const foundSub = allCats.find(c => c._id === cId)?.subcats;
-      let depSubcatIds = selSubcats.map(scId => {
-        const newSub = foundSub.find(sc => sc._id === scId);
-        if (newSub) {
-          subcatIds.push(scId);
-          return scId;
-        }
-      }).filter(sc => !!sc);
-      return { catId: cId, subcatIds: depSubcatIds};
+      const foundSub = allCats.find((c) => c._id === cId)?.subcats;
+      let depSubcatIds = selSubcats
+        .map((scId) => {
+          const newSub = foundSub.find((sc) => sc._id === scId);
+          if (newSub) {
+            subcatIds.push(scId);
+            return scId;
+          }
+        })
+        .filter((sc) => !!sc);
+      return { catId: cId, subcatIds: depSubcatIds };
     });
-    return { catIds, subcatIds, depCatArr};
+    return { catIds, subcatIds, depCatArr };
   },
-  transformArticle: inputData => {
+  transformArticleForUpdate: (inputData) => {
     let pd = JSON.parse(JSON.stringify(inputData));
     pd.contributor = {};
     pd.contributors[0].displayName = pd.displayName || "";
@@ -172,19 +181,62 @@ const helper = {
     pd.location.address = pd.address || "";
     pd.location.countryId = pd.countryId;
     pd.location.cityId = pd.cityId;
-    delete pd["displayName"]; 
-    delete pd["name"]; 
+    delete pd["displayName"];
+    delete pd["name"];
     delete pd["email"];
-    delete pd["country"]; 
+    delete pd["country"];
     delete pd["city"];
-    delete pd["catIds"]; 
+    delete pd["catIds"];
     delete pd["subcatIds"];
-  
-    pd.details?.map(dtl => {
+
+    pd.details?.map((dtl) => {
       dtl.content = draftToMarkdown(JSON.parse(dtl.content));
     });
 
     return pd;
+  },
+  transformArticlesForRead: (allData, allLocs, allCats) => {
+    let data = JSON.parse(JSON.stringify(allData));
+    return new Promise((resolve, reject) => {
+      let tf = data.map((res) => {
+        if (res.contributors?.length) {
+          let author = res.contributors.filter((c) => c.isAuthor);
+          if (author.length) {
+            res.displayName = author[0].displayName;
+          }
+        }
+
+        if (res.location) {
+          res = { ...res, ...res.location };
+          if (allLocs?.length) {
+            let foundP = allLocs.find((t) => t._id === res.location.countryId);
+            if (foundP) {
+              res.country = { _id: foundP._id, name: foundP.name };
+              let foundC = foundP.cities.find(
+                (t) => t._id === res.location.cityId
+              );
+              if (foundC) {
+                res.city = { _id: foundC._id, name: foundC.name };
+              }
+            }
+          }
+        }
+
+        if (res.categories?.length) {
+          res.catIds = [];
+          res.subcatIds = [];
+          res.categories.map((cat) => {
+            res.catIds = [...res.catIds, cat.catId];
+            res.subcatIds = [...res.subcatIds, ...cat.subcatIds];
+            return cat;
+          });
+        }
+        return res;
+      });
+
+      if (tf) { resolve(tf); }
+      else { reject ("Error encountered while transforming article for read"); }
+    });
   },
   regex: {
     spaces: /^[\s]*$/,
@@ -306,7 +358,7 @@ const helper = {
       }
     } else if (fieldName === "tags") {
       if (val && val?.length >= 1) {
-        let check = val.filter(t => !helper.regex.alphaNumeric.test(t));
+        let check = val.filter((t) => !helper.regex.alphaNumeric.test(t));
         if (check.length) {
           return { fieldName, message: helper.templates.alphaNumeric };
         }

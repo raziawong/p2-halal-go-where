@@ -19,6 +19,7 @@ export default function Article({
   removeArr,
   activeStep,
   loaded,
+  mounted,
   editModal,
   userEmail,
   userVerified,
@@ -28,20 +29,27 @@ export default function Article({
   execSearch
 }) {
   const params = useParams();
+
   useEffect(async () => {
     setFilterOpts({ name: "id", value: params.id });
-    await execSearch(helper.articleView);
-    setMgwState({ isRedirectArticle: false });
-  }, [execSearch]);
+  }, [setFilterOpts, params.id]);
+
+  useEffect(async () => {
+    if (mounted) {
+      await execSearch(helper.articleView);
+    }
+  }, [mounted, execSearch, params.id]);
 
   const handleEdit = () => {
     let inputs = {...helper.initArticleInputs, ...article};
+
     if (userVerified) {
       inputs.email = userEmail;
     }
     setMgwState({
       editModal: true,
-      articleInputs: inputs
+      articleInputs: inputs,
+      articleInputsErrors: {},
     });
   };
   const handleDelete = () => {};
@@ -54,7 +62,7 @@ export default function Article({
           <Box sx={{ my: 4, mx: 6 }}>
             <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center"}}>
               <Typography component="h1" variant="h2">{article.title}</Typography>
-              <Typography component="h2" variant="h2">{article.country}{", "}{article.city}</Typography>
+              <Typography component="h2" variant="h2">{article.country?.name}{", "}{article.city?.name}</Typography>
             </Box>
             <Box>
             <Typography variant="h4">{article.description}</Typography>
@@ -68,7 +76,7 @@ export default function Article({
                 </Fragment>
               ))}
             <Box>
-              <Typography>Address: {article.location.address}</Typography>
+              <Typography>Address: {article.address}</Typography>
             </Box>
             <Box
               sx={{
@@ -80,7 +88,7 @@ export default function Article({
             >
               <Box>
                 <Typography>
-                  Added By: {article.contributors[0].displayName}
+                  Added By: {article.contributors? article.contributors[0].displayName : ""}
                 </Typography>
                 <Typography>Last Modified: {article.lastModified}</Typography>
               </Box>
