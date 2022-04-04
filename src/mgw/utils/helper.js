@@ -1,6 +1,6 @@
 import { Checkbox, ListItemText, MenuItem } from "@mui/material";
 import { EditorState, convertToRaw } from "draft-js";
-import { draftToMarkdown } from "markdown-draft-js";
+import { draftToMarkdown, markdownToDraft } from "markdown-draft-js";
 import { getCategories } from "./data";
 
 const helper = {
@@ -229,6 +229,14 @@ const helper = {
             res.catIds = [...res.catIds, cat.catId];
             res.subcatIds = [...res.subcatIds, ...cat.subcatIds];
             return cat;
+          });
+        }
+
+        if (res.details?.length) {
+          res.details = res.details.map(det => {
+            det.contentMd = det.content;
+            det.content = JSON.stringify(markdownToDraft(det.content));
+            return det;
           });
         }
         return res;

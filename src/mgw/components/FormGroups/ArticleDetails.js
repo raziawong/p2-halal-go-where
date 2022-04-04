@@ -1,8 +1,7 @@
 import React, { Fragment } from "react";
 import helper from "../../utils/helper";
 import { default as Editor } from "mui-rte";
-import { EditorState, convertToRaw, convertFromRaw } from "draft-js";
-import { draftToMarkdown, markdownToDraft } from "markdown-draft-js";
+import { convertToRaw } from "draft-js";
 import { Box, IconButton, FormHelperText, Grid, TextField, Typography } from "@mui/material";
 import {
   AddCircleOutlineSharp,
@@ -47,9 +46,7 @@ export default function ArticleDetails({
     let details = JSON.parse(JSON.stringify(articleState.details)) || {};
     if (evt.target) {
       details[i].sectionName = evt.target.value;
-      console.log(evt.target.value, details);
     } else if (evt.getCurrentContent()) {
-      // details[i].content = draftToMarkdown(convertToRaw(evt.getCurrentContent()));
       details[i].content = JSON.stringify(
         convertToRaw(evt.getCurrentContent())
       );

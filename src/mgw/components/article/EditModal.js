@@ -3,7 +3,6 @@ import { Backdrop, Box, Fade, Modal } from "@mui/material";
 import HorizontalStepper from "../shared/HorizontalStepper";
 
 export default function EditModal({
-  type,
   locationOpts,
   catOpts,
   tagOpts,
