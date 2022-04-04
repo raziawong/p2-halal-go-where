@@ -1,5 +1,5 @@
-import React from "react";
-import { NavBarDrawer, NavBarLink } from "../utils/mgwStyle";
+import React, {Fragment} from "react";
+import { NavBarDrawer, NavBarLink } from "../../utils/mgwStyle";
 import { IconButton, List, ListItem, ListItemText } from "@mui/material";
 import { CollectionsBookmarkSharp, HomeSharp, MenuSharp, NoteAddSharp, ViewListSharp } from "@mui/icons-material";
 
@@ -10,7 +10,7 @@ export default class NavDrawer extends React.Component {
 
   render() {
     return (
-      <React.Fragment>
+      <Fragment>
         <NavBarDrawer
           anchor="right"
           open={this.state.opened}
@@ -46,7 +46,7 @@ export default class NavDrawer extends React.Component {
         <IconButton onClick={() => this.setState({ opened: !this.state.opened })}>
           <MenuSharp />
         </IconButton>
-      </React.Fragment>
+      </Fragment>
     );
   }
 }

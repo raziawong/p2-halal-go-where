@@ -1,13 +1,13 @@
-import React from "react";
-import logo from "../../assets/image/mgw-logo.svg";
-import { NavBarLogo, NavBarLink } from "../utils/mgwStyle";
+import React, { Fragment } from "react";
+import logo from "../../../assets/image/mgw-logo.svg";
+import { NavBarLogo, NavBarLink } from "../../utils/mgwStyle";
 import { AppBar, Box, Container, Toolbar } from "@mui/material";
 import { CollectionsBookmarkSharp, NoteAddSharp, ViewListSharp } from "@mui/icons-material";
 import NavDrawer from "./NavDrawer";
 
 export default function NavBar() {
   return (
-    <React.Fragment>
+    <Fragment>
         <AppBar position="static">
           <Container maxWidth="xl">
           <Toolbar>
@@ -35,6 +35,6 @@ export default function NavBar() {
           </Toolbar>
           </Container>
         </AppBar>
-    </React.Fragment>
+    </Fragment>
   );
 }

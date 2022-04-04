@@ -1,5 +1,5 @@
-import "../../assets/loader.css"
-import { LoaderBackdrop } from "../utils/mgwStyle";
+import "../../../assets/loader.css"
+import { LoaderBackdrop } from "../../utils/mgwStyle";
 
 export default function Loader(props) {
     return (

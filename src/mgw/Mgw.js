@@ -11,12 +11,12 @@ import {
 } from "./utils/data";
 import helper from "./utils/helper";
 import { SiteContainer, ViewContainer } from "./utils/mgwStyle";
-import Loader from "./components/Loader";
+import Loader from "./components/shared/Loader";
 import Landing from "./Landing";
 import Explore from "./Explore";
 import Create from "./Create";
 import Article from "./Article";
-import NavBar from "./components/NavBar";
+import NavBar from "./components/shared/NavBar";
 
 export default class Mgw extends Component {
   state = {
