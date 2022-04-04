@@ -5,15 +5,27 @@ import { Container, Box, IconButton, Typography } from "@mui/material";
 import { EditSharp, DeleteOutlineSharp } from "@mui/icons-material";
 import ReactMarkdown from "react-markdown";
 import ArticleRating from "./components/article/ArticleRating";
-import { getCountriesCities } from "./utils/data";
+import EditModal from "./components/article/EditModal";
 
 export default function Article({
-  articleInputs,
-  article,
+  tagOpts,
+  locationOpts,
+  catOpts,
+  articleState,
+  articleError,
+  validateArticle,
+  setArticleState,
+  setArr,
+  removeArr,
+  activeStep,
   loaded,
+  editModal,
+  userEmail,
+  verifyUser,
   setMgwState,
+  article,
   setFilterOpts,
-  execSearch,
+  execSearch
 }) {
   const params = useParams();
   useEffect(async () => {
@@ -22,7 +34,12 @@ export default function Article({
     setMgwState({ isRedirectArticle: false });
   }, [execSearch]);
 
-  const handleEdit = () => {};
+  const handleEdit = () => {
+    setMgwState({
+      editModal: true,
+      articleInputs: article
+    });
+  };
   const handleDelete = () => {};
   return (
     <Fragment>
@@ -59,7 +76,7 @@ export default function Article({
             >
               <Box>
                 <Typography>
-                  Added By: {article.contributor[0].displayName}
+                  Added By: {article.contributors[0].displayName}
                 </Typography>
                 <Typography>Last Modified: {article.lastModified}</Typography>
               </Box>
@@ -71,6 +88,22 @@ export default function Article({
                 >
                   <EditSharp />
                 </IconButton>
+                <EditModal 
+                    locationOpts={locationOpts}
+                    catOpts={catOpts}
+                    tagOpts={tagOpts}
+                    activeStep={activeStep}
+                    articleState={articleState}
+                    setArticleState={setArticleState}
+                    articleError={articleError}
+                    validateArticle={validateArticle}
+                    setArr={setArr}
+                    removeArr={removeArr}
+                    setMgwState={setMgwState}
+                    editModal={editModal}
+                    userEmail={userEmail}
+                    verifyUser={verifyUser}
+                  />
                 <IconButton
                   color="primary"
                   aria-label="Delete Article"

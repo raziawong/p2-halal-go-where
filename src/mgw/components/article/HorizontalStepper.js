@@ -1,6 +1,6 @@
 import helper from "../../utils/helper";
 import { Box, Button, Step, StepLabel, Stepper } from "@mui/material";
-import NewAuthor from "../formgroups/NewAuthor";
+import VerifyAuthor from "../formgroups/VerifyAuthor";
 import ArticleSummary from "../formgroups/ArticleSummary";
 import ArticleDetails from "../formgroups/ArticleDetails";
 import ArticleTags from "../formgroups/ArticleTags";
@@ -26,19 +26,19 @@ export default function HorizontalStepper({
     if (!isOptional(activeStep)) {
       throw new Error("You can't skip a step that isn't optional.");
     }
-    setMgwState({ createActiveStep: activeStep + 1 });
+    setMgwState({ editActiveStep: activeStep + 1 });
   };
   const handleNext = () => {
-    validateArticle(helper.createSteps[activeStep].fields);
+    validateArticle(helper.editSteps[activeStep].fields);
   };
   const handleBack = () => {
-    setMgwState({ createActiveStep: activeStep - 1 });
+    setMgwState({ editActiveStep: activeStep - 1 });
   };
 
   return (
     <Box sx={{ m: 4 }}>
       <Stepper activeStep={activeStep}>
-        {helper.createSteps.map((step, i) => (
+        {helper.editSteps.map((step, i) => (
           <Step key={step.title}>
             <StepLabel error={activeStep === i && hasError}>
               {step.title}
@@ -48,7 +48,7 @@ export default function HorizontalStepper({
       </Stepper>
       <Box sx={{ m: 4 }}>
         {activeStep === 0 && (
-          <NewAuthor
+          <VerifyAuthor
             articleState={articleState}
             setArticleState={setArticleState}
             articleError={articleError}
@@ -100,7 +100,7 @@ export default function HorizontalStepper({
           </Button>
         )}
         <Button onClick={handleNext}>
-          {activeStep === helper.createSteps.length - 1 ? "Submit" : "Next"}
+          {activeStep === helper.editSteps.length - 1 ? "Submit" : "Next"}
         </Button>
       </Box>
     </Box>

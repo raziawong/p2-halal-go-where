@@ -1,7 +1,6 @@
 import helper from "../../utils/helper";
 import { Autocomplete, Grid, TextField } from "@mui/material";
 
-
 export default function ArticleSummary({
   articleState,
   setArticleState,
@@ -41,6 +40,7 @@ export default function ArticleSummary({
       <Grid item xs={8}>
         <TextField
           fullWidth
+          required
           label="Address"
           arial-label="Address"
           name="address"

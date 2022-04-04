@@ -20,7 +20,8 @@ const mgwRequests = {
         countriesCities: "/countries/cities",
         categories : "/categories",
         categoriesSubcats : "/categories/subcats",
-        articles: "/articles"
+        articles: "/articles",
+        articleContributor: "/article/contributor"
     },
     submitPaths: {
         article: "/article",
@@ -103,6 +104,10 @@ const postArticle = async (body) => {
   });
 }
 
+const getArticleContributor = async (params) => {
+  return await mgwRequests.axiosBase.get(mgwRequests.queryPaths.articleContributor, { params });
+};
+
 const getCountries = async (params) => {
   return await mgwRequests.axiosBase.get(mgwRequests.queryPaths.countries, { params });
 }
@@ -115,5 +120,5 @@ const getCategories = async (params) => {
   return await mgwRequests.axiosBase.get(mgwRequests.queryPaths.categories, { params });
 }
 
-export { mgwCategoriesMap, getMgwFixed, getMgwArticles, getArticles, getCountries, getCountriesCities, getCategories,
+export { mgwCategoriesMap, getMgwFixed, getMgwArticles, getArticles, getArticleContributor, getCountries, getCountriesCities, getCategories,
   postArticle };

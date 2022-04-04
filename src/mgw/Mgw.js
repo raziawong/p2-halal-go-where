@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import mgwTheme from "./utils/mgwTheme";
 import { ThemeProvider } from "@mui/material";
 import { Navigate, Routes, Route } from "react-router-dom";
-import { getMgwFixed, getMgwArticles, getArticles, postArticle, getCountriesCities } from "./utils/data";
+import { getMgwFixed, getMgwArticles, getArticles, postArticle, getCountriesCities, getArticleContributor } from "./utils/data";
 import helper from "./utils/helper";
 import { SiteContainer, ViewContainer } from "./utils/mgwStyle";
 import Loader from "./components/Loader";
@@ -25,7 +25,10 @@ export default class Mgw extends Component {
     articlesTags: [],
     articlesLocations: [],
     articlePosted: "",
-    activeStep: 0,
+    createActiveStep: 0,
+    editActiveStep: 0,
+    editModal: false,
+    userEmail: "",
     isRedirectArticle: false,
     isRedirectListing: false,
     isLoaded: false
@@ -95,7 +98,7 @@ export default class Mgw extends Component {
                     locationOpts={this.state.allCountries}
                     catOpts={this.state.allCategories}
                     articleErrors={this.state.articleInputsErrors}
-                    activeStep={this.state.activeStep}
+                    activeStep={this.state.createActiveStep}
                     setMgwState={this.setMgwState}
                     articleState={this.state.articleInputs}
                     setArticleState={this.setArticleInputs}
@@ -103,7 +106,6 @@ export default class Mgw extends Component {
                     validateArticle={this.validateArticleInputs}
                     setArr={this.addArticleArraySize}
                     removeArr={this.removeArticleArraySize}
-                    submitArticle={this.submitArticle}
                   />
                 }
               />
@@ -111,11 +113,23 @@ export default class Mgw extends Component {
                 path="article/:id"
                 element={
                   <Article
-                    articleInputs={this.state.articleInputs}
-                    article={this.state.articleDetail}
+                    tagOpts={this.state.articlesTags}
+                    locationOpts={this.state.allCountries}
+                    catOpts={this.state.allCategories}
+                    articleState={this.state.articleInputs}
+                    articleError={this.state.articleInputsErrors}
+                    validateArticle={this.validateArticleInputs}
+                    setArticleState={this.setArticleInputs}
+                    setArr={this.addArticleArraySize}
+                    removeArr={this.removeArticleArraySize}
+                    activeStep={this.state.editActiveStep}
                     loaded={this.state.isLoaded}
-                    setFilterOpts={this.setFilterOpts}
+                    editModal={this.state.editModal}
+                    userEmail={this.state.userEmail}
+                    verifyUser={this.verifyArticleUser}
                     setMgwState={this.setMgwState}
+                    article={this.state.articleDetail}
+                    setFilterOpts={this.setFilterOpts}
                     execSearch={this.searchArticles}
                   />
                 }
@@ -140,6 +154,7 @@ export default class Mgw extends Component {
   };
 
   setMgwState = (keyValuePair) => {
+    console.log(keyValuePair);
     this.setState({ ...keyValuePair });
   };
 
@@ -223,6 +238,15 @@ export default class Mgw extends Component {
     this.setState({
       articleInputs: inputs
     });
+  }
+
+  verifyArticleUser = async (articleId, email) => {
+    let resp = await getArticleContributor({articleId, email});
+    if (resp.results.count) {
+      this.setState({
+        editVerified: true
+      });
+    }
   }
 
   searchArticles = (viewType) => {
