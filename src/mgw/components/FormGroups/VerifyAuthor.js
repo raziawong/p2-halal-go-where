@@ -4,6 +4,7 @@ export default function VerifyAuthor({
   articleState,
   setArticleState,
   articleError,
+  userVerifyErrorMsg
 }) {
   return (
     <Grid container spacing={4} sx={{ justifyContent: "center" }}>
@@ -23,8 +24,8 @@ export default function VerifyAuthor({
           name="email"
           value={articleState.email}
           onChange={setArticleState}
-          error={!!articleError?.email}
-          helperText={articleError?.email}
+          error={!!userVerifyErrorMsg || !!articleError?.email}
+          helperText={userVerifyErrorMsg || articleError?.email}
         />
       </Grid>
     </Grid>

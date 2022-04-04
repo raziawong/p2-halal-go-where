@@ -35,7 +35,7 @@ export default class Mgw extends Component {
     editActiveStep: 0,
     editModal: false,
     userEmail: "",
-    userVerified: false,
+    userVerifyErrorMsg: false,
     isRedirectListing: false,
     isMounted: false,
     isLoaded: false,
@@ -137,7 +137,7 @@ export default class Mgw extends Component {
                     mounted={this.state.isMounted}
                     editModal={this.state.editModal}
                     userEmail={this.state.userEmail}
-                    userVerified={this.state.userVerified}
+                    userVerifyErrorMsg={this.state.userVerifyErrorMsg}
                     setMgwState={this.setMgwState}
                     article={this.state.articleDetail}
                     setFilterOpts={this.setFilterOpts}
@@ -285,7 +285,7 @@ export default class Mgw extends Component {
       if (resp.data.count) {
         let update = {
           userEmail: email,
-          userVerified: true,
+          userVerifyErrorMsg: ""
         };
         if (this.state.editActiveStep === 0) {
           update.editActiveStep = 1;
@@ -294,7 +294,7 @@ export default class Mgw extends Component {
       } else {
         this.setState({
           userEmail: "",
-          userVerified: false,
+          userVerifyErrorMsg: helper.templates.user
         });
       }
     });
@@ -323,26 +323,11 @@ export default class Mgw extends Component {
       query = await getArticles(params, viewType);
       if (query.data.results) {
         let { articlesLocations, allCategories } = this.state;
-        // const results = query.data.results.map(async r => {
-        //   let locResp = await getCountriesCities({
-        //     countryId: r.location.countryId,
-        //     city: r.location.cityId
-        //   });
-        //   let locResults = locResp.data.results;
-        //   if (locResults.count) {
-        //     r.country = locResults[0].name;
-        //     r.city = locResults[0].cities[0].name;
-        //   }
-        //   console.log(r);
-        //   return r;
-        // });
-
         let transformed = await helper.transformArticlesForRead(
           query.data.results,
           articlesLocations,
           allCategories
-        )
-          console.log(transformed);
+        );
         viewType === helper.articleView
         ? this.setState({
             articleDetail: [...transformed][0] || [],

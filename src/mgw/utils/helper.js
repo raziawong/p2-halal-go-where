@@ -257,6 +257,7 @@ const helper = {
       `This cannot exceed ${length} characters including spaces`,
     email: `This is not a valid email address`,
     url: `This is not a valid URL`,
+    user: `User verification failed`
   },
   validate: (fieldName, inputs) => {
     let val = inputs[fieldName];
