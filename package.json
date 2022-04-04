@@ -47,5 +47,7 @@
     ]
   },
   "main": "index.js",
-  "license": "MIT"
+  "license": "MIT",
+  "repository": "https://github.com/raziawong/p2-muslim-go-where.git",
+  "author": "Razia <nrwpc.stack@gmail.com>"
 }
