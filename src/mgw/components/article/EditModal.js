@@ -17,7 +17,7 @@ export default function EditModal({
   setMgwState,
   editModal,
   userEmail,
-  userVerified,
+  userVerifyErrorMsg,
 }) {
   const hsProps = {
     locationOpts,
@@ -31,16 +31,18 @@ export default function EditModal({
     setArr,
     removeArr,
     setMgwState,
+    userVerifyErrorMsg
   };
   const handleClose = () => {
-    let inputs = helper.initArticleInputs;
-    if (userVerified) {
+    const inputs = helper.initArticleInputs;
+    if (!userVerifyErrorMsg) {
       inputs.email = userEmail;
     }
     setMgwState({
       editModal: false,
       articleInputs: inputs,
       articleInputsErrors: {},
+      userVerifyErrorMsg: ""
     });
   };
   return (

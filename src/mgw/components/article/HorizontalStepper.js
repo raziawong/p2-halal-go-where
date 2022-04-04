@@ -13,6 +13,7 @@ export default function HorizontalStepper({
   articleState,
   setArticleState,
   articleError,
+  userVerifyErrorMsg,
   validateArticle,
   setArr,
   removeArr,
@@ -52,6 +53,7 @@ export default function HorizontalStepper({
             articleState={articleState}
             setArticleState={setArticleState}
             articleError={articleError}
+            userVerifyErrorMsg={userVerifyErrorMsg}
           />
         )}
         {activeStep === 1 && (

@@ -22,7 +22,7 @@ export default function Article({
   mounted,
   editModal,
   userEmail,
-  userVerified,
+  userVerifyErrorMsg,
   setMgwState,
   article,
   setFilterOpts,
@@ -43,7 +43,7 @@ export default function Article({
   const handleEdit = () => {
     let inputs = {...helper.initArticleInputs, ...article};
 
-    if (userVerified) {
+    if (userVerifyErrorMsg) {
       inputs.email = userEmail;
     }
     setMgwState({
@@ -72,7 +72,7 @@ export default function Article({
               article.details.map((d, i) => (
                 <Fragment key={i}>
                   <h4>{d.sectionName}</h4>
-                  <ReactMarkdown children={d.content} />
+                  <ReactMarkdown children={d.contentMd} />
                 </Fragment>
               ))}
             <Box>
@@ -114,7 +114,7 @@ export default function Article({
                     setMgwState={setMgwState}
                     editModal={editModal}
                     userEmail={userEmail}
-                    userVerified={userVerified}
+                    userVerifyErrorMsg={userVerifyErrorMsg}
                   />
                 <IconButton
                   color="primary"
