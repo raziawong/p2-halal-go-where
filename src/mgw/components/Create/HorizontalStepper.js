@@ -26,13 +26,13 @@ export default function HorizontalStepper({
     if (!isOptional(activeStep)) {
       throw new Error("You can't skip a step that isn't optional.");
     }
-    setMgwState({ createActiveStep: activeStep + 1 });
+    setMgwState({ activeStep: activeStep + 1 });
   };
   const handleNext = () => {
     validateArticle(helper.createSteps[activeStep].fields);
   };
   const handleBack = () => {
-    setMgwState({ createActiveStep: activeStep - 1 });
+    setMgwState({ activeStep: activeStep - 1 });
   };
 
   return (

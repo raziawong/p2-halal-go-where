@@ -107,9 +107,13 @@ const getCountries = async (params) => {
   return await mgwRequests.axiosBase.get(mgwRequests.queryPaths.countries, { params });
 }
 
+const getCountriesCities = async (params) => {
+  return await mgwRequests.axiosBase.get(mgwRequests.queryPaths.countriesCities, { params });
+}
+
 const getCategories = async (params) => {
   return await mgwRequests.axiosBase.get(mgwRequests.queryPaths.categories, { params });
 }
 
-export { mgwCategoriesMap, getMgwFixed, getMgwArticles, getArticles, getCountries, getCategories,
+export { mgwCategoriesMap, getMgwFixed, getMgwArticles, getArticles, getCountries, getCountriesCities, getCategories,
   postArticle };

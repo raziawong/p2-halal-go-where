@@ -17,6 +17,15 @@ const helper = {
     { title: "Details", fields: ["photos", "details"] },
     { title: "Tags", fields: ["catIds", "subcatIds", "tags"] },
   ],
+  editSteps: [
+    { title: "Author", fields: ["email"] },
+    {
+      title: "Summary",
+      fields: ["title", "description", "address", "countryId", "cityId"],
+    },
+    { title: "Details", fields: ["photos", "details"] },
+    { title: "Tags", fields: ["catIds", "subcatIds", "tags"] },
+  ],
   initFilterOpts: {
     id: "",
     text: "",
@@ -157,9 +166,9 @@ const helper = {
   transformArticle: inputData => {
     let pd = JSON.parse(JSON.stringify(inputData));
     pd.contributor = {};
-    pd.contributor.displayName = pd.displayName || "";
-    pd.contributor.name = pd.name;
-    pd.contributor.email = pd.email;
+    pd.contributor[0].displayName = pd.displayName || "";
+    pd.contributor[0].name = pd.name;
+    pd.contributor[0].email = pd.email;
     pd.location = {};
     pd.location.address = pd.address || "";
     pd.location.countryId = pd.countryId;

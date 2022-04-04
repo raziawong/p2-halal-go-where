@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import mgwTheme from "./utils/mgwTheme";
 import { ThemeProvider } from "@mui/material";
 import { Navigate, Routes, Route } from "react-router-dom";
-import { getMgwFixed, getMgwArticles, getArticles, postArticle } from "./utils/data";
+import { getMgwFixed, getMgwArticles, getArticles, postArticle, getCountriesCities } from "./utils/data";
 import helper from "./utils/helper";
 import { SiteContainer, ViewContainer } from "./utils/mgwStyle";
 import Loader from "./components/Loader";
@@ -11,7 +11,6 @@ import Explore from "./Explore";
 import Create from "./Create";
 import Article from "./Article";
 import NavBar from "./components/NavBar";
-import { draftToMarkdown } from "markdown-draft-js";
 
 export default class Mgw extends Component {
   state = {
@@ -26,7 +25,7 @@ export default class Mgw extends Component {
     articlesTags: [],
     articlesLocations: [],
     articlePosted: "",
-    createActiveStep: 0,
+    activeStep: 0,
     isRedirectArticle: false,
     isRedirectListing: false,
     isLoaded: false
@@ -96,7 +95,7 @@ export default class Mgw extends Component {
                     locationOpts={this.state.allCountries}
                     catOpts={this.state.allCategories}
                     articleErrors={this.state.articleInputsErrors}
-                    activeStep={this.state.createActiveStep}
+                    activeStep={this.state.activeStep}
                     setMgwState={this.setMgwState}
                     articleState={this.state.articleInputs}
                     setArticleState={this.setArticleInputs}
@@ -191,18 +190,19 @@ export default class Mgw extends Component {
       articleInputsErrors: validation || {}
     }, async () => {
       if (!Object.entries(validation)?.length) {
-        if (this.state.createActiveStep === helper.createSteps.length - 1) {
+        if (this.state.activeStep === helper.createSteps.length - 1) {
           let pd = helper.transformArticle(this.state.articleInputs);
           await postArticle(pd).then(resp => {
             this.setState({
               articleInputs: helper.initArticleInputs,
               articleErrors: {},
-              articlePosted: resp.data.results.insertedId
+              articlePosted: resp.data.results.insertedId,
+              activeState: 0,
             });
           });
         } else {
           this.setState({
-            createActiveStep: this.state.createActiveStep + 1
+            activeStep: this.state.activeStep + 1
           });
         }
       }
@@ -246,6 +246,20 @@ export default class Mgw extends Component {
   
       query = await getArticles(params, viewType);
       if (query.data.results) {
+        // const results = query.data.results.map(async r => {
+        //   let locResp = await getCountriesCities({
+        //     countryId: r.location.countryId,
+        //     city: r.location.cityId
+        //   });
+        //   let locResults = locResp.data.results;
+        //   if (locResults.count) {
+        //     r.country = locResults[0].name;
+        //     r.city = locResults[0].cities[0].name;
+        //   }
+        //   console.log(r);
+        //   return r;
+        // });
+
         viewType === helper.articleView ? this.setState({
           // filterOpts: viewType === helper.articleView ?  { ...helper.initFilterOpts } : this.state.filterOpts,
           isRedirectArticle: true,

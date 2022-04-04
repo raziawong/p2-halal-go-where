@@ -1,8 +1,11 @@
 import React, { Fragment, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Container, Box, Typography } from "@mui/material";
 import helper from "./utils/helper";
+import { Container, Box, IconButton, Typography } from "@mui/material";
+import { EditSharp, DeleteOutlineSharp } from "@mui/icons-material";
+import ReactMarkdown from "react-markdown";
 import ArticleRating from "./components/article/ArticleRating";
+import { getCountriesCities } from "./utils/data";
 
 export default function Article({
   articleInputs,
@@ -13,31 +16,71 @@ export default function Article({
   execSearch,
 }) {
   const params = useParams();
-
   useEffect(async () => {
     setFilterOpts({ name: "id", value: params.id });
     await execSearch(helper.articleView);
     setMgwState({ isRedirectArticle: false });
   }, [execSearch]);
 
+  const handleEdit = () => {};
+  const handleDelete = () => {};
   return (
     <Fragment>
       <Container maxWidth="xl" disableGutters>
         {!loaded ? (
           <></>
         ) : (
-          <Box sx={{ m: 4 }}>
-            <h1>{article.title}</h1>
-            <h5>{article.description}</h5>
+          <Box sx={{ my: 4, mx: 6 }}>
+            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center"}}>
+              <Typography component="h1" variant="h2">{article.title}</Typography>
+              <Typography component="h2" variant="h2">{article.country}{", "}{article.city}</Typography>
+            </Box>
+            <Box>
+            <Typography variant="h4">{article.description}</Typography>
+            </Box>
             {article.details &&
               article.details.length > 0 &&
               article.details.map((d, i) => (
                 <Fragment key={i}>
-                  <h6>{d.sectionName}</h6>
-                  {d.content}
+                  <h4>{d.sectionName}</h4>
+                  <ReactMarkdown children={d.content} />
                 </Fragment>
               ))}
-              <ArticleRating {...article.rating} />
+            <Box>
+              <Typography>Address: {article.location.address}</Typography>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                my: 3,
+              }}
+            >
+              <Box>
+                <Typography>
+                  Added By: {article.contributor[0].displayName}
+                </Typography>
+                <Typography>Last Modified: {article.lastModified}</Typography>
+              </Box>
+              <Box>
+                <IconButton
+                  color="primary"
+                  aria-label="Edit Article"
+                  onClick={handleEdit}
+                >
+                  <EditSharp />
+                </IconButton>
+                <IconButton
+                  color="primary"
+                  aria-label="Delete Article"
+                  onClick={handleDelete}
+                >
+                  <DeleteOutlineSharp />
+                </IconButton>
+              </Box>
+            </Box>
+            <ArticleRating {...article.rating} />
           </Box>
         )}
       </Container>
