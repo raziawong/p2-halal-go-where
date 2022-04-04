@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect } from "react";
 import { Box, Container } from "@mui/material";
-import HorizontalStepper from "./components/create/HorizontalStepper";
+import HorizontalStepper from "./components/shared/HorizontalStepper";
 
 export default function Create(props) {
   const {setMgwState} = props;
@@ -12,7 +12,7 @@ export default function Create(props) {
     <Fragment>
       <Container maxWidth="xl" disableGutters>
         <Box sx={{ m: 4 }}>
-          <HorizontalStepper {...props} />
+          <HorizontalStepper {...props} type="create"/>
         </Box>
       </Container>
     </Fragment>

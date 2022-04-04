@@ -1,6 +1,6 @@
 import helper from "../../utils/helper";
-import { Backdrop, Box, Fade, Modal, Typography } from "@mui/material";
-import HorizontalStepper from "./HorizontalStepper";
+import { Backdrop, Box, Fade, Modal } from "@mui/material";
+import HorizontalStepper from "../shared/HorizontalStepper";
 
 export default function EditModal({
   type,
@@ -68,7 +68,7 @@ export default function EditModal({
             p: 4,
           }}
         >
-          <HorizontalStepper {...hsProps} />
+          <HorizontalStepper {...hsProps} type="edit"/>
         </Box>
       </Fade>
     </Modal>

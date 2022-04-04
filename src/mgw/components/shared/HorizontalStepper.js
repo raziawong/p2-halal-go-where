@@ -1,6 +1,7 @@
 import helper from "../../utils/helper";
 import { Box, Button, Step, StepLabel, Stepper } from "@mui/material";
 import NewAuthor from "../formgroups/NewAuthor";
+import VerifyAuthor from "../formgroups/VerifyAuthor";
 import ArticleSummary from "../formgroups/ArticleSummary";
 import ArticleDetails from "../formgroups/ArticleDetails";
 import ArticleTags from "../formgroups/ArticleTags";
@@ -13,11 +14,15 @@ export default function HorizontalStepper({
   articleState,
   setArticleState,
   articleError,
+  userVerifyErrorMsg,
   validateArticle,
   setArr,
   removeArr,
   setMgwState,
+  type,
 }) {
+  const stepState = type === "create" ? "createActiveStep" : "editActiveStep";
+  const stepsList = type === "create" ? helper.createSteps : helper.editSteps;
   const hasError = Object.entries(articleError)?.length !== 0;
   const isOptional = (step) => {
     return step === 2;
@@ -26,19 +31,19 @@ export default function HorizontalStepper({
     if (!isOptional(activeStep)) {
       throw new Error("You can't skip a step that isn't optional.");
     }
-    setMgwState({ createActiveStep: activeStep + 1 });
+    setMgwState({ [stepState]: activeStep + 1 });
   };
   const handleNext = () => {
-    validateArticle(helper.createSteps[activeStep].fields, "create");
+    validateArticle(stepsList[activeStep].fields, type);
   };
   const handleBack = () => {
-    setMgwState({ createActiveStep: activeStep - 1 });
+    setMgwState({ [stepState]: activeStep - 1 });
   };
 
   return (
     <Box sx={{ m: 4 }}>
       <Stepper activeStep={activeStep}>
-        {helper.createSteps.map((step, i) => (
+        {stepsList.map((step, i) => (
           <Step key={step.title}>
             <StepLabel error={activeStep === i && hasError}>
               {step.title}
@@ -47,13 +52,23 @@ export default function HorizontalStepper({
         ))}
       </Stepper>
       <Box sx={{ m: 4 }}>
-        {activeStep === 0 && (
-          <NewAuthor
-            articleState={articleState}
-            setArticleState={setArticleState}
-            articleError={articleError}
-          />
-        )}
+        {activeStep === 0 &&
+          type === "create" && (
+              <NewAuthor
+                articleState={articleState}
+                setArticleState={setArticleState}
+                articleError={articleError}
+              />
+            )}
+        {activeStep === 0 &&
+          type ==="edit" && (
+              <VerifyAuthor
+                articleState={articleState}
+                setArticleState={setArticleState}
+                articleError={articleError}
+                userVerifyErrorMsg={userVerifyErrorMsg}
+              />
+            )}
         {activeStep === 1 && (
           <ArticleSummary
             articleState={articleState}
@@ -100,7 +115,11 @@ export default function HorizontalStepper({
           </Button>
         )}
         <Button onClick={handleNext}>
-          {activeStep === helper.createSteps.length - 1 ? "Submit" : "Next"}
+          {activeStep === stepsList.length - 1
+            ? "Submit"
+            : activeStep === 0 && type === "edit"
+            ? "Verify"
+            : "Next"}
         </Button>
       </Box>
     </Box>
