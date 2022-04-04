@@ -18,7 +18,7 @@ const helper = {
     { title: "Tags", fields: ["catIds", "subcatIds", "tags"] },
   ],
   editSteps: [
-    { title: "Author", fields: ["email"] },
+    { title: "Verify", fields: ["email"] },
     {
       title: "Summary",
       fields: ["title", "description", "address", "countryId", "cityId"],
@@ -160,15 +160,14 @@ const helper = {
       }).filter(sc => !!sc);
       return { catId: cId, subcatIds: depSubcatIds};
     });
-    console.log("cat dep: ", catIds, subcatIds, depCatArr)
     return { catIds, subcatIds, depCatArr};
   },
   transformArticle: inputData => {
     let pd = JSON.parse(JSON.stringify(inputData));
     pd.contributor = {};
-    pd.contributor[0].displayName = pd.displayName || "";
-    pd.contributor[0].name = pd.name;
-    pd.contributor[0].email = pd.email;
+    pd.contributors[0].displayName = pd.displayName || "";
+    pd.contributors[0].name = pd.name;
+    pd.contributors[0].email = pd.email;
     pd.location = {};
     pd.location.address = pd.address || "";
     pd.location.countryId = pd.countryId;

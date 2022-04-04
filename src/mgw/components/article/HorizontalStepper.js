@@ -16,7 +16,7 @@ export default function HorizontalStepper({
   validateArticle,
   setArr,
   removeArr,
-  setMgwState,
+  setMgwState
 }) {
   const hasError = Object.entries(articleError)?.length !== 0;
   const isOptional = (step) => {
@@ -29,7 +29,7 @@ export default function HorizontalStepper({
     setMgwState({ editActiveStep: activeStep + 1 });
   };
   const handleNext = () => {
-    validateArticle(helper.editSteps[activeStep].fields);
+    validateArticle(helper.editSteps[activeStep].fields, "edit");
   };
   const handleBack = () => {
     setMgwState({ editActiveStep: activeStep - 1 });
@@ -100,7 +100,7 @@ export default function HorizontalStepper({
           </Button>
         )}
         <Button onClick={handleNext}>
-          {activeStep === helper.editSteps.length - 1 ? "Submit" : "Next"}
+          {activeStep === helper.editSteps.length - 1 ? "Submit" : activeStep === 0 ? "Verify" : "Next"}
         </Button>
       </Box>
     </Box>

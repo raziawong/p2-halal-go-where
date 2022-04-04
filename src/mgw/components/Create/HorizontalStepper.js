@@ -29,7 +29,7 @@ export default function HorizontalStepper({
     setMgwState({ createActiveStep: activeStep + 1 });
   };
   const handleNext = () => {
-    validateArticle(helper.createSteps[activeStep].fields);
+    validateArticle(helper.createSteps[activeStep].fields, "create");
   };
   const handleBack = () => {
     setMgwState({ createActiveStep: activeStep - 1 });

@@ -21,6 +21,7 @@ export default function Article({
   loaded,
   editModal,
   userEmail,
+  userVerified,
   verifyUser,
   setMgwState,
   article,
@@ -35,9 +36,13 @@ export default function Article({
   }, [execSearch]);
 
   const handleEdit = () => {
+    let inputs = {...helper.initArticleInputs, ...article};
+    if (userVerified) {
+      inputs.email = userEmail;
+    }
     setMgwState({
       editModal: true,
-      articleInputs: article
+      articleInputs: inputs
     });
   };
   const handleDelete = () => {};
