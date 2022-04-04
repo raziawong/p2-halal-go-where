@@ -1,3 +1,4 @@
+import helper from "../../utils/helper";
 import { Backdrop, Box, Fade, Modal, Typography } from "@mui/material";
 import HorizontalStepper from "./HorizontalStepper";
 
@@ -16,7 +17,7 @@ export default function EditModal({
   setMgwState,
   editModal,
   userEmail,
-  verifyUser
+  userVerified,
 }) {
   const hsProps = {
     locationOpts,
@@ -30,11 +31,17 @@ export default function EditModal({
     setArr,
     removeArr,
     setMgwState,
-    userEmail,
-    verifyUser
   };
   const handleClose = () => {
-    setMgwState({ editModal: false });
+    let inputs = helper.initArticleInputs;
+    if (userVerified) {
+      inputs.email = userEmail;
+    }
+    setMgwState({
+      editModal: false,
+      articleInputs: inputs,
+      articleInputsErrors: {},
+    });
   };
   return (
     <Modal

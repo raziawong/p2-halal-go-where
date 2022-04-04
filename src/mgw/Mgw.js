@@ -7,7 +7,6 @@ import {
   getMgwArticles,
   getArticles,
   postArticle,
-  getCountriesCities,
   getArticleContributor,
 } from "./utils/data";
 import helper from "./utils/helper";
@@ -137,7 +136,6 @@ export default class Mgw extends Component {
                     editModal={this.state.editModal}
                     userEmail={this.state.userEmail}
                     userVerified={this.state.userVerified}
-                    verifyUser={this.verifyArticleUser}
                     setMgwState={this.setMgwState}
                     article={this.state.articleDetail}
                     setFilterOpts={this.setFilterOpts}

@@ -22,7 +22,6 @@ export default function Article({
   editModal,
   userEmail,
   userVerified,
-  verifyUser,
   setMgwState,
   article,
   setFilterOpts,
@@ -107,7 +106,7 @@ export default function Article({
                     setMgwState={setMgwState}
                     editModal={editModal}
                     userEmail={userEmail}
-                    verifyUser={verifyUser}
+                    userVerified={userVerified}
                   />
                 <IconButton
                   color="primary"
