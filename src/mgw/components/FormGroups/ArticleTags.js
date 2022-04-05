@@ -42,16 +42,13 @@ export default function ArticleTags({
             arial-label="Categories"
             labelId="create-cat-label"
             name="catIds"
-            value={articleState.catIds}
+            value={articleState.catIds || []}
             onChange={setArticleState}
             renderValue={(vals) =>
-              vals.length
+              vals?.length
                 ? catOpts
                     .filter((c) => vals.includes(c._id))
-                    .map((f) => {
-                      console.log(f);
-                      return f.name;
-                    })
+                    .map((f) => f.name)
                     .join(", ")
                 : ""
             }
@@ -86,10 +83,10 @@ export default function ArticleTags({
             label="Sub-Categories"
             arial-label="Sub-Categories"
             name="subcatIds"
-            value={articleState.subcatIds}
+            value={articleState.subcatIds || []}
             onChange={setArticleState}
             renderValue={(vals) =>
-              vals.length
+              vals?.length
                 ? catOpts
                     .reduce((pv, cv) => {
                       return pv.concat(
@@ -123,6 +120,7 @@ export default function ArticleTags({
           multiple
           fullWidth
           name="tags"
+          value={articleState.tags}
           options={tagOpts}
           renderInput={(params) => (
             <TextField
