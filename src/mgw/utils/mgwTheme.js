@@ -1,4 +1,4 @@
-import { createTheme, alpha } from "@mui/material";
+import { createTheme, alpha, responsiveFontSizes } from "@mui/material";
 
 const mgwColors = {
   primary: "#1C7C54",
@@ -10,7 +10,7 @@ const mgwColors = {
   background: "#F7F7FF"
 }
 
-const mgwTheme = createTheme({
+let mgwTheme = createTheme({
   palette: {
     type: "light",
     primary: {
@@ -51,7 +51,8 @@ const mgwTheme = createTheme({
           width: "100%",
           height: "100%",
           display: "flex",
-          overflow: "hidden"
+          overflow: "hidden",
+          marginTop: "20px"
         },
         container: {
           width: "100%",
@@ -77,5 +78,6 @@ const mgwTheme = createTheme({
   }
 });
 
+mgwTheme = responsiveFontSizes(mgwTheme);
 export default mgwTheme;
 export { mgwColors };

@@ -7,6 +7,7 @@ import ReactMarkdown from "react-markdown";
 import ArticleRating from "./components/article/ArticleRating";
 import EditModal from "./components/article/EditModal";
 import DeleteModal from "./components/article/DeleteModal";
+import NotFound from "./NotFound";
 
 export default function Article({
   tagOpts,
@@ -68,8 +69,9 @@ export default function Article({
   };
   return (
     <Fragment>
+      {
+        article.title && loaded && 
       <Container maxWidth="xl" disableGutters>
-        {loaded &&
           <Box sx={{ my: 4, mx: 6 }}>
             <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center"}}>
               <Typography component="h1" variant="h2">{article.title}</Typography>
@@ -151,8 +153,12 @@ export default function Article({
             </Box>
             <ArticleRating {...article.rating} />
           </Box>
-        }
       </Container>
+    }
+    {
+      !article.title && loaded &&
+      <NotFound />
+    }
     </Fragment>
   );
 }

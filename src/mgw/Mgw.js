@@ -19,6 +19,7 @@ import Explore from "./Explore";
 import Create from "./Create";
 import Article from "./Article";
 import NavBar from "./components/shared/NavBar";
+import NotFound from "./NotFound";
 
 export default class Mgw extends Component {
   state = {
@@ -74,9 +75,7 @@ export default class Mgw extends Component {
           <ViewContainer>
             <NavBar />
             <Routes>
-              <Route
-                index
-                path="/"
+              <Route index path="/"
                 element={
                   this.state.isRedirectListing ? (
                     <Navigate replace to="/explore" />
@@ -89,8 +88,7 @@ export default class Mgw extends Component {
                   )
                 }
               />
-              <Route
-                path="explore"
+              <Route path="explore"
                 element={
                   <Explore
                     filterOpts={this.state.filterOpts}
@@ -106,8 +104,7 @@ export default class Mgw extends Component {
                   />
                 }
               />
-              <Route
-                path="create"
+              <Route path="create"
                 element={
                   <Create
                     tagOpts={this.state.articlesTags}
@@ -126,8 +123,7 @@ export default class Mgw extends Component {
                   />
                 }
               />
-              <Route
-                path="article/:id"
+              <Route path="article/:id"
                 element={
                   <Article
                     tagOpts={this.state.articlesTags}
@@ -155,6 +151,7 @@ export default class Mgw extends Component {
                   />
                 }
               />
+              <Route path="*" element={<NotFound />}/>
             </Routes>
           </ViewContainer>
           <Loader toShow={!this.state.isLoaded} />
