@@ -170,7 +170,7 @@ const helper = {
     return categories
       ? categories.map((cat) => (
           <MenuItem key={cat._id} value={cat._id}>
-            <Checkbox checked={catIds.indexOf(cat._id) > -1} />
+            <Checkbox checked={catIds?.indexOf(cat._id) > -1} />
             <ListItemText primary={cat.name} />
           </MenuItem>
         ))
@@ -178,34 +178,27 @@ const helper = {
   },
   subcategoriesOptDispay: (categories, catIds, subcatIds) => {
     const c = categories
-      ? catIds.length > 0
-        ? categories.filter((cat) => catIds.indexOf(cat._id) > -1)
+      ? catIds?.length > 0
+        ? categories.filter((cat) => catIds?.indexOf(cat._id) > -1)
         : categories
       : [];
     return c.length
       ? c.map((cat) =>
           cat.subcats.map((subcat) => (
             <MenuItem key={subcat._id} value={subcat._id}>
-              <Checkbox checked={subcatIds.indexOf(subcat._id) > -1} />
+              <Checkbox checked={subcatIds?.indexOf(subcat._id) > -1} />
               <ListItemText primary={subcat.name} />
             </MenuItem>
           ))
         )
       : [];
   },
-  getCatDep: async (allCats, selCats, selSubcats) => {
-    const fetchedCats = await getCategories();
-    allCats = allCats.length
-      ? allCats
-      : fetchedCats.data.count
-      ? fetchedCats.data.results
-      : [];
+  getCatDep: (allCats, selCats, selSubcats) => {
     const catIds = [...selCats];
     let subcatIds = [];
-    let depCatArr = catIds.map((cId, i) => {
+    const depCatArr = catIds.map((cId, i) => {
       const foundSub = allCats.find((c) => c._id === cId)?.subcats;
-      let depSubcatIds = selSubcats
-        .map((scId) => {
+      const depSubcatIds = selSubcats.map((scId) => {
           const newSub = foundSub.find((sc) => sc._id === scId);
           if (newSub) {
             subcatIds.push(scId);

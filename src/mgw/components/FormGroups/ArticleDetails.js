@@ -47,9 +47,12 @@ export default function ArticleDetails({
     if (evt.target) {
       details[i].sectionName = evt.target.value;
     } else if (evt.getCurrentContent()) {
-      details[i].content = JSON.stringify(
+      const contentUpdate = JSON.stringify(
         convertToRaw(evt.getCurrentContent())
       );
+      if (contentUpdate !== details[i].content) {
+        details[i].content = contentUpdate;
+      }
     }
 
     setArticleState({

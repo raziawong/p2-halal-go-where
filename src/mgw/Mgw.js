@@ -193,24 +193,22 @@ export default class Mgw extends Component {
       inputs.cityId = value._id;
     }
     if (name === "catIds" || name === "subcatIds") {
-      const selCatIds =
-        name === "catIds" ? inputs.catIds : this.state.articleInputs.catIds;
-      const selSubcatIds =
-        name === "subcatIds"
+      const selCatIds = name === "catIds" ? inputs.catIds : this.state.articleInputs.catIds;
+      const selSubcatIds = name === "subcatIds"
           ? inputs.subcatIds
           : this.state.articleInputs.subcatIds;
-      let { catIds, subcatIds, depCatArr } = helper.getCatDep(
+      const catDep = helper.getCatDep(
         this.state.allCategories,
         selCatIds,
         selSubcatIds
       );
-      inputs.catIds = catIds;
-      inputs.subcatIds = subcatIds;
-      inputs.categories = depCatArr;
+      inputs.catIds = [...catDep.catIds];
+      inputs.subcatIds = [...catDep.subcatIds];
+      inputs.categories = [...catDep.depCatArr];
     }
 
     this.setState({
-      articleInputs: inputs,
+      articleInputs: inputs
     });
   };
 
@@ -317,7 +315,6 @@ export default class Mgw extends Component {
         }
       } else if (viewType === helper.articleView) {
         params = { articleId: filterOpts.id };
-        console.log(params);
       }
 
       query = await getArticles(params, viewType);
