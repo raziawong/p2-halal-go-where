@@ -13,6 +13,7 @@ import VerifyAuthor from "../formgroups/VerifyAuthor";
 import ArticleSummary from "../formgroups/ArticleSummary";
 import ArticleDetails from "../formgroups/ArticleDetails";
 import ArticleTags from "../formgroups/ArticleTags";
+import ConfirmDelete from "../formgroups/ConfimDelete";
 
 export default function HorizontalStepper({
   locationOpts,
@@ -30,8 +31,18 @@ export default function HorizontalStepper({
   type,
   requestError
 }) {
-  const stepState = type === "create" ? "createActiveStep" : "editActiveStep";
-  const stepsList = type === "create" ? helper.createSteps : helper.editSteps;
+  const stepState =
+    type === "create"
+      ? "createActiveStep"
+      : type === "edit"
+      ? "editActiveStep"
+      : "deleteActiveStep";
+  const stepsList =
+    type === "create"
+      ? helper.createSteps
+      : type === "edit"
+      ? helper.editSteps
+      : helper.deleteSteps;
   const hasError = Object.entries(articleError)?.length !== 0;
   const isOptional = (step) => {
     return step === 2;
@@ -43,6 +54,7 @@ export default function HorizontalStepper({
     setMgwState({ [stepState]: activeStep + 1 });
   };
   const handleNext = () => {
+    console.log(stepState, activeStep, type);
     validateArticle(stepsList[activeStep].fields, type);
   };
   const handleBack = () => {
@@ -76,21 +88,25 @@ export default function HorizontalStepper({
             articleError={articleError}
           />
         )}
-        {activeStep === 0 && type === "edit" && (
+        {activeStep === 0 && (type === "edit" || type === "delete") && (
           <VerifyAuthor
+            type={type}
             articleState={articleState}
             setArticleState={setArticleState}
             articleError={articleError}
             userVerifyErrorMsg={userVerifyErrorMsg}
           />
         )}
-        {activeStep === 1 && (
+        {activeStep === 1 && (type === "create" || type === "edit") && (
           <ArticleSummary
             articleState={articleState}
             setArticleState={setArticleState}
             articleError={articleError}
             locationOpts={locationOpts}
           />
+        )}
+        {activeStep === 1 && type === "delete" && (
+          <ConfirmDelete />
         )}
         {activeStep === 2 && (
           <ArticleDetails
@@ -113,6 +129,7 @@ export default function HorizontalStepper({
       </Box>
       <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
         <Button
+          aria-label="previous step"
           disabled={!!Object.entries(articleError).length}
           onClick={handleBack}
           sx={{ mr: 1, display: activeStep === 0 ? "none" : "" }}
@@ -122,6 +139,7 @@ export default function HorizontalStepper({
         <Box sx={{ flex: "1 1 auto" }} />
         {isOptional(activeStep) && (
           <Button
+            aria-label="skip step"
             disabled={!!Object.entries(articleError).length}
             onClick={handleSkip}
             sx={{ mr: 1 }}
@@ -129,12 +147,9 @@ export default function HorizontalStepper({
             Skip
           </Button>
         )}
-        <Button onClick={handleNext}>
+        <Button aria-label="submit step and go to next" onClick={handleNext}>
           {activeStep === stepsList.length - 1
-            ? "Submit"
-            : activeStep === 0 && type === "edit"
-            ? "Verify"
-            : "Next"}
+            ? type === "delete" ? "Confirm" : "Submit" : "Next"}
         </Button>
       </Box>
     </Box>

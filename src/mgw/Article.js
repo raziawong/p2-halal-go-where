@@ -6,6 +6,7 @@ import { EditSharp, DeleteOutlineSharp } from "@mui/icons-material";
 import ReactMarkdown from "react-markdown";
 import ArticleRating from "./components/article/ArticleRating";
 import EditModal from "./components/article/EditModal";
+import DeleteModal from "./components/article/DeleteModal";
 
 export default function Article({
   tagOpts,
@@ -17,16 +18,19 @@ export default function Article({
   setArticleState,
   setArr,
   removeArr,
+  deleteStep,
   activeStep,
   loaded,
   mounted,
   editModal,
+  deleteModal,
   userEmail,
   userVerifyErrorMsg,
   setMgwState,
   article,
   setFilterOpts,
-  execSearch
+  execSearch,
+  requestError
 }) {
   const params = useParams();
 
@@ -42,7 +46,6 @@ export default function Article({
 
   const handleEdit = () => {
     let inputs = {...helper.initArticleInputs, ...article};
-
     if (userVerifyErrorMsg) {
       inputs.email = userEmail;
     }
@@ -52,13 +55,21 @@ export default function Article({
       articleInputsErrors: {},
     });
   };
-  const handleDelete = () => {};
+  const handleDelete = () => {
+    let inputs = {...helper.initArticleInputs, ...article};
+    if (userVerifyErrorMsg) {
+      inputs.email = userEmail;
+    }
+    setMgwState({
+      deleteModal: true,
+      articleInputs: inputs,
+      articleInputsErrors: {},
+    });
+  };
   return (
     <Fragment>
       <Container maxWidth="xl" disableGutters>
-        {!loaded ? (
-          <></>
-        ) : (
+        {loaded &&
           <Box sx={{ my: 4, mx: 6 }}>
             <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center"}}>
               <Typography component="h1" variant="h2">{article.title}</Typography>
@@ -88,7 +99,7 @@ export default function Article({
             >
               <Box>
                 <Typography>
-                  Added By: {article.contributors? article.contributors[0].displayName : ""}
+                  Added By: {article.contributors? article.contributors.filter(c => c.isAuthor)[0].displayName : ""}
                 </Typography>
                 <Typography>Last Modified: {article.lastModified}</Typography>
               </Box>
@@ -115,6 +126,7 @@ export default function Article({
                     editModal={editModal}
                     userEmail={userEmail}
                     userVerifyErrorMsg={userVerifyErrorMsg}
+                    requestError={requestError}
                   />
                 <IconButton
                   color="primary"
@@ -123,11 +135,23 @@ export default function Article({
                 >
                   <DeleteOutlineSharp />
                 </IconButton>
+                <DeleteModal 
+                    activeStep={deleteStep}
+                    articleState={articleState}
+                    setArticleState={setArticleState}
+                    articleError={articleError}
+                    validateArticle={validateArticle}
+                    setMgwState={setMgwState}
+                    deleteModal={deleteModal}
+                    userEmail={userEmail}
+                    userVerifyErrorMsg={userVerifyErrorMsg}
+                    requestError={requestError}
+                  />
               </Box>
             </Box>
             <ArticleRating {...article.rating} />
           </Box>
-        )}
+        }
       </Container>
     </Fragment>
   );

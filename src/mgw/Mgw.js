@@ -9,6 +9,7 @@ import {
   postArticle,
   getArticleContributor,
   updateArticle,
+  deleteArticle,
 } from "./utils/data";
 import helper from "./utils/helper";
 import { SiteContainer, ViewContainer } from "./utils/mgwStyle";
@@ -34,7 +35,9 @@ export default class Mgw extends Component {
     articlePosted: "",
     createActiveStep: 0,
     editActiveStep: 0,
+    deleteActiveStep: 0,
     editModal: false,
+    deleteModal: false,
     userEmail: "",
     userVerifyErrorMsg: false,
     isRedirectListing: false,
@@ -137,9 +140,11 @@ export default class Mgw extends Component {
                     setArr={this.addArticleArraySize}
                     removeArr={this.removeArticleArraySize}
                     activeStep={this.state.editActiveStep}
+                    deleteStep={this.state.deleteActiveStep}
                     loaded={this.state.isLoaded}
                     mounted={this.state.isMounted}
                     editModal={this.state.editModal}
+                    deleteModal={this.state.deleteModal}
                     userEmail={this.state.userEmail}
                     userVerifyErrorMsg={this.state.userVerifyErrorMsg}
                     setMgwState={this.setMgwState}
@@ -228,7 +233,9 @@ export default class Mgw extends Component {
     this.setState({ articleInputsErrors: validation || {} },
       async () => {
         if (!Object.entries(validation)?.length) {
-          let { createActiveStep, editActiveStep, articleInputs, userEmail, userVerifyErrorMsg } = this.state;
+          let { createActiveStep, editActiveStep, deleteActiveStep, 
+            articleInputs, userEmail, userVerifyErrorMsg } = this.state;
+          
           if (type === "create") {
             if (createActiveStep === helper.createSteps.length - 1) {
               let pd = helper.transformArticleForUpdate(articleInputs);
@@ -255,19 +262,17 @@ export default class Mgw extends Component {
           if (type === "edit") {
             if (editActiveStep === 0 && articleInputs.email) {
               await this.verifyArticleUser(
-                articleInputs._id,
-                articleInputs.email
+                articleInputs._id, articleInputs.email, type
               );
             } else if (editActiveStep === helper.editSteps.length - 1) {
               let pd = helper.transformArticleForUpdate(articleInputs);
               await updateArticle(pd).then((resp) => {
                 this.setState({
-                  articleInputs: helper.initArticleInputs,
                   articleErrors: {},
                   articlePosted: resp.data.results.insertedId,
                   editActiveStep: userEmail && !userVerifyErrorMsg ? 1 : 0,
                   requestError: ""
-                })
+                });
               }).catch(err => {
                 this.setState({
                   requestError: "Failed to update article with " + articleInputs._id
@@ -276,6 +281,33 @@ export default class Mgw extends Component {
             } else {
               this.setState({
                 editActiveStep: editActiveStep + 1
+              })
+            }
+          }
+
+          if (type === "delete") {
+            if (deleteActiveStep === 0 && articleInputs.email) {
+              await this.verifyArticleUser(
+                articleInputs._id, articleInputs.email, type
+              );
+            } else if (deleteActiveStep === helper.deleteSteps.length - 1) {
+              let articleId = articleInputs._id;
+              if (articleId) {
+                await deleteArticle({ articleId }).then((resp) => {
+                  this.setState({
+                    articleErrors: {},
+                    deleteActiveStep: userEmail && !userVerifyErrorMsg ? 1 : 0,
+                    requestError: ""
+                  });
+                }).catch(err => {
+                  this.setState({
+                    requestError: "Failed to delete article with " + articleInputs._id
+                  });
+                });
+              }
+            } else {
+              this.setState({
+                deleteActiveStep: deleteActiveStep + 1
               })
             }
           }
@@ -300,7 +332,7 @@ export default class Mgw extends Component {
     });
   };
 
-  verifyArticleUser = async (articleId, email) => {
+  verifyArticleUser = async (articleId, email, type) => {
     await getArticleContributor({ articleId, email }).then((resp) => {
       if (resp.data.count) {
         let update = {
@@ -308,8 +340,12 @@ export default class Mgw extends Component {
           userVerifyErrorMsg: "",
           requestError: ""
         };
-        if (this.state.editActiveStep === 0) {
+
+        if (type === "edit" && this.state.editActiveStep === 0) {
           update.editActiveStep = 1;
+        }
+        if (type === "delete" && this.state.deleteActiveStep === 0) {
+          update.deleteActiveStep = 1;
         }
         this.setState(update);
       } else {

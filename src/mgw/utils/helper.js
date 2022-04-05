@@ -1,7 +1,6 @@
 import { Checkbox, ListItemText, MenuItem } from "@mui/material";
 import { EditorState, convertToRaw } from "draft-js";
 import { draftToMarkdown, markdownToDraft } from "markdown-draft-js";
-import { getCategories } from "./data";
 
 const helper = {
   exploreView: "listing",
@@ -26,6 +25,10 @@ const helper = {
     },
     { title: "Details", fields: ["photos", "details"] },
     { title: "Tags", fields: ["catIds", "subcatIds", "tags"] },
+  ],
+  deleteSteps: [
+    { title: "Verify", fields: ["email"] },
+    { title: "Confirmation", fields: [] }
   ],
   fieldValidations: {
     displayName: {
@@ -213,10 +216,15 @@ const helper = {
   },
   transformArticleForUpdate: (inputData) => {
     let pd = JSON.parse(JSON.stringify(inputData));
-    pd.contributor = {};
-    pd.contributors[0].displayName = pd.displayName || "";
-    pd.contributors[0].name = pd.name;
-    pd.contributors[0].email = pd.email;
+    if (pd._id) {
+      pd.articleId = pd._id;
+      delete pd["allowPubic"];
+    } else {
+      pd.contributor = {};
+      pd.contributor.displayName = pd.displayName || "";
+      pd.contributor.name = pd.name;
+      pd.contributor.email = pd.email;
+    }
     pd.location = {};
     pd.location.address = pd.address || "";
     pd.location.countryId = pd.countryId;
@@ -231,6 +239,7 @@ const helper = {
 
     pd.details?.map((dtl) => {
       dtl.content = draftToMarkdown(JSON.parse(dtl.content));
+      delete dtl["contentMd"];
       return dtl;
     });
 
@@ -314,6 +323,7 @@ const helper = {
   },
   validate: (fieldName, inputs) => {
     let inputVal = inputs[fieldName];
+    console.log(inputVal);
     if (fieldName.startsWith("photos")) {
       inputVal = inputs.photos;
       let err = inputVal.map((p, i) => {
@@ -330,10 +340,14 @@ const helper = {
       let errList = inputVal.map(dtl => {
           let err = {};
           const { sectionName, content } = dtl;
-          if (!sectionName|| helper.regex.spaces.test(sectionName)) {
+          if (!sectionName || helper.regex.spaces.test(sectionName)) {
             err.sectionName = helper.templates.required;
           } else if (!helper.regex.displayName.test(sectionName)) {
             err.sectionName = helper.templates.special;
+          } else if (sectionName > 100) {
+            err.sectionName = helper.templates.maxLength(100);
+          } else if (sectionName < 5) {
+            err.sectionName = helper.templates.minLength(10);
           }
           if (content) {
             const contentMd = draftToMarkdown(JSON.parse(content));
@@ -355,7 +369,6 @@ const helper = {
         }
       }
     } else if (helper.fieldValidations[fieldName]){
-      let ret = {};
       for (const [k, v] of Object.entries(helper.fieldValidations[fieldName])) {
         if (k === "required" && !inputVal?.length) {
           return { fieldName, message: helper.templates.required };
@@ -384,8 +397,6 @@ const helper = {
           return { fieldName, message: helper.templates.minLength(v) };
         }
       }
-
-      return ret;
     }
 
     return false;

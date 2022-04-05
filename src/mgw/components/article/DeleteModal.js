@@ -16,48 +16,39 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function EditModal({
-  locationOpts,
-  catOpts,
-  tagOpts,
+export default function DeleteModal({
   activeStep,
   articleState,
   setArticleState,
   articleError,
   validateArticle,
-  setArr,
-  removeArr,
   setMgwState,
-  editModal,
+  deleteModal,
   userEmail,
   userVerifyErrorMsg,
   requestError,
 }) {
   const hsProps = {
-    locationOpts,
-    catOpts,
-    tagOpts,
     activeStep,
     articleState,
     setArticleState,
     articleError,
     validateArticle,
-    setArr,
-    removeArr,
     setMgwState,
     userVerifyErrorMsg,
     requestError,
   };
   const handleClose = () => {
-    let inputs = helper.initArticleInputs;
+    const inputs = helper.initArticleInputs;
     if (!userVerifyErrorMsg) {
       inputs.email = userEmail;
     }
     setMgwState({
-      editModal: false,
+      deleteModal: false,
       articleInputs: inputs,
       articleInputsErrors: {},
       userVerifyErrorMsg: "",
+      requestError: ""
     });
   };
   return (
@@ -66,11 +57,11 @@ export default function EditModal({
       maxWidth="87vw"
       TransitionComponent={Transition}
       fullScreen={useMediaQuery(useTheme().breakpoints.down("md"))}
-      open={editModal}
+      open={deleteModal}
       onClose={handleClose}
     >
       <DialogTitle sx={{ m: 0, p: 2 }}>
-        Edit Article
+        Delete Article
         <IconButton
           aria-label="Close"
           onClick={handleClose}
@@ -85,7 +76,7 @@ export default function EditModal({
         </IconButton>
       </DialogTitle>
       <DialogContent>
-        <HorizontalStepper {...hsProps} type="edit" />
+        <HorizontalStepper {...hsProps} type="delete"/>
       </DialogContent>
     </Dialog>
   );

@@ -110,6 +110,10 @@ const updateArticle = async (body) => {
   });
 }
 
+const deleteArticle = async (params) => {
+  return await mgwRequests.axiosBase.delete(mgwRequests.submitPaths.article, { params });
+}
+
 const getArticleContributor = async (params) => {
   return await mgwRequests.axiosBase.get(mgwRequests.queryPaths.articleContributor, { params });
 };
@@ -118,13 +122,9 @@ const getCountries = async (params) => {
   return await mgwRequests.axiosBase.get(mgwRequests.queryPaths.countries, { params });
 }
 
-const getCountriesCities = async (params) => {
-  return await mgwRequests.axiosBase.get(mgwRequests.queryPaths.countriesCities, { params });
-}
-
 const getCategories = async (params) => {
   return await mgwRequests.axiosBase.get(mgwRequests.queryPaths.categories, { params });
 }
 
-export { mgwCategoriesMap, getMgwFixed, getMgwArticles, getArticles, getArticleContributor, getCountries, getCountriesCities, getCategories,
-  postArticle, updateArticle };
+export { mgwCategoriesMap, getMgwFixed, getMgwArticles, getArticles, getArticleContributor, getCountries, getCategories,
+  postArticle, updateArticle, deleteArticle };

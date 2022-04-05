@@ -7,11 +7,14 @@ export default function NewAuthor({
 }) {
   return (
     <Grid container spacing={4} sx={{ justifyContent: "center" }}>
-      <Grid item xs={10}>
+      <Grid item xs={11}>
         <Paper elevation={3}>
-          <Typography sx={{ padding: "1em" }}>
+          <Typography sx={{ padding: "1rem" }}>
             MGW require all submissions to have at least contact name and email
             for editing verification and administrative communication purposes.
+          </Typography>
+          <Typography sx={{ padding: "1rem" }}>
+            All Author information will not be modifiable once submitted.
           </Typography>
         </Paper>
       </Grid>

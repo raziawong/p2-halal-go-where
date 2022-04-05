@@ -1,6 +1,7 @@
-import { Grid, Paper, Switch, TextField, Typography } from "@mui/material";
+import { Grid, Paper, TextField, Typography } from "@mui/material";
 
 export default function VerifyAuthor({
+  type,
   articleState,
   setArticleState,
   articleError,
@@ -8,11 +9,18 @@ export default function VerifyAuthor({
 }) {
   return (
     <Grid container spacing={4} sx={{ justifyContent: "center" }}>
-      <Grid item xs={10}>
+      <Grid item xs={11}>
         <Paper elevation={3}>
           <Typography sx={{ padding: "1em" }}>
-            Please enter the same email that was used for submission for verifying editing permission.
+            Please enter the same email that was used for submission for
+            verifying permission.
           </Typography>
+          {type === "delete" && (
+            <Typography sx={{ padding: "1em" }}>
+              Note that only the creator of the article has permission to
+              delete.
+            </Typography>
+          )}
         </Paper>
       </Grid>
       <Grid item xs={8}>
