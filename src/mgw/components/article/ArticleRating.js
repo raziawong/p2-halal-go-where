@@ -1,3 +1,4 @@
+import React from "react";
 import { Alert, Box, Container, Rating, Snackbar, Typography } from "@mui/material";
 
 export default function ArticleRating({

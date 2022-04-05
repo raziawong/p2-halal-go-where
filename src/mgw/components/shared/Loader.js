@@ -1,3 +1,4 @@
+import React from "react";
 import "../../../assets/loader.css"
 import { LoaderBackdrop } from "../../utils/mgwStyle";
 

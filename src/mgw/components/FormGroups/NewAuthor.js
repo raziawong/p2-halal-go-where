@@ -1,3 +1,4 @@
+import React from "react";
 import { Grid, Paper, Switch, TextField, Typography } from "@mui/material";
 
 export default function NewAuthor({

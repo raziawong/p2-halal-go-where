@@ -1,3 +1,4 @@
+import React, { Fragment } from "react";
 import helper from "../../utils/helper";
 import {
   Button,
@@ -7,7 +8,6 @@ import {
   Select,
   Slider,
 } from "@mui/material";
-import { Fragment } from "react";
 
 export default function FilterGroup({
   detectFilter,

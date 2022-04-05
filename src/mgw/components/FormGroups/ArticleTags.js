@@ -1,3 +1,4 @@
+import React from "react";
 import helper from "../../utils/helper";
 import {
   Autocomplete,
@@ -19,7 +20,6 @@ export default function ArticleTags({
   tagOpts,
 }) {
   const handleTagChange = (evt, value) => {
-    // let tags = [...articleState.tags];
     setArticleState({
       target: {
         name: "tags",

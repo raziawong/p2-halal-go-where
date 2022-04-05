@@ -1,7 +1,13 @@
-import React, {Fragment} from "react";
+import React, { Fragment } from "react";
 import { NavBarDrawer, NavBarLink } from "../../utils/mgwStyle";
 import { IconButton, List, ListItem, ListItemText } from "@mui/material";
-import { CollectionsBookmarkSharp, HomeSharp, MenuSharp, NoteAddSharp, ViewListSharp } from "@mui/icons-material";
+import {
+  CollectionsBookmarkSharp,
+  HomeSharp,
+  MenuSharp,
+  NoteAddSharp,
+  ViewListSharp,
+} from "@mui/icons-material";
 
 export default class NavDrawer extends React.Component {
   state = {
@@ -16,11 +22,11 @@ export default class NavDrawer extends React.Component {
           open={this.state.opened}
           onClose={() => this.setState({ opened: false })}
         >
-          <List sx={{ minWidth: "30vw "}}>
+          <List sx={{ minWidth: "30vw " }}>
             <ListItem>
               <ListItemText>
                 <NavBarLink to="/">
-                  <HomeSharp fontSize="small" sx={{ mx: 1}}/>
+                  <HomeSharp fontSize="small" sx={{ mx: 1 }} />
                   Home
                 </NavBarLink>
               </ListItemText>
@@ -28,7 +34,7 @@ export default class NavDrawer extends React.Component {
             <ListItem>
               <ListItemText>
                 <NavBarLink to="/explore">
-                  <ViewListSharp fontSize="small" sx={{ mx: 1}} />
+                  <ViewListSharp fontSize="small" sx={{ mx: 1 }} />
                   Explore
                 </NavBarLink>
               </ListItemText>
@@ -36,14 +42,16 @@ export default class NavDrawer extends React.Component {
             <ListItem>
               <ListItemText>
                 <NavBarLink to="/create">
-                  <NoteAddSharp fontSize="small" sx={{ mx: 1}} />
+                  <NoteAddSharp fontSize="small" sx={{ mx: 1 }} />
                   Create
                 </NavBarLink>
               </ListItemText>
             </ListItem>
           </List>
         </NavBarDrawer>
-        <IconButton onClick={() => this.setState({ opened: !this.state.opened })}>
+        <IconButton
+          onClick={() => this.setState({ opened: !this.state.opened })}
+        >
           <MenuSharp />
         </IconButton>
       </Fragment>

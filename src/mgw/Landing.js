@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import {
   Box,
   Container,
@@ -16,70 +16,66 @@ import helper from "./utils/helper";
 
 export default function Landing({ filterOpts, detectFilter, detectSearch }) {
   return (
-    <Fragment>
-      <Container maxWidth="xl" disableGutters>
-        <HeroBanner bgImg={banner}>
-          <HeroOverlay>
-            <FormControl>
-              <OutlinedInput
-                id="home-search"
-                name="text"
-                label="Search"
-                arial-label="Search"
-                value={filterOpts.text}
-                onChange={detectFilter}
-                onKeyDown={(evt) => detectSearch(evt, helper.exploreView)}
-                startAdornment={
-                  <InputAdornment position="start">
-                    <IconButton
-                      aria-label="Submit Search"
-                      onClick={(evt) => detectSearch(evt, helper.exploreView)}
-                      onMouseDown={(evt) =>
-                        detectSearch(evt, helper.exploreView)
-                      }
-                      onKeyDown={(evt) => detectSearch(evt, helper.exploreView)}
-                    >
-                      <SearchSharp sx={{ color: "white", mr: 1, my: 0.5 }} />
-                    </IconButton>
-                  </InputAdornment>
-                }
-              />
-            </FormControl>
-          </HeroOverlay>
-        </HeroBanner>
-        <Box sx={{ m: 2 }}>
-          <Typography component="h2" variant="h3">
-            What's New
-          </Typography>
-        </Box>
-        <Box sx={{ m: 2 }}>
-          <Typography component="h2" variant="h3">
-            Categories
-          </Typography>
-          <Stack spacing={2}>
-            <Box id="">
-              <Typography component="h3" variant="4">
-                Attractions
-              </Typography>
-            </Box>
-            <Box>
-              <Typography component="h3" variant="4">
-                Mosques
-              </Typography>
-            </Box>
-            <Box>
-              <Typography component="h3" variant="4">
-                Praying Spaces
-              </Typography>
-            </Box>
-            <Box>
-              <Typography component="h3" variant="4">
-                Food
-              </Typography>
-            </Box>
-          </Stack>
-        </Box>
-      </Container>
-    </Fragment>
+    <Container maxWidth="xl" disableGutters>
+      <HeroBanner bgImg={banner}>
+        <HeroOverlay>
+          <FormControl>
+            <OutlinedInput
+              id="home-search"
+              name="text"
+              label="Search"
+              arial-label="Search"
+              value={filterOpts.text}
+              onChange={detectFilter}
+              onKeyDown={(evt) => detectSearch(evt, helper.exploreView)}
+              startAdornment={
+                <InputAdornment position="start">
+                  <IconButton
+                    aria-label="Submit Search"
+                    onClick={(evt) => detectSearch(evt, helper.exploreView)}
+                    onMouseDown={(evt) => detectSearch(evt, helper.exploreView)}
+                    onKeyDown={(evt) => detectSearch(evt, helper.exploreView)}
+                  >
+                    <SearchSharp sx={{ color: "white", mr: 1, my: 0.5 }} />
+                  </IconButton>
+                </InputAdornment>
+              }
+            />
+          </FormControl>
+        </HeroOverlay>
+      </HeroBanner>
+      <Box sx={{ m: 2 }}>
+        <Typography component="h2" variant="h3">
+          What's New
+        </Typography>
+      </Box>
+      <Box sx={{ m: 2 }}>
+        <Typography component="h2" variant="h3">
+          Categories
+        </Typography>
+        <Stack spacing={2}>
+          <Box id="">
+            <Typography component="h3" variant="4">
+              Attractions
+            </Typography>
+          </Box>
+          <Box>
+            <Typography component="h3" variant="4">
+              Mosques
+            </Typography>
+          </Box>
+          <Box>
+            <Typography component="h3" variant="4">
+              Praying Spaces
+            </Typography>
+          </Box>
+          <Box>
+            <Typography component="h3" variant="4">
+              Food
+            </Typography>
+          </Box>
+        </Stack>
+      </Box>
+    </Container>
   );
 }

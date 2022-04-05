@@ -1,3 +1,4 @@
+import React from "react";
 import helper from "../../utils/helper";
 import {
   Alert,
@@ -65,7 +66,7 @@ export default function HorizontalStepper({
     <Box sx={{ m: 4 }}>
       {requestError && (
         <Box sx={{ mb: 4 }}>
-          <Alert severity="error">
+          <Alert severity="error" variant="filled">
           <AlertTitle>Error</AlertTitle>
           {requestError}
         </Alert>
