@@ -169,17 +169,11 @@ export default function Article({
                 />
               </Box>
             </Box>
-            <ArticleRating
-              {...article.rating}
-              articleId={article._id}
-              updateRating={updateRating}
-              requestError={requestError}
-              setMgwState={setMgwState}
-            />
             <ArticleComments
               comments={article.comments}
+              rating={article.rating}
+              updateRating={updateRating}
               articleId={article._id}
-              requestError={requestError}
               setMgwState={setMgwState}
             />
           </Box>
