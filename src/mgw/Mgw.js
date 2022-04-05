@@ -10,6 +10,8 @@ import {
   getArticleContributor,
   updateArticle,
   deleteArticle,
+  updateRating,
+  getRating,
 } from "./utils/data";
 import helper from "./utils/helper";
 import { SiteContainer, ViewContainer } from "./utils/mgwStyle";
@@ -147,6 +149,7 @@ export default class Mgw extends Component {
                     article={this.state.articleDetail}
                     setFilterOpts={this.setFilterOpts}
                     execSearch={this.searchArticles}
+                    updateRating={this.updateArticleRating}
                     requestError={this.state.requestError}
                   />
                 }
@@ -406,4 +409,35 @@ export default class Mgw extends Component {
       });
     });
   };
+
+  getArticleRating = async (articleId) => {
+    let dtl = {...this.state.articleDetail} || {};
+    if (articleId && articleId === dtl._id && dtl.rating && Object.keys(dtl.rating).length) {
+      await getRating({articleId}).then(resp => {
+        if (resp.data.results.count)
+          this.setState({
+            articleDetail: {...dtl, rating: {...dtl.rating, ...resp.data.results[0].rating}},
+            requestError: ""
+          });
+      }).catch(err => {
+        this.setState({
+          requestError: "Failed to get latest article rating"
+        });
+      })
+    }
+  }
+
+  updateArticleRating = async (articleId, rateValue) => {
+    const rating = {...this.state.articleDetail}?.rating || {};
+    if (articleId && rating && Object.keys(rating).length && rateValue) {
+      rateValue = rating.count ? (rating.avg + rateValue) / 2 : rateValue;
+      await updateRating({articleId, rating: rateValue}).then(resp => {
+        this.getArticleRating(articleId);
+      }).catch(err => {
+        this.setState({
+          requestError: "Failed to update article rating"
+        })
+      });
+    }
+  }
 }

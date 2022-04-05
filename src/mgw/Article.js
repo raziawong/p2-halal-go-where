@@ -31,6 +31,7 @@ export default function Article({
   article,
   setFilterOpts,
   execSearch,
+  updateRating,
   requestError
 }) {
   const params = useParams();
@@ -151,7 +152,13 @@ export default function Article({
                   />
               </Box>
             </Box>
-            <ArticleRating {...article.rating} />
+            <ArticleRating 
+              {...article.rating} 
+              articleId={article._id}
+              updateRating={updateRating}
+              requestError={requestError}
+              setMgwState={setMgwState}
+            />
           </Box>
       </Container>
     }

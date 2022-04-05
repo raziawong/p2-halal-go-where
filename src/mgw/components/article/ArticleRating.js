@@ -1,29 +1,50 @@
-import { Container } from "@mui/material";
-import Box from "@mui/material/Box";
-import Rating from "@mui/material/Rating";
-import Typography from "@mui/material/Typography";
+import { Alert, Box, Container, Rating, Snackbar, Typography } from "@mui/material";
 
-export default function ArticleRating({ avg, count }) {
+export default function ArticleRating({
+  articleId,
+  avg,
+  count,
+  updateRating,
+  requestError,
+  setMgwState
+}) {
+  const handleClose = () => {
+    setMgwState({
+      requestError: ""
+    });
+  }
+  const handleClick = (evt, newValue) => {
+    updateRating(articleId, newValue);
+  };
   return (
-    <Container sx={{ display: "flex", justifyContent: "center", width: "100%"}}>
+    <Container
+      sx={{ display: "flex", justifyContent: "center", width: "100%" }}
+    >
       <Box
         sx={{
           display: "flex",
+          flexWrap: "wrap",
           justifyContent: "space-around",
           alignItems: "center",
           minWidth: "75%",
-          mt: 2
+          mt: 2,
         }}
       >
+        {requestError && (
+          <Snackbar open={!!requestError} autoHideDuration={6000} onClose={handleClose}
+          sx={{ bottom: 130, left: 10 }}>
+            <Alert severity="error">{requestError}</Alert>
+          </Snackbar>
+        )}
         <Rating
-          name="simple-controlled"
+          name="rating"
+          aria-label="rating"
+          precision={0.5}
           value={avg}
-          onChange={(event, newValue) => {
-            console.log(newValue);
-          }}
+          onChange={handleClick}
         />
         <Typography component="legend">
-          {count === 0 ? "No Rating" : `${count} Votes`}
+          {count === 0 ? "No Rating" : `On ${count} Votes`}
         </Typography>
       </Box>
     </Container>

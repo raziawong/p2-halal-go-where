@@ -21,12 +21,13 @@ const mgwRequests = {
         categories : "/categories",
         categoriesSubcats : "/categories/subcats",
         articles: "/articles",
-        articleContributor: "/article/contributor"
+        articleContributor: "/article/contributor",
+        articleRating: "/article/rating"
     },
     submitPaths: {
         article: "/article",
-        rating: "/article/rating",
-        comment: "/article/comment"         
+        articleRating: "/article/rating",
+        articleComment: "/article/comment"         
     }
 }
 
@@ -126,5 +127,15 @@ const getCategories = async (params) => {
   return await mgwRequests.axiosBase.get(mgwRequests.queryPaths.categories, { params });
 }
 
+const getRating = async (params) => {
+  return await mgwRequests.axiosBase.get(mgwRequests.queryPaths.articleRating, { params });
+}
+
+const updateRating = async (body) => {
+  return await mgwRequests.axiosBase.put(mgwRequests.submitPaths.articleRating, {
+    ...body
+  });
+}
+
 export { mgwCategoriesMap, getMgwFixed, getMgwArticles, getArticles, getArticleContributor, getCountries, getCategories,
-  postArticle, updateArticle, deleteArticle };
+  postArticle, updateArticle, deleteArticle, getRating, updateRating };
