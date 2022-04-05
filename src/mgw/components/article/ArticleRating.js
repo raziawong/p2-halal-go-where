@@ -1,19 +1,12 @@
 import React from "react";
-import { Alert, Box, Container, Rating, Snackbar, Typography } from "@mui/material";
+import { Box, Container, Rating, Typography } from "@mui/material";
 
 export default function ArticleRating({
   articleId,
   avg,
   count,
-  updateRating,
-  requestError,
-  setMgwState
+  updateRating
 }) {
-  const handleClose = () => {
-    setMgwState({
-      requestError: ""
-    });
-  }
   const handleClick = (evt, newValue) => {
     updateRating(articleId, newValue);
   };
@@ -31,12 +24,6 @@ export default function ArticleRating({
           mt: 2,
         }}
       >
-        {requestError && (
-          <Snackbar open={!!requestError} autoHideDuration={6000} onClose={handleClose}
-          sx={{ bottom: 130, left: 10 }}>
-            <Alert severity="error">{requestError}</Alert>
-          </Snackbar>
-        )}
         <Rating
           name="rating"
           aria-label="rating"

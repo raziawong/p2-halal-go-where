@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import mgwTheme from "./utils/mgwTheme";
-import { ThemeProvider } from "@mui/material";
+import { Alert, Snackbar, ThemeProvider } from "@mui/material";
 import { Navigate, Routes, Route } from "react-router-dom";
 import {
   getMgwFixed,
@@ -158,6 +158,16 @@ export default class Mgw extends Component {
             </Routes>
           </ViewContainer>
           <Loader toShow={!this.state.isLoaded} />
+          {this.state.requestError && (
+            <Snackbar
+              open={!!this.state.requestError && !this.state.editModal && !this.state.deleteModal}
+              autoHideDuration={6000}
+              onClose={this.handleToastClose}
+              sx={{ bottom: 130, left: 10 }}
+            >
+              <Alert severity="error">{this.state.requestError}</Alert>
+            </Snackbar>
+          )}
         </SiteContainer>
       </ThemeProvider>
     );
@@ -173,6 +183,12 @@ export default class Mgw extends Component {
   detectFilter = (evt) => {
     this.setFilterOpts(evt.target);
   };
+
+  handleToastClose = () => {
+    this.setState({
+      requestError: ""
+    });
+  }
 
   setMgwState = (keyValuePair) => {
     this.setState({ ...keyValuePair });

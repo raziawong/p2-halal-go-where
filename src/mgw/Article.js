@@ -8,6 +8,7 @@ import ArticleRating from "./components/article/ArticleRating";
 import EditModal from "./components/article/EditModal";
 import DeleteModal from "./components/article/DeleteModal";
 import NotFound from "./NotFound";
+import ArticleComments from "./components/article/ArticleComments";
 
 export default function Article({
   tagOpts,
@@ -32,7 +33,7 @@ export default function Article({
   setFilterOpts,
   execSearch,
   updateRating,
-  requestError
+  requestError,
 }) {
   const params = useParams();
 
@@ -48,7 +49,7 @@ export default function Article({
   }, [mounted, execSearch, params.id]);
 
   const handleEdit = () => {
-    let inputs = {...helper.initArticleInputs, ...article};
+    let inputs = { ...helper.initArticleInputs, ...article };
     if (userVerifyErrorMsg) {
       inputs.email = userEmail;
     }
@@ -59,7 +60,7 @@ export default function Article({
     });
   };
   const handleDelete = () => {
-    let inputs = {...helper.initArticleInputs, ...article};
+    let inputs = { ...helper.initArticleInputs, ...article };
     if (userVerifyErrorMsg) {
       inputs.email = userEmail;
     }
@@ -71,16 +72,27 @@ export default function Article({
   };
   return (
     <Fragment>
-      {
-        article.title && loaded && 
-      <Container maxWidth="xl" disableGutters>
+      {article.title && loaded && (
+        <Container maxWidth="xl" disableGutters>
           <Box sx={{ my: 4, mx: 6 }}>
-            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center"}}>
-              <Typography component="h1" variant="h2">{article.title}</Typography>
-              <Typography component="h2" variant="h2">{article.country?.name}{", "}{article.city?.name}</Typography>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <Typography component="h1" variant="h2">
+                {article.title}
+              </Typography>
+              <Typography component="h2" variant="h2">
+                {article.country?.name}
+                {", "}
+                {article.city?.name}
+              </Typography>
             </Box>
             <Box>
-            <Typography variant="h4">{article.description}</Typography>
+              <Typography variant="h4">{article.description}</Typography>
             </Box>
             {article.details &&
               article.details.length > 0 &&
@@ -103,7 +115,11 @@ export default function Article({
             >
               <Box>
                 <Typography>
-                  Added By: {article.contributors? article.contributors.filter(c => c.isAuthor)[0].displayName : ""}
+                  Added By:{" "}
+                  {article.contributors
+                    ? article.contributors.filter((c) => c.isAuthor)[0]
+                        .displayName
+                    : ""}
                 </Typography>
                 <Typography>Last Modified: {article.lastModified}</Typography>
               </Box>
@@ -115,23 +131,23 @@ export default function Article({
                 >
                   <EditSharp />
                 </IconButton>
-                <EditModal 
-                    locationOpts={locationOpts}
-                    catOpts={catOpts}
-                    tagOpts={tagOpts}
-                    activeStep={activeStep}
-                    articleState={articleState}
-                    setArticleState={setArticleState}
-                    articleError={articleError}
-                    validateArticle={validateArticle}
-                    setArr={setArr}
-                    removeArr={removeArr}
-                    setMgwState={setMgwState}
-                    editModal={editModal}
-                    userEmail={userEmail}
-                    userVerifyErrorMsg={userVerifyErrorMsg}
-                    requestError={requestError}
-                  />
+                <EditModal
+                  locationOpts={locationOpts}
+                  catOpts={catOpts}
+                  tagOpts={tagOpts}
+                  activeStep={activeStep}
+                  articleState={articleState}
+                  setArticleState={setArticleState}
+                  articleError={articleError}
+                  validateArticle={validateArticle}
+                  setArr={setArr}
+                  removeArr={removeArr}
+                  setMgwState={setMgwState}
+                  editModal={editModal}
+                  userEmail={userEmail}
+                  userVerifyErrorMsg={userVerifyErrorMsg}
+                  requestError={requestError}
+                />
                 <IconButton
                   color="primary"
                   aria-label="Delete Article"
@@ -139,34 +155,37 @@ export default function Article({
                 >
                   <DeleteOutlineSharp />
                 </IconButton>
-                <DeleteModal 
-                    activeStep={deleteStep}
-                    articleState={articleState}
-                    setArticleState={setArticleState}
-                    articleError={articleError}
-                    validateArticle={validateArticle}
-                    setMgwState={setMgwState}
-                    deleteModal={deleteModal}
-                    userEmail={userEmail}
-                    userVerifyErrorMsg={userVerifyErrorMsg}
-                    requestError={requestError}
-                  />
+                <DeleteModal
+                  activeStep={deleteStep}
+                  articleState={articleState}
+                  setArticleState={setArticleState}
+                  articleError={articleError}
+                  validateArticle={validateArticle}
+                  setMgwState={setMgwState}
+                  deleteModal={deleteModal}
+                  userEmail={userEmail}
+                  userVerifyErrorMsg={userVerifyErrorMsg}
+                  requestError={requestError}
+                />
               </Box>
             </Box>
-            <ArticleRating 
-              {...article.rating} 
+            <ArticleRating
+              {...article.rating}
               articleId={article._id}
               updateRating={updateRating}
               requestError={requestError}
               setMgwState={setMgwState}
             />
+            <ArticleComments
+              comments={article.comments}
+              articleId={article._id}
+              requestError={requestError}
+              setMgwState={setMgwState}
+            />
           </Box>
-      </Container>
-    }
-    {
-      !article.title && loaded &&
-      <NotFound />
-    }
+        </Container>
+      )}
+      {!article.title && loaded && <NotFound />}
     </Fragment>
   );
 }
