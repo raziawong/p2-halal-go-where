@@ -15,7 +15,7 @@ export default function Explore({
   loaded,
 }) {
   useEffect(() => {
-    setMgwState({ isRedirectListing: false });
+    return setMgwState({ isRedirectListing: false });
   }, [setMgwState]);
   return (
     <Container maxWidth="xl" disableGutters>

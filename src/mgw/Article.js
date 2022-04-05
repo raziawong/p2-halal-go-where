@@ -37,13 +37,14 @@ export default function Article({
   const params = useParams();
 
   useEffect(async () => {
-    setFilterOpts({ name: "id", value: params.id });
+    return setFilterOpts({ name: "id", value: params.id });
   }, [setFilterOpts, params.id]);
 
   useEffect(async () => {
     if (mounted) {
-      await execSearch(helper.articleView);
+      return await execSearch(helper.articleView);
     }
+    return "";
   }, [mounted, execSearch, params.id]);
 
   const handleEdit = () => {
