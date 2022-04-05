@@ -27,6 +27,52 @@ const helper = {
     { title: "Details", fields: ["photos", "details"] },
     { title: "Tags", fields: ["catIds", "subcatIds", "tags"] },
   ],
+  fieldValidations: {
+    displayName: {
+      patterns: ["displayName", "spaces"],
+      maxLength: 80,
+      minLength: 3,
+    },
+    name: {
+      required: true,
+      patterns: ["displayName", "spaces"],
+      maxLength: 80,
+      minLength: 3,
+    },
+    email: {
+      required: true,
+      patterns: ["email"],
+    },
+    title: {
+      required: true,
+      patterns: ["displayName", "spaces"],
+      maxLength: 100,
+      minLength: 10,
+    },
+    description: {
+      required: true,
+      patterns: ["spaces"],
+      maxLength: 200,
+      minLength: 10,
+    },
+    address: {
+      required: true,
+      patterns: ["spaces"],
+      minLength: 5,
+    },
+    countryId: {
+      required: true,
+    },
+    cityId: {
+      required: true,
+    },
+    catIds: {
+      required: true,
+    },
+    subcatIds: {
+      required: true,
+    }
+  },
   initFilterOpts: {
     id: "",
     text: "",
@@ -165,6 +211,7 @@ const helper = {
             subcatIds.push(scId);
             return scId;
           }
+          return false;
         })
         .filter((sc) => !!sc);
       return { catId: cId, subcatIds: depSubcatIds };
@@ -191,6 +238,7 @@ const helper = {
 
     pd.details?.map((dtl) => {
       dtl.content = draftToMarkdown(JSON.parse(dtl.content));
+      return dtl;
     });
 
     return pd;
@@ -233,7 +281,7 @@ const helper = {
         }
 
         if (res.details?.length) {
-          res.details = res.details.map(det => {
+          res.details = res.details.map((det) => {
             det.contentMd = det.content;
             det.content = JSON.stringify(markdownToDraft(det.content));
             return det;
@@ -242,8 +290,11 @@ const helper = {
         return res;
       });
 
-      if (tf) { resolve(tf); }
-      else { reject ("Error encountered while transforming article for read"); }
+      if (tf) {
+        resolve(tf);
+      } else {
+        reject("Error encountered while transforming article for read");
+      }
     });
   },
   regex: {
@@ -263,80 +314,29 @@ const helper = {
     alphaNumeric: `This can only be alphanumeric inclusive of spaces and -`,
     maxLength: (length) =>
       `This cannot exceed ${length} characters including spaces`,
+    minLength: (length) => `This must be at least be ${length} characters`,
     email: `This is not a valid email address`,
     url: `This is not a valid URL`,
-    user: `User verification failed`
+    user: `User verification failed`,
   },
   validate: (fieldName, inputs) => {
-    let val = inputs[fieldName];
-    if (fieldName === "displayName") {
-      if (!helper.regex.displayName.test(val)) {
-        return { fieldName, message: helper.templates.special };
-      }
-      if (val?.length && val.length > 80) {
-        return { fieldName, message: helper.templates.maxLength(80) };
-      }
-    } else if (fieldName === "name") {
-      if (!val) {
-        return { fieldName, message: helper.templates.required };
-      }
-      if (!helper.regex.displayName.test(val)) {
-        return { fieldName, message: helper.templates.special };
-      }
-      if (val?.length && val.length > 80) {
-        return { fieldName, message: helper.templates.maxLength(80) };
-      }
-    } else if (fieldName === "email") {
-      if (!val) {
-        return { fieldName, message: helper.templates.required };
-      }
-      if (!helper.regex.email.test(val)) {
-        return { fieldName, message: helper.templates.email };
-      }
-    } else if (fieldName === "title") {
-      if (!val) {
-        return { fieldName, message: helper.templates.required };
-      }
-      if (!helper.regex.displayName.test(val)) {
-        return { fieldName, message: helper.templates.special };
-      }
-      if (val?.length && val.length > 50) {
-        return { fieldName, message: helper.templates.maxLength(50) };
-      }
-    } else if (fieldName === "description") {
-      if (!val) {
-        return { fieldName, message: helper.templates.required };
-      }
-      if (val?.length && val.length > 150) {
-        return { fieldName, message: helper.templates.maxLength(150) };
-      }
-    } else if (fieldName === "address") {
-      if (!val) {
-        return { fieldName, message: helper.templates.required };
-      }
-    } else if (fieldName === "countryId") {
-      if (!val) {
-        return { fieldName, message: helper.templates.required };
-      }
-    } else if (fieldName === "cityId") {
-      if (!val) {
-        return { fieldName, message: helper.templates.required };
-      }
-    } else if (fieldName.startsWith("photos")) {
-      val = inputs.photos;
-      let err = val
+    let inputVal = inputs[fieldName];
+    if (fieldName.startsWith("photos")) {
+      inputVal = inputs.photos;
+      let err = inputVal
         .map((p, i) => {
           if (!helper.regex.url.test(p)) {
             return helper.templates.url;
           }
+          return false;
         })
         .filter((p) => !!p);
       if (err.length) {
         return { fieldName, message: err };
       }
     } else if (fieldName.startsWith("details")) {
-      val = inputs.details;
-      let errList = val
+      inputVal = inputs.details;
+      let errList = inputVal
         .map((d, i) => {
           let err = {};
           if (!d.sectionName) {
@@ -357,21 +357,45 @@ const helper = {
       if (errList.length) {
         return { fieldName, message: errList };
       }
-    } else if (fieldName === "catIds") {
-      if (!val.length) {
-        return { fieldName, message: helper.templates.required };
-      }
-    } else if (fieldName === "subcatIds") {
-      if (!val.length) {
-        return { fieldName, message: helper.templates.required };
-      }
     } else if (fieldName === "tags") {
-      if (val && val?.length >= 1) {
-        let check = val.filter((t) => !helper.regex.alphaNumeric.test(t));
+      if (inputVal && inputVal?.length >= 1) {
+        let check = inputVal.filter((t) => !helper.regex.alphaNumeric.test(t));
         if (check.length) {
           return { fieldName, message: helper.templates.alphaNumeric };
         }
       }
+    } else if (helper.fieldValidations[fieldName]){
+      let ret = {};
+      for (const [k, v] of Object.entries(helper.fieldValidations[fieldName])) {
+        if (k === "required" && !inputVal?.length) {
+          return { fieldName, message: helper.templates.required };
+        }
+        if (k === "patterns") {
+          for (const type of v) {
+            if (type === "displayName" && !helper.regex.displayName.test(inputVal)) {
+              return { fieldName, message: helper.templates.special };
+            }
+            if (type === "spaces" && inputVal?.length && helper.regex.spaces.test(inputVal)) {
+              return { fieldName, message: helper.templates.spaces };
+            }
+            if (type === "url" && !helper.regex.url.test(inputVal)) {
+              return { fieldName, message: helper.templates.url };
+            }
+            if (type === "email" && !helper.regex.email.test(inputVal)) {
+              return { fieldName, message: helper.templates.email };
+            }
+          }
+        }
+        if (k === "maxLength" && inputVal?.length && inputVal.length > v) {
+          return { fieldName, message: helper.templates.maxLength(v) };
+          break;
+        }
+        if (k === "minLength" && inputVal?.length && inputVal.length < v) {
+          return { fieldName, message: helper.templates.minLength(v) };
+        }
+      }
+
+      return ret;
     }
 
     return false;
