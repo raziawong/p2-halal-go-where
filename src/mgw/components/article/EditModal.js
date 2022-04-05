@@ -1,6 +1,20 @@
+import React from "react";
 import helper from "../../utils/helper";
-import { Backdrop, Box, Fade, Modal } from "@mui/material";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  Slide,
+  useMediaQuery,
+  useTheme
+} from "@mui/material";
+import { CloseSharp } from "@mui/icons-material";
 import HorizontalStepper from "../shared/HorizontalStepper";
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 export default function EditModal({
   locationOpts,
@@ -17,7 +31,7 @@ export default function EditModal({
   editModal,
   userEmail,
   userVerifyErrorMsg,
-  requestError
+  requestError,
 }) {
   const hsProps = {
     locationOpts,
@@ -32,7 +46,7 @@ export default function EditModal({
     removeArr,
     setMgwState,
     userVerifyErrorMsg,
-    requestError
+    requestError,
   };
   const handleClose = () => {
     const inputs = helper.initArticleInputs;
@@ -43,35 +57,36 @@ export default function EditModal({
       editModal: false,
       articleInputs: inputs,
       articleInputsErrors: {},
-      userVerifyErrorMsg: ""
+      userVerifyErrorMsg: "",
     });
   };
   return (
-    <Modal
-      aria-labelledby="title"
+    <Dialog
+      fullWidth keepMounted
+      maxWidth="87vw"
+      TransitionComponent={Transition}
+      fullScreen={useMediaQuery(useTheme().breakpoints.down("md"))}
       open={editModal}
       onClose={handleClose}
-      closeAfterTransition
-      BackdropComponent={Backdrop}
-      BackdropProps={{ timeout: 500 }}
     >
-      <Fade in={editModal}>
-        <Box
+      <DialogTitle sx={{ m: 0, p: 2 }}>
+        Edit {articleState.title}
+        <IconButton
+          aria-label="Close"
+          onClick={handleClose}
           sx={{
             position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: "80%",
-            bgcolor: "background.paper",
-            border: "2px solid #000",
-            boxShadow: 24,
-            p: 4,
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[500],
           }}
         >
-          <HorizontalStepper {...hsProps} type="edit"/>
-        </Box>
-      </Fade>
-    </Modal>
+          <CloseSharp />
+        </IconButton>
+      </DialogTitle>
+      <DialogContent>
+        <HorizontalStepper {...hsProps} type="edit" />
+      </DialogContent>
+    </Dialog>
   );
 }
