@@ -327,23 +327,23 @@ const helper = {
       }
     } else if (fieldName.startsWith("details")) {
       inputVal = inputs.details;
-      let errList = inputVal.map((d, i) => {
+      let errList = inputVal.map(dtl => {
           let err = {};
-          if (!d.sectionName?.length) {
+          const { sectionName, content } = dtl;
+          if (!sectionName|| helper.regex.spaces.test(sectionName)) {
             err.sectionName = helper.templates.required;
-          } else if (!helper.regex.displayName.test(d.sectionName)) {
+          } else if (!helper.regex.displayName.test(sectionName)) {
             err.sectionName = helper.templates.special;
           }
-          if (d.content) {
-            const content = JSON.parse(d.content);
-            if (d.sectionName?.length && !content.blocks?.text) {
+          if (content) {
+            const contentMd = draftToMarkdown(JSON.parse(content));
+            if (sectionName?.length && !contentMd?.length) {
               err.content = "Content cannot be empty when Header is not";
             }
           }
           return err;
         })
-        .filter((d) => !!d);
-
+        .filter(d => Object.keys(d).length !== 0);
       if (errList.length) {
         return { fieldName, message: errList };
       }
