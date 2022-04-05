@@ -120,22 +120,28 @@ export default function ArticleDetails({
                 value={dtl.sectionName}
                 onChange={(evt) => handleDetailChange(evt, i)}
                 error={!!checkError("details", i)?.sectionName}
-                // helperText={checkError("details", i, "sectionName")}
+                helperText={checkError("details", i)?.sectionName}
               />
-              <Editor
-                toolbarButtonSize="small"
-                controls={helper.rteControls}
-                inlineToolbar
-                label="Insert content for section"
-                name={`details[${i}]content`}
-                value={dtl.content}
-                onChange={(evt) => handleDetailChange(evt, i)}
-              />
-              {/* {checkError("details", i, "content") && (
-                <FormHelperText error={!!checkError("details", i, "content")}>
-                  {checkError("details", i, "content")}
+              <Box sx={!!checkError("details", i)?.content ? {
+                borderColor: "error.main",
+                borderWidth: "1px",
+                borderStyle: "solid"
+              } : {}}>
+                <Editor
+                  toolbarButtonSize="small"
+                  controls={helper.rteControls}
+                  inlineToolbar
+                  label="Insert content for section"
+                  name={`details[${i}]content`}
+                  value={dtl.content}
+                  onChange={(evt) => handleDetailChange(evt, i)}
+                />
+              </Box>
+              {checkError("details", i)?.content && (
+                <FormHelperText error={!!checkError("details", i)?.content}>
+                  {checkError("details", i)?.content}
                 </FormHelperText>
-              )} */}
+              )}
             </Box>
             <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
               {articleState.details.length && (

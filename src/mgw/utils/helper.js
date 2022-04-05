@@ -323,36 +323,33 @@ const helper = {
     let inputVal = inputs[fieldName];
     if (fieldName.startsWith("photos")) {
       inputVal = inputs.photos;
-      let err = inputVal
-        .map((p, i) => {
+      let err = inputVal.map((p, i) => {
           if (!helper.regex.url.test(p)) {
             return helper.templates.url;
           }
           return false;
-        })
-        .filter((p) => !!p);
+        }).filter((p) => !!p);
       if (err.length) {
         return { fieldName, message: err };
       }
     } else if (fieldName.startsWith("details")) {
       inputVal = inputs.details;
-      let errList = inputVal
-        .map((d, i) => {
+      let errList = inputVal.map((d, i) => {
           let err = {};
-          if (!d.sectionName) {
+          if (!d.sectionName?.length) {
             err.sectionName = helper.templates.required;
           } else if (!helper.regex.displayName.test(d.sectionName)) {
-            err.sectionNasme = helper.templates.special;
+            err.sectionName = helper.templates.special;
           }
           if (d.content) {
             const content = JSON.parse(d.content);
-            if (d.sectionName && !content.blocks.length) {
+            if (d.sectionName?.length && !content.blocks?.text) {
               err.content = "Content cannot be empty when Header is not";
             }
           }
           return err;
         })
-        .filter((d) => !d);
+        .filter((d) => !!d);
 
       if (errList.length) {
         return { fieldName, message: errList };
