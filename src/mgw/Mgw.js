@@ -8,6 +8,7 @@ import {
   getArticles,
   postArticle,
   getArticleContributor,
+  updateArticle,
 } from "./utils/data";
 import helper from "./utils/helper";
 import { SiteContainer, ViewContainer } from "./utils/mgwStyle";
@@ -39,6 +40,7 @@ export default class Mgw extends Component {
     isRedirectListing: false,
     isMounted: false,
     isLoaded: false,
+    requestError: ""
   };
 
   async componentDidMount() {
@@ -97,6 +99,7 @@ export default class Mgw extends Component {
                     setFilterOpts={this.setFilterOpts}
                     detectFilter={this.detectFilter}
                     detectSearch={this.detectSearch}
+                    requestError={this.state.requestError}
                   />
                 }
               />
@@ -116,6 +119,7 @@ export default class Mgw extends Component {
                     validateArticle={this.validateArticleInputs}
                     setArr={this.addArticleArraySize}
                     removeArr={this.removeArticleArraySize}
+                    requestError={this.state.requestError}
                   />
                 }
               />
@@ -142,6 +146,7 @@ export default class Mgw extends Component {
                     article={this.state.articleDetail}
                     setFilterOpts={this.setFilterOpts}
                     execSearch={this.searchArticles}
+                    requestError={this.state.requestError}
                   />
                 }
               />
@@ -220,13 +225,10 @@ export default class Mgw extends Component {
       .filter((v) => v)
       .reduce((a, v) => ({ ...a, [v.fieldName]: v.message }), {});
 
-    this.setState(
-      {
-        articleInputsErrors: validation || {},
-      },
+    this.setState({ articleInputsErrors: validation || {} },
       async () => {
         if (!Object.entries(validation)?.length) {
-          let { createActiveStep, editActiveStep, articleInputs } = this.state;
+          let { createActiveStep, editActiveStep, articleInputs, userEmail, userVerifyErrorMsg } = this.state;
           if (type === "create") {
             if (createActiveStep === helper.createSteps.length - 1) {
               let pd = helper.transformArticleForUpdate(articleInputs);
@@ -235,7 +237,12 @@ export default class Mgw extends Component {
                   articleInputs: helper.initArticleInputs,
                   articleErrors: {},
                   articlePosted: resp.data.results.insertedId,
-                  activeState: 0,
+                  createActiveStep: 0,
+                  requestError: ""
+                });
+              }).catch(err => {
+                this.setState({
+                  requestError: "Failed to post new article, please try again"
                 });
               });
             } else {
@@ -251,9 +258,24 @@ export default class Mgw extends Component {
                 articleInputs._id,
                 articleInputs.email
               );
+            } else if (editActiveStep === helper.editSteps.length - 1) {
+              let pd = helper.transformArticleForUpdate(articleInputs);
+              await updateArticle(pd).then((resp) => {
+                this.setState({
+                  articleInputs: helper.initArticleInputs,
+                  articleErrors: {},
+                  articlePosted: resp.data.results.insertedId,
+                  editActiveStep: userEmail && !userVerifyErrorMsg ? 1 : 0,
+                  requestError: ""
+                })
+              }).catch(err => {
+                this.setState({
+                  requestError: "Failed to update article with " + articleInputs._id
+                });
+              });
             } else {
               this.setState({
-                editActiveStep: this.state.editActiveStep + 1
+                editActiveStep: editActiveStep + 1
               })
             }
           }
@@ -283,7 +305,8 @@ export default class Mgw extends Component {
       if (resp.data.count) {
         let update = {
           userEmail: email,
-          userVerifyErrorMsg: ""
+          userVerifyErrorMsg: "",
+          requestError: ""
         };
         if (this.state.editActiveStep === 0) {
           update.editActiveStep = 1;
@@ -292,16 +315,21 @@ export default class Mgw extends Component {
       } else {
         this.setState({
           userEmail: "",
-          userVerifyErrorMsg: helper.templates.user
+          userVerifyErrorMsg: helper.templates.user,
+          requestError: ""
         });
       }
+    }).catch(err => {
+      this.setState({
+        requestError: "Failed to get contributor with " + articleId
+      });
     });
   };
 
   searchArticles = (viewType) => {
     this.setState({ isLoaded: false }, async () => {
       let { filterOpts } = this.state;
-      let params, query = {};
+      let params = {};
 
       if (viewType === helper.exploreView) {
         params = Object.fromEntries(
@@ -317,25 +345,32 @@ export default class Mgw extends Component {
         params = { articleId: filterOpts.id };
       }
 
-      query = await getArticles(params, viewType);
-      if (query.data.results) {
-        let { articlesLocations, allCategories } = this.state;
-        let transformed = await helper.transformArticlesForRead(
-          query.data.results,
-          articlesLocations,
-          allCategories
-        );
-        viewType === helper.articleView
-        ? this.setState({
-            articleDetail: [...transformed][0] || [],
-            isLoaded: true
-          })
-        : this.setState({
-            isRedirectListing: true,
-            articlesFetched: [...transformed] || [],
-            isLoaded: true
-          });
-      }
+      await getArticles(params, viewType).then(async resp => {
+        if (resp.data.results) {
+          let { articlesLocations, allCategories } = this.state;
+          let transformed = await helper.transformArticlesForRead(
+            resp.data.results,
+            articlesLocations,
+            allCategories
+          );
+          viewType === helper.articleView
+          ? this.setState({
+              articleDetail: [...transformed][0] || [],
+              isLoaded: true,
+              requestError: ""
+            })
+          : this.setState({
+              isRedirectListing: true,
+              articlesFetched: [...transformed] || [],
+              isLoaded: true,
+              requestError: ""
+            });
+        }
+      }).catch(err => {
+        this.setState({
+          requestError: "Failed to load articles, please try again"
+        });
+      });
     });
   };
 }

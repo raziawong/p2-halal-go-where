@@ -1,5 +1,13 @@
 import helper from "../../utils/helper";
-import { Box, Button, Step, StepLabel, Stepper } from "@mui/material";
+import {
+  Alert,
+  AlertTitle,
+  Box,
+  Button,
+  Step,
+  StepLabel,
+  Stepper,
+} from "@mui/material";
 import NewAuthor from "../formgroups/NewAuthor";
 import VerifyAuthor from "../formgroups/VerifyAuthor";
 import ArticleSummary from "../formgroups/ArticleSummary";
@@ -20,6 +28,7 @@ export default function HorizontalStepper({
   removeArr,
   setMgwState,
   type,
+  requestError
 }) {
   const stepState = type === "create" ? "createActiveStep" : "editActiveStep";
   const stepsList = type === "create" ? helper.createSteps : helper.editSteps;
@@ -42,6 +51,14 @@ export default function HorizontalStepper({
 
   return (
     <Box sx={{ m: 4 }}>
+      {requestError && (
+        <Box sx={{ mb: 4 }}>
+          <Alert severity="error">
+          <AlertTitle>Error</AlertTitle>
+          {requestError}
+        </Alert>
+        </Box>
+      )}
       <Stepper activeStep={activeStep}>
         {stepsList.map((step, i) => (
           <Step key={step.title}>
@@ -52,23 +69,21 @@ export default function HorizontalStepper({
         ))}
       </Stepper>
       <Box sx={{ m: 4 }}>
-        {activeStep === 0 &&
-          type === "create" && (
-              <NewAuthor
-                articleState={articleState}
-                setArticleState={setArticleState}
-                articleError={articleError}
-              />
-            )}
-        {activeStep === 0 &&
-          type ==="edit" && (
-              <VerifyAuthor
-                articleState={articleState}
-                setArticleState={setArticleState}
-                articleError={articleError}
-                userVerifyErrorMsg={userVerifyErrorMsg}
-              />
-            )}
+        {activeStep === 0 && type === "create" && (
+          <NewAuthor
+            articleState={articleState}
+            setArticleState={setArticleState}
+            articleError={articleError}
+          />
+        )}
+        {activeStep === 0 && type === "edit" && (
+          <VerifyAuthor
+            articleState={articleState}
+            setArticleState={setArticleState}
+            articleError={articleError}
+            userVerifyErrorMsg={userVerifyErrorMsg}
+          />
+        )}
         {activeStep === 1 && (
           <ArticleSummary
             articleState={articleState}

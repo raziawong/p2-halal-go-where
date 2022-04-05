@@ -141,7 +141,7 @@ export default function ArticleDetails({
                 />
               </Box>
               {checkError("details", i)?.content && (
-                <FormHelperText error={!!checkError("details", i)?.content}>
+                <FormHelperText error>
                   {checkError("details", i)?.content}
                 </FormHelperText>
               )}

@@ -6,7 +6,7 @@ import defaultMusolla from "../../assets/image/default-musolla.jpg";
 
 const mgwRequests = {
     axiosBase: axios.create({
-        baseURL: "https://muslim-go-where-api.herokuapp.com"
+        baseURL: "http://localhost:3388"
     }),
     dataPaths: {
         countries: "/countries/cities",
@@ -104,6 +104,12 @@ const postArticle = async (body) => {
   });
 }
 
+const updateArticle = async (body) => {
+  return await mgwRequests.axiosBase.put(mgwRequests.submitPaths.article, {
+    ...body
+  });
+}
+
 const getArticleContributor = async (params) => {
   return await mgwRequests.axiosBase.get(mgwRequests.queryPaths.articleContributor, { params });
 };
@@ -121,4 +127,4 @@ const getCategories = async (params) => {
 }
 
 export { mgwCategoriesMap, getMgwFixed, getMgwArticles, getArticles, getArticleContributor, getCountries, getCountriesCities, getCategories,
-  postArticle };
+  postArticle, updateArticle };

@@ -17,6 +17,7 @@ export default function EditModal({
   editModal,
   userEmail,
   userVerifyErrorMsg,
+  requestError
 }) {
   const hsProps = {
     locationOpts,
@@ -30,7 +31,8 @@ export default function EditModal({
     setArr,
     removeArr,
     setMgwState,
-    userVerifyErrorMsg
+    userVerifyErrorMsg,
+    requestError
   };
   const handleClose = () => {
     const inputs = helper.initArticleInputs;
