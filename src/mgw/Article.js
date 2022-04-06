@@ -53,7 +53,7 @@ export default function Article({
     return "";
   }, [mounted, execSearch, params.id]);
   const imgList = () => {
-    return article.photos.length ? article.photos : [mgwCategoriesMap[article.catValues[0]].default];
+    return article.photos?.length ? article.photos : [mgwCategoriesMap[article.catLabels[0].value].default];
   }
   return (
     <Fragment>
