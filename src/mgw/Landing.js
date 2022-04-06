@@ -14,7 +14,7 @@ import { HeroBanner, HeroOverlay } from "./utils/mgwStyle";
 import { SearchSharp } from "@mui/icons-material";
 import helper from "./utils/helper";
 
-export default function Landing({ filterOpts, detectFilter, detectSearch }) {
+export default function Landing({ filterOpts, setFilterOpts, detectSearch }) {
   return (
     <Container disableGutters>
       <HeroBanner bgImg={banner}>
@@ -26,7 +26,7 @@ export default function Landing({ filterOpts, detectFilter, detectSearch }) {
               label="Search"
               arial-label="Search"
               value={filterOpts.text}
-              onChange={detectFilter}
+              onChange={(evt) => setFilterOpts(evt.target)}
               onKeyDown={(evt) => detectSearch(evt, helper.exploreView)}
               startAdornment={
                 <InputAdornment position="start">

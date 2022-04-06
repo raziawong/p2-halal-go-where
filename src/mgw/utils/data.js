@@ -95,8 +95,12 @@ const getMgwArticles = async () => {
     return data;
 }
 
-const getArticles = async (params, viewType) => {
+const getArticles = async (params, viewType, { sortField="createdDate", sortOrder="desc"}) => {
   let qPath = mgwRequests.queryPaths.articles + '/' + viewType;
+  
+  if (sortField && sortOrder) {
+    qPath += '/' + sortField + '/' + sortOrder;
+  }
   return await mgwRequests.axiosBase.get(qPath, { params });
 }
 

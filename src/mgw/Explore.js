@@ -2,13 +2,15 @@ import React, { Fragment, useEffect } from "react";
 import { Container, Box, Typography } from "@mui/material";
 import FilterGroup from "./components/explore/FilterGroup";
 import Listing from "./components/explore/Listing";
+import SortSelection from "./components/explore/SortSelection";
 
 export default function Explore({
   setMgwState,
   setFilterOpts,
-  detectFilter,
   detectSearch,
   filterOpts,
+  sortIndex,
+  sortAnchor,
   countries,
   categories,
   articles,
@@ -25,11 +27,16 @@ export default function Explore({
         <Fragment>
           <Box sx={{ m: 4 }}>
             <FilterGroup
-              detectFilter={detectFilter}
               detectSearch={detectSearch}
               filterOpts={filterOpts}
+              setFilterOpts={setFilterOpts}
               countries={countries}
               categories={categories}
+            />
+            <SortSelection 
+              sortIndex={sortIndex}
+              sortAnchor={sortAnchor}
+              setMgwState={setMgwState}
             />
           </Box>
           <Box sx={{ m: 4 }}>

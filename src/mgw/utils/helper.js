@@ -5,6 +5,33 @@ import { draftToMarkdown, markdownToDraft } from "markdown-draft-js";
 const helper = {
   exploreView: "listing",
   articleView: "details",
+  sortOptions: [
+    {
+      label: "What's New",
+      sortField: "createdDate",
+      sortOrder: "desc",
+    },
+    {
+      label: "Oldest",
+      sortField: "createdDate",
+      sortOrder: "asc",
+    },
+    {
+      label: "Last Updated",
+      sortField: "lastModified",
+      sortOrder: "desc",
+    },
+    {
+      label: "Title (A-Z)",
+      sortField: "title",
+      sortOrder: "asc",
+    },
+    {
+      label: "Title (Z-A)",
+      sortField: "title",
+      sortOrder: "desc",
+    },
+  ],
   createSteps: [
     {
       title: "Author",
@@ -28,7 +55,7 @@ const helper = {
   ],
   deleteSteps: [
     { title: "Verify", fields: ["email"] },
-    { title: "Confirmation", fields: [] }
+    { title: "Confirmation", fields: [] },
   ],
   fieldValidations: {
     displayName: {
@@ -79,24 +106,24 @@ const helper = {
       title: {
         patterns: ["displayName"],
         maxLength: 100,
-        minLength: 5
+        minLength: 5,
       },
       content: {
         required: true,
         maxLength: 200,
-        minLength: 5
+        minLength: 5,
       },
       name: {
         required: true,
         patterns: ["displayName"],
         maxLength: 80,
-        minLength: 3
+        minLength: 3,
       },
       email: {
         required: true,
-        patterns: ["email"]
-      }
-    }
+        patterns: ["email"],
+      },
+    },
   },
   initFilterOpts: {
     id: "",
@@ -136,7 +163,7 @@ const helper = {
     name: "",
     email: "",
     title: "",
-    content: ""
+    content: "",
   },
   ratingMarks: [
     { value: 0, text: "No Rating" },
@@ -229,7 +256,8 @@ const helper = {
     let subcatIds = [];
     const depCatArr = catIds.map((cId, i) => {
       const foundSub = allCats.find((c) => c._id === cId)?.subcats;
-      const depSubcatIds = selSubcats.map((scId) => {
+      const depSubcatIds = selSubcats
+        .map((scId) => {
           const newSub = foundSub.find((sc) => sc._id === scId);
           if (newSub) {
             subcatIds.push(scId);
@@ -313,7 +341,7 @@ const helper = {
             return cat;
           });
 
-          res.catIds.map(catId => {
+          res.catIds.map((catId) => {
             let foundC = allCats.find((source) => source._id === catId);
             if (foundC) {
               res.catLabels.push(foundC);
@@ -321,7 +349,8 @@ const helper = {
                 .filter((source) => res.subcatIds.indexOf(source._id) > -1)
                 .map((f) => res.subcatLabels.push(f));
             }
-          })
+            return catId;
+          });
         }
 
         if (res.details?.length) {
@@ -363,23 +392,28 @@ const helper = {
     url: `This is not a valid URL`,
     user: `User verification failed`,
   },
-  validate: (fieldName, inputs, valKey="") => {
+  validate: (fieldName, inputs, valKey = "") => {
     let inputVal = inputs[fieldName];
-    const rules = valKey ? helper.fieldValidations[valKey][fieldName] : helper.fieldValidations[fieldName];
+    const rules = valKey
+      ? helper.fieldValidations[valKey][fieldName]
+      : helper.fieldValidations[fieldName];
     if (fieldName.startsWith("photos")) {
       inputVal = inputs.photos;
-      let err = inputVal.map((p, i) => {
+      let err = inputVal
+        .map((p, i) => {
           if (!helper.regex.url.test(p)) {
             return helper.templates.url;
           }
           return false;
-        }).filter((p) => !!p);
+        })
+        .filter((p) => !!p);
       if (err.length) {
         return { fieldName, message: err };
       }
     } else if (fieldName.startsWith("details")) {
       inputVal = inputs.details;
-      let errList = inputVal.map(dtl => {
+      let errList = inputVal
+        .map((dtl) => {
           let err = {};
           const { sectionName, content } = dtl;
           if (!sectionName || helper.regex.spaces.test(sectionName)) {
@@ -399,7 +433,7 @@ const helper = {
           }
           return err;
         })
-        .filter(d => Object.keys(d).length !== 0);
+        .filter((d) => Object.keys(d).length !== 0);
       if (errList.length) {
         return { fieldName, message: errList };
       }
@@ -410,17 +444,24 @@ const helper = {
           return { fieldName, message: helper.templates.alphaNumeric };
         }
       }
-    } else if (rules){
+    } else if (rules) {
       for (const [k, v] of Object.entries(rules)) {
         if (k === "required" && !inputVal?.length) {
           return { fieldName, message: helper.templates.required };
         }
         if (k === "patterns") {
           for (const type of v) {
-            if (type === "displayName" && !helper.regex.displayName.test(inputVal)) {
+            if (
+              type === "displayName" &&
+              !helper.regex.displayName.test(inputVal)
+            ) {
               return { fieldName, message: helper.templates.special };
             }
-            if (type === "spaces" && inputVal?.length && helper.regex.spaces.test(inputVal)) {
+            if (
+              type === "spaces" &&
+              inputVal?.length &&
+              helper.regex.spaces.test(inputVal)
+            ) {
               return { fieldName, message: helper.templates.spaces };
             }
             if (type === "url" && !helper.regex.url.test(inputVal)) {
@@ -444,30 +485,33 @@ const helper = {
   stringToColor: (string) => {
     let hash = 0;
     let i;
-  
+
     /* eslint-disable no-bitwise */
     for (i = 0; i < string.length; i += 1) {
       hash = string.charCodeAt(i) + ((hash << 5) - hash);
     }
-    let color = '#';
+    let color = "#";
     for (i = 0; i < 3; i += 1) {
       const value = (hash >> (i * 8)) & 0xff;
       color += `00${value.toString(16)}`.slice(-2);
     }
     /* eslint-enable no-bitwise */
-  
+
     return color;
   },
   stringAvatar: (name) => {
-    name = name.split(' ');
-    const startLetters = name.map(n => n[0].toUpperCase()).join("").slice(0, 2);
+    name = name.split(" ");
+    const startLetters = name
+      .map((n) => n[0].toUpperCase())
+      .join("")
+      .slice(0, 2);
     return {
       sx: {
         bgcolor: helper.stringToColor(startLetters),
       },
       children: startLetters,
     };
-  }
+  },
 };
 
 export default helper;

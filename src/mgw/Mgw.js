@@ -31,6 +31,8 @@ export default class Mgw extends Component {
     allCategories: [],
     allArticles: [],
     filterOpts: { ...helper.initFilterOpts },
+    sortIndex: 0,
+    sortMenuAnchor: null,
     articleInputs: { ...helper.initArticleInputs },
     articleInputsErrors: {},
     articlesFetched: [],
@@ -70,7 +72,7 @@ export default class Mgw extends Component {
                   ) : (
                     <Landing
                       filterOpts={this.state.filterOpts}
-                      detectFilter={this.detectFilter}
+                      setFilterOpts={this.setFilterOpts}
                       detectSearch={this.detectSearch}
                     />
                   )
@@ -81,13 +83,14 @@ export default class Mgw extends Component {
                 element={
                   <Explore
                     filterOpts={this.state.filterOpts}
+                    sortIndex={this.state.sortIndex}
+                    sortAnchor={this.state.sortMenuAnchor}
                     countries={this.state.articlesLocations}
                     categories={this.state.allCategories}
                     articles={this.state.articlesFetched}
                     loaded={this.state.isLoaded}
                     setMgwState={this.setMgwState}
                     setFilterOpts={this.setFilterOpts}
-                    detectFilter={this.detectFilter}
                     detectSearch={this.detectSearch}
                     requestError={this.state.requestError}
                   />
@@ -195,15 +198,17 @@ export default class Mgw extends Component {
     });
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.sortIndex !== this.state.sortIndex) {
+      this.fetchArticles(helper.exploreView);
+    }
+  }
+
   detectSearch = (evt, viewType) => {
     const { type, key } = evt;
     if (type === "mousedown" || type === "click" || key === "Enter") {
       this.fetchArticles(viewType);
     }
-  };
-
-  detectFilter = (evt) => {
-    this.setFilterOpts(evt.target);
   };
 
   handleToastClose = () => {
@@ -226,7 +231,8 @@ export default class Mgw extends Component {
 
   fetchArticles = (viewType) => {
     this.setState({ isLoaded: false }, async () => {
-      let { filterOpts } = this.state;
+      let { filterOpts, sortIndex } = this.state;
+      let sortOptions = helper.sortOptions[sortIndex];
       let params = {};
 
       if (viewType === helper.exploreView) {
@@ -243,7 +249,7 @@ export default class Mgw extends Component {
         params = { articleId: filterOpts.id };
       }
 
-      await getArticles(params, viewType)
+      await getArticles(params, viewType, sortOptions)
         .then(async (resp) => {
           if (resp.data.results) {
             let { articlesLocations, allCategories } = this.state;
