@@ -1,5 +1,6 @@
 import React from "react";
 import helper from "../../utils/helper";
+import { Link } from "react-router-dom";
 import {
   Alert,
   AlertTitle,
@@ -30,7 +31,9 @@ export default function HorizontalStepper({
   removeArr,
   setMgwState,
   type,
-  requestError
+  articlePosted,
+  requestError,
+  requestSuccess
 }) {
   const stepState =
     type === "create"
@@ -55,7 +58,6 @@ export default function HorizontalStepper({
     setMgwState({ [stepState]: activeStep + 1 });
   };
   const handleNext = () => {
-    console.log(stepState, activeStep, type);
     validateArticle(stepsList[activeStep].fields, type);
   };
   const handleBack = () => {
@@ -64,12 +66,37 @@ export default function HorizontalStepper({
 
   return (
     <Box sx={{ m: 4 }}>
+      {requestSuccess && (
+        <Box sx={{ mb: 4 }}>
+          <Alert
+            severity="success"
+            variant="filled"
+            action={
+              type === "create" &&
+              articlePosted && (
+                <Button
+                  component={Link}
+                  aria-label="View article"
+                  to={`/article/${articlePosted}`}
+                  size="small"
+                  color="secondary"
+                >
+                  View Article
+                </Button>
+              )
+            }
+          >
+            <AlertTitle>Success</AlertTitle>
+            {requestSuccess}
+          </Alert>
+        </Box>
+      )}
       {requestError && (
         <Box sx={{ mb: 4 }}>
           <Alert severity="error" variant="filled">
-          <AlertTitle>Error</AlertTitle>
-          {requestError}
-        </Alert>
+            <AlertTitle>Error</AlertTitle>
+            {requestError}
+          </Alert>
         </Box>
       )}
       <Stepper activeStep={activeStep}>
@@ -106,9 +133,7 @@ export default function HorizontalStepper({
             locationOpts={locationOpts}
           />
         )}
-        {activeStep === 1 && type === "delete" && (
-          <ConfirmDelete />
-        )}
+        {activeStep === 1 && type === "delete" && <ConfirmDelete />}
         {activeStep === 2 && (
           <ArticleDetails
             articleState={articleState}
@@ -150,7 +175,10 @@ export default function HorizontalStepper({
         )}
         <Button aria-label="submit step and go to next" onClick={handleNext}>
           {activeStep === stepsList.length - 1
-            ? type === "delete" ? "Confirm" : "Submit" : "Next"}
+            ? type === "delete"
+              ? "Confirm"
+              : "Submit"
+            : "Next"}
         </Button>
       </Box>
     </Box>

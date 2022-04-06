@@ -51,6 +51,7 @@ export default class Mgw extends Component {
     isMounted: false,
     isLoaded: false,
     requestError: "",
+    requestSuccess: ""
   };
 
   render() {
@@ -108,6 +109,8 @@ export default class Mgw extends Component {
                     validateArticle={this.validateArticleInputs}
                     setArr={this.addArticleArraySize}
                     removeArr={this.removeArticleArraySize}
+                    articlePosted={this.state.articlePosted}
+                    requestSuccess={this.state.requestSuccess}
                     requestError={this.state.requestError}
                   />
                 }
@@ -142,6 +145,8 @@ export default class Mgw extends Component {
                     commentError={this.state.commentInputsErrors}
                     validateComment={this.validateArticleComment}
                     setCommentState={this.setCommentInputs}
+                    articlePosted={this.state.articlePosted}
+                    requestSuccess={this.state.requestSuccess}
                     requestError={this.state.requestError}
                   />
                 }
@@ -321,9 +326,7 @@ export default class Mgw extends Component {
           createActiveStep,
           editActiveStep,
           deleteActiveStep,
-          articleInputs,
-          userEmail,
-          userVerifyErrorMsg,
+          articleInputs
         } = this.state;
 
         if (type === "create") {
@@ -332,15 +335,17 @@ export default class Mgw extends Component {
             await postArticle(pd)
               .then((resp) => {
                 this.setState({
-                  articleInputs: helper.initArticleInputs,
+                  articleInputs: {...helper.initArticleInputs},
                   articleErrors: {},
                   articlePosted: resp.data.results.insertedId,
                   createActiveStep: 0,
+                  requestSuccess: "Article created successfully",
                   requestError: "",
                 });
               })
               .catch((err) => {
                 this.setState({
+                  articlePosted: "",
                   requestError: "Failed to post new article, please try again",
                 });
               });
@@ -364,13 +369,14 @@ export default class Mgw extends Component {
               .then((resp) => {
                 this.setState({
                   articleErrors: {},
-                  articlePosted: resp.data.results.insertedId,
-                  editActiveStep: userEmail && !userVerifyErrorMsg ? 1 : 0,
+                  editActiveStep: 0,
+                  requestSuccess: "Article updated successfully, close the modal to view the updates",
                   requestError: "",
                 });
               })
               .catch((err) => {
                 this.setState({
+                  requestSuccess: "",
                   requestError:
                     "Failed to update article with " + articleInputs._id,
                 });
@@ -396,12 +402,14 @@ export default class Mgw extends Component {
                 .then((resp) => {
                   this.setState({
                     articleErrors: {},
-                    deleteActiveStep: userEmail && !userVerifyErrorMsg ? 1 : 0,
+                    deleteActiveStep: 0,
+                    requestSuccess: "Article deleted successfully",
                     requestError: "",
                   });
                 })
                 .catch((err) => {
                   this.setState({
+                    requestSuccess: "",
                     requestError:
                       "Failed to delete article with " + articleInputs._id,
                   });

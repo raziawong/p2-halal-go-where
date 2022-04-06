@@ -27,6 +27,7 @@ export default function DeleteModal({
   userEmail,
   userVerifyErrorMsg,
   requestError,
+  requestSuccess
 }) {
   const hsProps = {
     activeStep,
@@ -37,6 +38,7 @@ export default function DeleteModal({
     setMgwState,
     userVerifyErrorMsg,
     requestError,
+    requestSuccess
   };
   const handleClose = () => {
     const inputs = helper.initArticleInputs;
@@ -48,7 +50,9 @@ export default function DeleteModal({
       articleInputs: inputs,
       articleInputsErrors: {},
       userVerifyErrorMsg: "",
-      requestError: ""
+      articlePosted: "",
+      requestError: "",
+      requestSuccess: ""
     });
   };
   return (

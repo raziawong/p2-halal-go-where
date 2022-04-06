@@ -32,6 +32,7 @@ export default function EditModal({
   userEmail,
   userVerifyErrorMsg,
   requestError,
+  requestSuccess
 }) {
   const hsProps = {
     locationOpts,
@@ -47,6 +48,7 @@ export default function EditModal({
     setMgwState,
     userVerifyErrorMsg,
     requestError,
+    requestSuccess
   };
   const handleClose = () => {
     let inputs = helper.initArticleInputs;
@@ -58,6 +60,9 @@ export default function EditModal({
       articleInputs: inputs,
       articleInputsErrors: {},
       userVerifyErrorMsg: "",
+      articlePosted: "",
+      requestError: "",
+      requestSuccess: ""
     });
   };
   return (

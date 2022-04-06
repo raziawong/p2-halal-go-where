@@ -41,8 +41,9 @@ export default function Article({
   const params = useParams();
 
   useEffect(() => {
-    return setFilterOpts({ name: "id", value: params.id });
-  }, [setFilterOpts, params.id]);
+    setFilterOpts({ name: "id", value: params.id });
+    return setMgwState({ articlePosted: "" });
+  }, [setFilterOpts, setMgwState, params.id]);
 
   useEffect(async () => {
     if (mounted) {
