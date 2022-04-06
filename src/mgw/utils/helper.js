@@ -264,6 +264,8 @@ const helper = {
     delete pd["city"];
     delete pd["catIds"];
     delete pd["subcatIds"];
+    delete pd["catLabels"];
+    delete pd["subcatLabels"];
 
     pd.details?.map((dtl) => {
       dtl.content = draftToMarkdown(JSON.parse(dtl.content));
@@ -303,11 +305,23 @@ const helper = {
         if (res.categories?.length) {
           res.catIds = [];
           res.subcatIds = [];
+          res.catLabels = [];
+          res.subcatLabels = [];
           res.categories.map((cat) => {
             res.catIds = [...res.catIds, cat.catId];
             res.subcatIds = [...res.subcatIds, ...cat.subcatIds];
             return cat;
           });
+
+          res.catIds.map(catId => {
+            let foundC = allCats.find((source) => source._id === catId);
+            if (foundC) {
+              res.catLabels.push(foundC);
+              foundC.subcats
+                .filter((source) => res.subcatIds.indexOf(source._id) > -1)
+                .map((f) => res.subcatLabels.push(f));
+            }
+          })
         }
 
         if (res.details?.length) {
