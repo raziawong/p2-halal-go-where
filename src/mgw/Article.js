@@ -59,7 +59,7 @@ export default function Article({
     <Fragment>
       {article.title && loaded && (
         <Container disableGutters>
-          <Box sx={{ my: { xs: 0, lg: 4 }, mx: { xs: 0, lg: 6 } }}>
+          <Box sx={{ my: { xs: 0.5, lg: 4 }, mx: 0 }}>
             <ImageCarousel images={imgList()} />
             <Box sx={{ my: { xs: 3, lg: 5 }, mx: { xs: 3, lg: 2 } }}>
               <Typography component="h1" variant="h2">
