@@ -9,7 +9,7 @@ export default function Create(props) {
   }, [setMgwState]);
 
   return (
-    <Container maxWidth="xl" disableGutters>
+    <Container disableGutters>
       <Box sx={{ m: 4 }}>
         <HorizontalStepper {...props} type="create" />
       </Box>

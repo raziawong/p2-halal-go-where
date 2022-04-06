@@ -1,13 +1,14 @@
 import React, { Fragment, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import helper from "./utils/helper";
-import { Container, Box, IconButton, Typography } from "@mui/material";
+import { Avatar, Container, Box, IconButton, Typography } from "@mui/material";
 import { EditSharp, DeleteOutlineSharp } from "@mui/icons-material";
 import ReactMarkdown from "react-markdown";
 import EditModal from "./components/article/EditModal";
 import DeleteModal from "./components/article/DeleteModal";
 import NotFound from "./NotFound";
 import ArticleComments from "./components/article/ArticleComments";
+import ImageCarousel from "./components/article/ImageCarousel";
 
 export default function Article({
   tagOpts,
@@ -74,60 +75,58 @@ export default function Article({
       articleInputsErrors: {},
     });
   };
+  const authorName = () => {
+    return article.contributors
+      ? article.contributors.filter((c) => c.isAuthor)[0].displayName
+      : "";
+  };
   return (
     <Fragment>
       {article.title && loaded && (
-        <Container maxWidth="xl" disableGutters>
-          <Box sx={{ my: 4, mx: 6 }}>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <Typography component="h1" variant="h2">
+        <Container disableGutters>
+          <Box
+            sx={{ my: { xs: 0, lg: 4 }, mx: { xs: 0, lg: 6 } }}
+          >
+            <ImageCarousel images={article.photos} />
+            <Box sx={{ my: { xs: 1.5, lg: 0 }, mx: { xs: 3, lg: 0 } }}>
+              <Typography component="h1" variant="h1">
                 {article.title}
               </Typography>
-              <Typography component="h2" variant="h2">
-                {article.country?.name}
-                {", "}
-                {article.city?.name}
-              </Typography>
-            </Box>
-            <Box>
               <Typography variant="h4">{article.description}</Typography>
-            </Box>
-            {article.details &&
-              article.details.length > 0 &&
-              article.details.map((d, i) => (
-                <Fragment key={i}>
-                  <h4>{d.sectionName}</h4>
-                  <ReactMarkdown children={d.contentMd} />
-                </Fragment>
-              ))}
-            <Box>
-              <Typography>Address: {article.address}</Typography>
+              {article.details &&
+                article.details.length > 0 &&
+                article.details.map((d, i) => (
+                  <Fragment key={i}>
+                    <h4>{d.sectionName}</h4>
+                    <ReactMarkdown children={d.contentMd} />
+                  </Fragment>
+                ))}
+              <Typography>
+                <strong>Location: </strong>
+                {[
+                  article.address,
+                  article.country?.name,
+                  article.city?.name,
+                ].join(", ")}
+              </Typography>
             </Box>
             <Box
               sx={{
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
-                my: 3,
+                my: { xs: 1.5, lg: 0 },
+                mx: { xs: 3, lg: 0 },
               }}
             >
-              <Box>
-                <Typography>
-                  Added By:{" "}
-                  {article.contributors
-                    ? article.contributors.filter((c) => c.isAuthor)[0]
-                        .displayName
-                    : ""}
-                </Typography>
-                <Typography>Last Modified: {article.lastModified}</Typography>
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <Avatar {...helper.stringAvatar(authorName())} />
+                <Box sx={{ px: 1 }}>
+                  <Typography>{authorName()}</Typography>
+                  <Typography>{article.lastModified}</Typography>
+                </Box>
               </Box>
-              <Box>
+              <Box sx={{ textAlign: "right" }}>
                 <IconButton
                   color="primary"
                   aria-label="Edit Article"

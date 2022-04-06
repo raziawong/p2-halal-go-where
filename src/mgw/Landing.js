@@ -16,7 +16,7 @@ import helper from "./utils/helper";
 
 export default function Landing({ filterOpts, detectFilter, detectSearch }) {
   return (
-    <Container maxWidth="xl" disableGutters>
+    <Container disableGutters>
       <HeroBanner bgImg={banner}>
         <HeroOverlay>
           <FormControl>

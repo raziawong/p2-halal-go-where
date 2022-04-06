@@ -27,36 +27,28 @@ export default function ArticleComments({
   setCommentState
 }) {
   return (
-    <Container disableGutters sx={{ width: "75%", my: 4 }}>
+    <Container disableGutters sx={{ 
+      justifyContent: "center",
+      width: {xs: "100%", md: "75%"}, my: 4 }}>
       <Box
         sx={{
           display: "flex",
+          flexDirection: {xs: "column-reverse", md: "row"},
+          flexWrap: {xs: "wrap", md: "nowrap"},
           alignItems: "center",
           justifyContent: "space-between",
           width: "100%",
         }}
       >
-        <Box
-          sx={{
-            display: "flex",
-            flexWrap: "wrap",
-            alignItems: "center",
-            justifyContent: "center",
-            width: "100%",
-            my: 3,
-          }}
-        >
           <Typography component="h5" variant="h5">
-            Comments
+            {`${comments?.length || 0} Comment(s)`}
           </Typography>
-        </Box>
         <Box
           sx={{
             display: "flex",
             flexWrap: "wrap",
             alignItems: "center",
-            justifyContent: "center",
-            width: "100%",
+            justifyContent: {xs: "center", md: "flex-end"},
             my: 3,
           }}
         >
@@ -85,7 +77,7 @@ export default function ArticleComments({
           ))}
         </List>
       </Box>
-      <Box sx={{ width: "100%", textAlign: "right" }}>
+      <Box sx={{ width: "100%", textAlign: { xs: "center", lg: "right"} }}>
         <NewComment
           commentState={commentState}
           commentError={commentError}
@@ -100,7 +92,7 @@ export default function ArticleComments({
           }
         >
           <AddCommentSharp />
-          <Typography variant="body2" sx={{ marginLeft: "5px" }}>
+          <Typography variant="body2" sx={{ mx: 0.5 }}>
             Add a comment
           </Typography>
         </IconButton>

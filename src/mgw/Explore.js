@@ -18,7 +18,7 @@ export default function Explore({
     return setMgwState({ isRedirectListing: false });
   }, [setMgwState]);
   return (
-    <Container maxWidth="xl" disableGutters>
+    <Container disableGutters>
       {!loaded ? (
         <></>
       ) : (
