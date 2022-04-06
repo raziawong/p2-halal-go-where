@@ -12,6 +12,8 @@ import {
   deleteArticle,
   updateRating,
   getRating,
+  postComment,
+  getComments,
 } from "./utils/data";
 import helper from "./utils/helper";
 import { SiteContainer, ViewContainer } from "./utils/mgwStyle";
@@ -36,6 +38,8 @@ export default class Mgw extends Component {
     articlesTags: [],
     articlesLocations: [],
     articlePosted: "",
+    commentInputs: { ...helper.initCommentInputs },
+    commentInputsErrors: {},
     createActiveStep: 0,
     editActiveStep: 0,
     deleteActiveStep: 0,
@@ -46,29 +50,8 @@ export default class Mgw extends Component {
     isRedirectListing: false,
     isMounted: false,
     isLoaded: false,
-    requestError: ""
+    requestError: "",
   };
-
-  async componentDidMount() {
-    const fixed = await getMgwFixed();
-    const articles = await getMgwArticles();
-    const uniqueTags = articles.tags.results
-      .reduce((a, r) => [...a, ...r.tags], [])
-      .filter((v, i, a) => a.indexOf(v) === i);
-
-    this.setState({
-      allCountries: fixed.countries.results,
-      allCategories: fixed.categories.results,
-      allArticles: articles.main,
-      articlesFetched: articles.main.count ? articles.main.results : [],
-      articlesTags: uniqueTags,
-      articlesLocations: articles.location.count
-        ? articles.location.results
-        : [],
-      isMounted: true,
-      isLoaded: true,
-    });
-  }
 
   render() {
     return (
@@ -77,7 +60,9 @@ export default class Mgw extends Component {
           <ViewContainer>
             <NavBar />
             <Routes>
-              <Route index path="/"
+              <Route
+                index
+                path="/"
                 element={
                   this.state.isRedirectListing ? (
                     <Navigate replace to="/explore" />
@@ -90,7 +75,8 @@ export default class Mgw extends Component {
                   )
                 }
               />
-              <Route path="explore"
+              <Route
+                path="explore"
                 element={
                   <Explore
                     filterOpts={this.state.filterOpts}
@@ -106,7 +92,8 @@ export default class Mgw extends Component {
                   />
                 }
               />
-              <Route path="create"
+              <Route
+                path="create"
                 element={
                   <Create
                     tagOpts={this.state.articlesTags}
@@ -125,7 +112,8 @@ export default class Mgw extends Component {
                   />
                 }
               />
-              <Route path="article/:id"
+              <Route
+                path="article/:id"
                 element={
                   <Article
                     tagOpts={this.state.articlesTags}
@@ -148,19 +136,27 @@ export default class Mgw extends Component {
                     setMgwState={this.setMgwState}
                     article={this.state.articleDetail}
                     setFilterOpts={this.setFilterOpts}
-                    execSearch={this.searchArticles}
+                    execSearch={this.fetchArticles}
                     updateRating={this.updateArticleRating}
+                    commentState={this.state.commentInputs}
+                    commentError={this.state.commentInputsErrors}
+                    validateComment={this.validateArticleComment}
+                    setCommentState={this.setCommentInputs}
                     requestError={this.state.requestError}
                   />
                 }
               />
-              <Route path="*" element={<NotFound />}/>
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </ViewContainer>
           <Loader toShow={!this.state.isLoaded} />
           {this.state.requestError && (
             <Snackbar
-              open={!!this.state.requestError && !this.state.editModal && !this.state.deleteModal}
+              open={
+                !!this.state.requestError &&
+                !this.state.editModal &&
+                !this.state.deleteModal
+              }
               autoHideDuration={6000}
               onClose={this.handleToastClose}
               sx={{ bottom: 130, left: 10 }}
@@ -173,10 +169,31 @@ export default class Mgw extends Component {
     );
   }
 
+  async componentDidMount() {
+    const fixed = await getMgwFixed();
+    const articles = await getMgwArticles();
+    const uniqueTags = articles.tags.results
+      .reduce((a, r) => [...a, ...r.tags], [])
+      .filter((v, i, a) => a.indexOf(v) === i);
+
+    this.setState({
+      allCountries: fixed.countries.results,
+      allCategories: fixed.categories.results,
+      allArticles: articles.main,
+      articlesFetched: articles.main.count ? articles.main.results : [],
+      articlesTags: uniqueTags,
+      articlesLocations: articles.location.count
+        ? articles.location.results
+        : [],
+      isMounted: true,
+      isLoaded: true,
+    });
+  }
+
   detectSearch = (evt, viewType) => {
     const { type, key } = evt;
     if (type === "mousedown" || type === "click" || key === "Enter") {
-      this.searchArticles(viewType);
+      this.fetchArticles(viewType);
     }
   };
 
@@ -186,9 +203,9 @@ export default class Mgw extends Component {
 
   handleToastClose = () => {
     this.setState({
-      requestError: ""
+      requestError: "",
     });
-  }
+  };
 
   setMgwState = (keyValuePair) => {
     this.setState({ ...keyValuePair });
@@ -199,6 +216,56 @@ export default class Mgw extends Component {
     opts[name] = value;
     this.setState({
       filterOpts: opts,
+    });
+  };
+
+  fetchArticles = (viewType) => {
+    this.setState({ isLoaded: false }, async () => {
+      let { filterOpts } = this.state;
+      let params = {};
+
+      if (viewType === helper.exploreView) {
+        params = Object.fromEntries(
+          Object.entries(filterOpts).filter(
+            ([k, v]) => typeof v !== "undefined" && v.length
+          )
+        );
+        if (params.rating && params.rating.length === 2) {
+          params.ratingFrom = params.rating[0];
+          params.ratingTo = params.rating[1];
+        }
+      } else if (viewType === helper.articleView) {
+        params = { articleId: filterOpts.id };
+      }
+
+      await getArticles(params, viewType)
+        .then(async (resp) => {
+          if (resp.data.results) {
+            let { articlesLocations, allCategories } = this.state;
+            let transformed = await helper.transformArticlesForRead(
+              resp.data.results,
+              articlesLocations,
+              allCategories
+            );
+            viewType === helper.articleView
+              ? this.setState({
+                  articleDetail: [...transformed][0] || [],
+                  isLoaded: true,
+                  requestError: "",
+                })
+              : this.setState({
+                  isRedirectListing: true,
+                  articlesFetched: [...transformed] || [],
+                  isLoaded: true,
+                  requestError: "",
+                });
+          }
+        })
+        .catch((err) => {
+          this.setState({
+            requestError: "Failed to load articles, please try again",
+          });
+        });
     });
   };
 
@@ -219,8 +286,10 @@ export default class Mgw extends Component {
       inputs.cityId = value._id;
     }
     if (name === "catIds" || name === "subcatIds") {
-      const selCatIds = name === "catIds" ? inputs.catIds : this.state.articleInputs.catIds;
-      const selSubcatIds = name === "subcatIds"
+      const selCatIds =
+        name === "catIds" ? inputs.catIds : this.state.articleInputs.catIds;
+      const selSubcatIds =
+        name === "subcatIds"
           ? inputs.subcatIds
           : this.state.articleInputs.subcatIds;
       const catDep = helper.getCatDep(
@@ -234,7 +303,7 @@ export default class Mgw extends Component {
     }
 
     this.setState({
-      articleInputs: inputs
+      articleInputs: inputs,
     });
   };
 
@@ -246,90 +315,106 @@ export default class Mgw extends Component {
       .filter((v) => v)
       .reduce((a, v) => ({ ...a, [v.fieldName]: v.message }), {});
 
-    this.setState({ articleInputsErrors: validation || {} },
-      async () => {
-        if (!Object.entries(validation)?.length) {
-          let { createActiveStep, editActiveStep, deleteActiveStep, 
-            articleInputs, userEmail, userVerifyErrorMsg } = this.state;
-          
-          if (type === "create") {
-            if (createActiveStep === helper.createSteps.length - 1) {
-              let pd = helper.transformArticleForUpdate(articleInputs);
-              await postArticle(pd).then((resp) => {
+    this.setState({ articleInputsErrors: validation || {} }, async () => {
+      if (!Object.entries(validation)?.length) {
+        let {
+          createActiveStep,
+          editActiveStep,
+          deleteActiveStep,
+          articleInputs,
+          userEmail,
+          userVerifyErrorMsg,
+        } = this.state;
+
+        if (type === "create") {
+          if (createActiveStep === helper.createSteps.length - 1) {
+            let pd = helper.transformArticleForUpdate(articleInputs);
+            await postArticle(pd)
+              .then((resp) => {
                 this.setState({
                   articleInputs: helper.initArticleInputs,
                   articleErrors: {},
                   articlePosted: resp.data.results.insertedId,
                   createActiveStep: 0,
-                  requestError: ""
+                  requestError: "",
                 });
-              }).catch(err => {
+              })
+              .catch((err) => {
                 this.setState({
-                  requestError: "Failed to post new article, please try again"
+                  requestError: "Failed to post new article, please try again",
                 });
               });
-            } else {
-              this.setState({
-                createActiveStep: createActiveStep + 1,
-              });
-            }
+          } else {
+            this.setState({
+              createActiveStep: createActiveStep + 1,
+            });
           }
+        }
 
-          if (type === "edit") {
-            if (editActiveStep === 0 && articleInputs.email) {
-              await this.verifyArticleUser(
-                articleInputs._id, articleInputs.email, type
-              );
-            } else if (editActiveStep === helper.editSteps.length - 1) {
-              let pd = helper.transformArticleForUpdate(articleInputs);
-              await updateArticle(pd).then((resp) => {
+        if (type === "edit") {
+          if (editActiveStep === 0 && articleInputs.email) {
+            await this.verifyArticleUser(
+              articleInputs._id,
+              articleInputs.email,
+              type
+            );
+          } else if (editActiveStep === helper.editSteps.length - 1) {
+            let pd = helper.transformArticleForUpdate(articleInputs);
+            await updateArticle(pd)
+              .then((resp) => {
                 this.setState({
                   articleErrors: {},
                   articlePosted: resp.data.results.insertedId,
                   editActiveStep: userEmail && !userVerifyErrorMsg ? 1 : 0,
-                  requestError: ""
+                  requestError: "",
                 });
-              }).catch(err => {
+              })
+              .catch((err) => {
                 this.setState({
-                  requestError: "Failed to update article with " + articleInputs._id
+                  requestError:
+                    "Failed to update article with " + articleInputs._id,
                 });
               });
-            } else {
-              this.setState({
-                editActiveStep: editActiveStep + 1
-              })
-            }
+          } else {
+            this.setState({
+              editActiveStep: editActiveStep + 1,
+            });
           }
+        }
 
-          if (type === "delete") {
-            if (deleteActiveStep === 0 && articleInputs.email) {
-              await this.verifyArticleUser(
-                articleInputs._id, articleInputs.email, type
-              );
-            } else if (deleteActiveStep === helper.deleteSteps.length - 1) {
-              let articleId = articleInputs._id;
-              if (articleId) {
-                await deleteArticle({ articleId }).then((resp) => {
+        if (type === "delete") {
+          if (deleteActiveStep === 0 && articleInputs.email) {
+            await this.verifyArticleUser(
+              articleInputs._id,
+              articleInputs.email,
+              type
+            );
+          } else if (deleteActiveStep === helper.deleteSteps.length - 1) {
+            let articleId = articleInputs._id;
+            if (articleId) {
+              await deleteArticle({ articleId })
+                .then((resp) => {
                   this.setState({
                     articleErrors: {},
                     deleteActiveStep: userEmail && !userVerifyErrorMsg ? 1 : 0,
-                    requestError: ""
+                    requestError: "",
                   });
-                }).catch(err => {
+                })
+                .catch((err) => {
                   this.setState({
-                    requestError: "Failed to delete article with " + articleInputs._id
+                    requestError:
+                      "Failed to delete article with " + articleInputs._id,
                   });
                 });
-              }
-            } else {
-              this.setState({
-                deleteActiveStep: deleteActiveStep + 1
-              })
             }
+          } else {
+            this.setState({
+              deleteActiveStep: deleteActiveStep + 1,
+            });
           }
         }
       }
-    );
+    });
   };
 
   addArticleArraySize = (name, val) => {
@@ -349,111 +434,141 @@ export default class Mgw extends Component {
   };
 
   verifyArticleUser = async (articleId, email, type) => {
-    await getArticleContributor({ articleId, email }).then((resp) => {
-      if (resp.data.count) {
-        let update = {
-          userEmail: email,
-          userVerifyErrorMsg: "",
-          requestError: ""
-        };
+    await getArticleContributor({ articleId, email })
+      .then((resp) => {
+        if (resp.data.count) {
+          let update = {
+            userEmail: email,
+            userVerifyErrorMsg: "",
+            requestError: "",
+          };
 
-        if (type === "edit" && this.state.editActiveStep === 0) {
-          update.editActiveStep = 1;
-        }
-        if (type === "delete" && this.state.deleteActiveStep === 0) {
-          update.deleteActiveStep = 1;
-        }
-        this.setState(update);
-      } else {
-        this.setState({
-          userEmail: "",
-          userVerifyErrorMsg: helper.templates.user,
-          requestError: ""
-        });
-      }
-    }).catch(err => {
-      this.setState({
-        requestError: "Failed to get contributor with " + articleId
-      });
-    });
-  };
-
-  searchArticles = (viewType) => {
-    this.setState({ isLoaded: false }, async () => {
-      let { filterOpts } = this.state;
-      let params = {};
-
-      if (viewType === helper.exploreView) {
-        params = Object.fromEntries(
-          Object.entries(filterOpts).filter(
-            ([k, v]) => typeof v !== "undefined" && v.length
-          )
-        );
-        if (params.rating && params.rating.length === 2) {
-          params.ratingFrom = params.rating[0];
-          params.ratingTo = params.rating[1];
-        }
-      } else if (viewType === helper.articleView) {
-        params = { articleId: filterOpts.id };
-      }
-
-      await getArticles(params, viewType).then(async resp => {
-        if (resp.data.results) {
-          let { articlesLocations, allCategories } = this.state;
-          let transformed = await helper.transformArticlesForRead(
-            resp.data.results,
-            articlesLocations,
-            allCategories
-          );
-          viewType === helper.articleView
-          ? this.setState({
-              articleDetail: [...transformed][0] || [],
-              isLoaded: true,
-              requestError: ""
-            })
-          : this.setState({
-              isRedirectListing: true,
-              articlesFetched: [...transformed] || [],
-              isLoaded: true,
-              requestError: ""
-            });
-        }
-      }).catch(err => {
-        this.setState({
-          requestError: "Failed to load articles, please try again"
-        });
-      });
-    });
-  };
-
-  getArticleRating = async (articleId) => {
-    let dtl = {...this.state.articleDetail} || {};
-    if (articleId && articleId === dtl._id && dtl.rating && Object.keys(dtl.rating).length) {
-      await getRating({articleId}).then(resp => {
-        if (resp.data.results.count)
+          if (type === "edit" && this.state.editActiveStep === 0) {
+            update.editActiveStep = 1;
+          }
+          if (type === "delete" && this.state.deleteActiveStep === 0) {
+            update.deleteActiveStep = 1;
+          }
+          this.setState(update);
+        } else {
           this.setState({
-            articleDetail: {...dtl, rating: {...dtl.rating, ...resp.data.results[0].rating}},
-            requestError: ""
+            userEmail: "",
+            userVerifyErrorMsg: helper.templates.user,
+            requestError: "",
           });
-      }).catch(err => {
-        this.setState({
-          requestError: "Failed to get latest article rating"
-        });
+        }
       })
+      .catch((err) => {
+        this.setState({
+          requestError: "Failed to get contributor with " + articleId,
+        });
+      });
+  };
+
+  fetchArticleRating = async (articleId) => {
+    let dtl = { ...this.state.articleDetail } || {};
+    if (
+      articleId &&
+      articleId === dtl._id &&
+      dtl.rating &&
+      Object.keys(dtl.rating).length
+    ) {
+      await getRating({ articleId })
+        .then((resp) => {
+          if (resp.data.results.count) {
+            let newRating = { ...dtl.rating, ...resp.data.results[0].rating };
+            console.log()
+            this.setState({
+              articleDetail: {
+                ...dtl,
+                rating: newRating,
+              },
+              requestError: "",
+            });
+          }
+        })
+        .catch((err) => {
+          this.setState({
+            requestError: "Failed to get latest article rating",
+          });
+        });
     }
-  }
+  };
 
   updateArticleRating = async (articleId, rateValue) => {
-    const rating = {...this.state.articleDetail}?.rating || {};
+    const rating = { ...this.state.articleDetail }?.rating || {};
     if (articleId && rating && Object.keys(rating).length && rateValue) {
       rateValue = rating.count ? (rating.avg + rateValue) / 2 : rateValue;
-      await updateRating({articleId, rating: rateValue}).then(resp => {
-        this.getArticleRating(articleId);
-      }).catch(err => {
-        this.setState({
-          requestError: "Failed to update article rating"
+      await updateRating({ articleId, rating: rateValue })
+        .then((resp) => {
+          this.fetchArticleRating(articleId);
         })
-      });
+        .catch((err) => {
+          this.setState({
+            requestError: "Failed to update article rating",
+          });
+        });
     }
-  }
+  };
+
+  setCommentInputs = ({ target }) => {
+    this.setState({
+      commentInputs: {
+        ...this.state.commentInputs,
+        [target.name]: target.value,
+      },
+    });
+  };
+
+  fetchArticleComments = async (articleId) => {
+    let dtl = { ...this.state.articleDetail } || {};
+    if (articleId && articleId === dtl._id) {
+      await getComments({ articleId })
+        .then((resp) => {
+          if (resp.data.results.count)
+            this.setState({
+              articleDetail: {
+                ...dtl,
+                comments: [ ...resp.data.results[0].comments ]
+              },
+              commentInputs: {...helper.initCommentInputs},
+              commentInputsErrors: {},
+              requestError: "",
+            });
+        })
+        .catch((err) => {
+          this.setState({
+            requestError: "Failed to get latest article rating",
+          });
+        });
+    }
+  };
+
+  validateArticleComment = (articleId, fields) => {
+    const validation = fields
+      .map((fieldName) => {
+        return helper.validate(
+          fieldName,
+          { ...this.state.commentInputs },
+          "comments"
+        );
+      })
+      .filter((v) => v)
+      .reduce((a, v) => ({ ...a, [v.fieldName]: v.message }), {});
+
+    this.setState({ commentInputsErrors: validation || {} }, 
+      async () => {
+        if (!Object.entries(validation)?.length) {
+          const bodyContent = {...this.state.commentInputs, articleId}
+          await postComment(bodyContent).then((resp) => {
+            this.fetchArticleComments(articleId);
+          })
+          .catch((err) => {
+            this.setState({
+              requestError: "Failed to post article comment",
+            });
+          });
+        }
+      });
+  };
 }

@@ -74,6 +74,28 @@ const helper = {
     },
     subcatIds: {
       required: true,
+    },
+    comments: {
+      title: {
+        patterns: ["displayName"],
+        maxLength: 100,
+        minLength: 5
+      },
+      content: {
+        required: true,
+        maxLength: 200,
+        minLength: 5
+      },
+      name: {
+        required: true,
+        patterns: ["displayName"],
+        maxLength: 80,
+        minLength: 3
+      },
+      email: {
+        required: true,
+        patterns: ["email"]
+      }
     }
   },
   initFilterOpts: {
@@ -109,6 +131,12 @@ const helper = {
     subcatIds: [],
     categories: [],
     tags: [],
+  },
+  initCommentInputs: {
+    name: "",
+    email: "",
+    title: "",
+    content: ""
   },
   ratingMarks: [
     { value: 0, text: "No Rating" },
@@ -321,9 +349,9 @@ const helper = {
     url: `This is not a valid URL`,
     user: `User verification failed`,
   },
-  validate: (fieldName, inputs) => {
+  validate: (fieldName, inputs, valKey="") => {
     let inputVal = inputs[fieldName];
-    console.log(inputVal);
+    const rules = valKey ? helper.fieldValidations[valKey][fieldName] : helper.fieldValidations[fieldName];
     if (fieldName.startsWith("photos")) {
       inputVal = inputs.photos;
       let err = inputVal.map((p, i) => {
@@ -368,8 +396,8 @@ const helper = {
           return { fieldName, message: helper.templates.alphaNumeric };
         }
       }
-    } else if (helper.fieldValidations[fieldName]){
-      for (const [k, v] of Object.entries(helper.fieldValidations[fieldName])) {
+    } else if (rules){
+      for (const [k, v] of Object.entries(rules)) {
         if (k === "required" && !inputVal?.length) {
           return { fieldName, message: helper.templates.required };
         }
@@ -391,16 +419,41 @@ const helper = {
         }
         if (k === "maxLength" && inputVal?.length && inputVal.length > v) {
           return { fieldName, message: helper.templates.maxLength(v) };
-          break;
         }
         if (k === "minLength" && inputVal?.length && inputVal.length < v) {
           return { fieldName, message: helper.templates.minLength(v) };
         }
       }
     }
-
     return false;
   },
+  stringToColor: (string) => {
+    let hash = 0;
+    let i;
+  
+    /* eslint-disable no-bitwise */
+    for (i = 0; i < string.length; i += 1) {
+      hash = string.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    let color = '#';
+    for (i = 0; i < 3; i += 1) {
+      const value = (hash >> (i * 8)) & 0xff;
+      color += `00${value.toString(16)}`.slice(-2);
+    }
+    /* eslint-enable no-bitwise */
+  
+    return color;
+  },
+  stringAvatar: (name) => {
+    name = name.split(' ');
+    const startLetters = name.map(n => n[0].toUpperCase()).join("").slice(0, 2);
+    return {
+      sx: {
+        bgcolor: helper.stringToColor(startLetters),
+      },
+      children: startLetters,
+    };
+  }
 };
 
 export default helper;

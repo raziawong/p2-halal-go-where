@@ -22,7 +22,8 @@ const mgwRequests = {
         categoriesSubcats : "/categories/subcats",
         articles: "/articles",
         articleContributor: "/article/contributor",
-        articleRating: "/article/rating"
+        articleRating: "/article/rating",
+        articleComments: "/article/comments"
     },
     submitPaths: {
         article: "/article",
@@ -137,5 +138,15 @@ const updateRating = async (body) => {
   });
 }
 
+const getComments = async (params) => {
+  return await mgwRequests.axiosBase.get(mgwRequests.queryPaths.articleComments, { params });
+}
+
+const postComment = async (body) => {
+  return await mgwRequests.axiosBase.post(mgwRequests.submitPaths.articleComment, {
+    ...body
+  });
+}
+
 export { mgwCategoriesMap, getMgwFixed, getMgwArticles, getArticles, getArticleContributor, getCountries, getCategories,
-  postArticle, updateArticle, deleteArticle, getRating, updateRating };
+  postArticle, updateArticle, deleteArticle, getRating, updateRating, getComments, postComment };

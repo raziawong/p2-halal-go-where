@@ -14,13 +14,17 @@ import {
 } from "@mui/material";
 import { AddCommentSharp } from "@mui/icons-material";
 import ArticleRating from "./ArticleRating";
+import NewComment from "../formgroups/NewComment";
 
 export default function ArticleComments({
   rating,
   comments,
   articleId,
   updateRating,
-  setMgwState,
+  commentState,
+  commentError,
+  validateComment,
+  setCommentState
 }) {
   return (
     <Container disableGutters sx={{ width: "75%", my: 4 }}>
@@ -45,12 +49,6 @@ export default function ArticleComments({
           <Typography component="h5" variant="h5">
             Comments
           </Typography>
-          <IconButton color="primary" aria-label="Add a comment">
-            <AddCommentSharp />
-            <Typography variant="body2" sx={{ marginLeft: "5px" }}>
-              Add a comment
-            </Typography>
-          </IconButton>
         </Box>
         <Box
           sx={{
@@ -66,14 +64,13 @@ export default function ArticleComments({
             {...rating}
             articleId={articleId}
             updateRating={updateRating}
-            setMgwState={setMgwState}
           />
         </Box>
       </Box>
       <Box sx={{ display: "flex", justifyContent: "center", width: "100%" }}>
         <List sx={{ width: "100%", maxWidth: "90vw" }}>
-          {comments?.map((comment) => (
-            <Fragment key={comment._id}>
+          {comments?.map((comment, i) => (
+            <Fragment key={i}>
               <ListItem>
                 <ListItemAvatar>
                   <Avatar {...helper.stringAvatar(comment.name)} />
@@ -87,6 +84,26 @@ export default function ArticleComments({
             </Fragment>
           ))}
         </List>
+      </Box>
+      <Box sx={{ width: "100%", textAlign: "right" }}>
+        <NewComment
+          commentState={commentState}
+          commentError={commentError}
+          validateComment={validateComment}
+          setCommentState={setCommentState}
+        />
+        <IconButton
+          color="primary"
+          aria-label="Add a comment"
+          onClick={() =>
+            validateComment(articleId, Object.keys(helper.initCommentInputs))
+          }
+        >
+          <AddCommentSharp />
+          <Typography variant="body2" sx={{ marginLeft: "5px" }}>
+            Add a comment
+          </Typography>
+        </IconButton>
       </Box>
     </Container>
   );

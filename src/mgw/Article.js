@@ -4,7 +4,6 @@ import helper from "./utils/helper";
 import { Container, Box, IconButton, Typography } from "@mui/material";
 import { EditSharp, DeleteOutlineSharp } from "@mui/icons-material";
 import ReactMarkdown from "react-markdown";
-import ArticleRating from "./components/article/ArticleRating";
 import EditModal from "./components/article/EditModal";
 import DeleteModal from "./components/article/DeleteModal";
 import NotFound from "./NotFound";
@@ -33,11 +32,15 @@ export default function Article({
   setFilterOpts,
   execSearch,
   updateRating,
+  commentState,
+  commentError,
+  validateComment,
+  setCommentState,
   requestError,
 }) {
   const params = useParams();
 
-  useEffect(async () => {
+  useEffect(() => {
     return setFilterOpts({ name: "id", value: params.id });
   }, [setFilterOpts, params.id]);
 
@@ -171,10 +174,13 @@ export default function Article({
             </Box>
             <ArticleComments
               comments={article.comments}
+              commentState={commentState}
+              commentError={commentError}
+              validateComment={validateComment}
+              setCommentState={setCommentState}
               rating={article.rating}
               updateRating={updateRating}
               articleId={article._id}
-              setMgwState={setMgwState}
             />
           </Box>
         </Container>
