@@ -10,7 +10,7 @@ import {
   useTheme
 } from "@mui/material";
 import { CloseSharp } from "@mui/icons-material";
-import HorizontalStepper from "../shared/HorizontalStepper";
+import FormStepper from "../shared/FormStepper";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -29,7 +29,7 @@ export default function DeleteModal({
   requestError,
   requestSuccess
 }) {
-  const hsProps = {
+  const stepperProps = {
     activeStep,
     articleState,
     setArticleState,
@@ -58,7 +58,7 @@ export default function DeleteModal({
   return (
     <Dialog
       fullWidth keepMounted
-      maxWidth="87vw"
+      maxWidth="85vw"
       TransitionComponent={Transition}
       fullScreen={useMediaQuery(useTheme().breakpoints.down("md"))}
       open={deleteModal}
@@ -80,7 +80,7 @@ export default function DeleteModal({
         </IconButton>
       </DialogTitle>
       <DialogContent>
-        <HorizontalStepper {...hsProps} type="delete"/>
+        <FormStepper {...stepperProps} type="delete" />
       </DialogContent>
     </Dialog>
   );

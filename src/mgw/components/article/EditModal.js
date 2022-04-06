@@ -10,7 +10,7 @@ import {
   useTheme
 } from "@mui/material";
 import { CloseSharp } from "@mui/icons-material";
-import HorizontalStepper from "../shared/HorizontalStepper";
+import FormStepper from "../shared/FormStepper";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -34,7 +34,7 @@ export default function EditModal({
   requestError,
   requestSuccess
 }) {
-  const hsProps = {
+  const stepperProps = {
     locationOpts,
     catOpts,
     tagOpts,
@@ -68,7 +68,7 @@ export default function EditModal({
   return (
     <Dialog
       fullWidth keepMounted
-      maxWidth="87vw"
+      maxWidth="85vw"
       TransitionComponent={Transition}
       fullScreen={useMediaQuery(useTheme().breakpoints.down("md"))}
       open={editModal}
@@ -90,7 +90,7 @@ export default function EditModal({
         </IconButton>
       </DialogTitle>
       <DialogContent>
-        <HorizontalStepper {...hsProps} type="edit" />
+        <FormStepper {...stepperProps} type="edit" />
       </DialogContent>
     </Dialog>
   );

@@ -65,10 +65,11 @@ export default function HorizontalStepper({
   };
 
   return (
-    <Box sx={{ m: 4 }}>
+    <Box sx={{ m: 4, display: { xs: "none", md: "block" } }}>
       {requestSuccess && (
         <Box sx={{ mb: 4 }}>
           <Alert
+            square
             severity="success"
             variant="filled"
             action={
@@ -93,7 +94,7 @@ export default function HorizontalStepper({
       )}
       {requestError && (
         <Box sx={{ mb: 4 }}>
-          <Alert severity="error" variant="filled">
+          <Alert square severity="error" variant="filled">
             <AlertTitle>Error</AlertTitle>
             {requestError}
           </Alert>

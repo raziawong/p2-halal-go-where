@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
-import { Box, Container } from "@mui/material";
-import HorizontalStepper from "./components/shared/HorizontalStepper";
+import FormStepper from "./components/shared/FormStepper";
 
 export default function Create(props) {
   const { setMgwState } = props;
@@ -9,10 +8,6 @@ export default function Create(props) {
   }, [setMgwState]);
 
   return (
-    <Container disableGutters>
-      <Box sx={{ m: 4 }}>
-        <HorizontalStepper {...props} type="create" />
-      </Box>
-    </Container>
+    <FormStepper {...props} type="create"/>
   );
 }
