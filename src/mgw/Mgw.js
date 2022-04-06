@@ -475,9 +475,8 @@ export default class Mgw extends Component {
     ) {
       await getRating({ articleId })
         .then((resp) => {
-          if (resp.data.results.count) {
+          if (resp.data.count) {
             let newRating = { ...dtl.rating, ...resp.data.results[0].rating };
-            console.log()
             this.setState({
               articleDetail: {
                 ...dtl,
@@ -525,7 +524,7 @@ export default class Mgw extends Component {
     if (articleId && articleId === dtl._id) {
       await getComments({ articleId })
         .then((resp) => {
-          if (resp.data.results.count)
+          if (resp.data.count)
             this.setState({
               articleDetail: {
                 ...dtl,
@@ -559,7 +558,7 @@ export default class Mgw extends Component {
     this.setState({ commentInputsErrors: validation || {} }, 
       async () => {
         if (!Object.entries(validation)?.length) {
-          const bodyContent = {...this.state.commentInputs, articleId}
+          const bodyContent = {...this.state.commentInputs, articleId};
           await postComment(bodyContent).then((resp) => {
             this.fetchArticleComments(articleId);
           })
