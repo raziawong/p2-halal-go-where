@@ -28,8 +28,12 @@ export default function ArticleTags({
     });
   };
   return (
-    <Grid container spacing={4} sx={{ justifyContent: "center" }}>
-      <Grid item xs={8}>
+    <Grid
+      container
+      spacing={{ xs: 2, md: 4 }}
+      sx={{ maxWidth: "100vw", justifyContent: "center" }}
+    >
+      <Grid item xs={12} md={5}>
         <FormControl sx={{ width: "100%" }}>
           <InputLabel id="create-cat-label" error={!!articleError?.catIds}>
             Categories
@@ -60,14 +64,14 @@ export default function ArticleTags({
               articleState.catIds
             )}
           </Select>
-          { articleError?.catIds &&
+          {articleError?.catIds && (
             <FormHelperText error={!!articleError?.catIds}>
               {articleError?.catIds}
             </FormHelperText>
-          }
+          )}
         </FormControl>
       </Grid>
-      <Grid item xs={8}>
+      <Grid item xs={12} md={5}>
         <FormControl sx={{ width: "100%" }}>
           <InputLabel
             id="create-subcat-label"
@@ -106,14 +110,14 @@ export default function ArticleTags({
               articleState.subcatIds
             )}
           </Select>
-          { articleError?.subcatIds &&
+          {articleError?.subcatIds && (
             <FormHelperText error={!!articleError?.subcatIds}>
               {articleError?.subcatIds}
             </FormHelperText>
-          }
+          )}
         </FormControl>
       </Grid>
-      <Grid item xs={8}>
+      <Grid item xs={12} md={10}>
         <Autocomplete
           autoSelect
           freeSolo

@@ -9,8 +9,12 @@ export default function VerifyAuthor({
   userVerifyErrorMsg
 }) {
   return (
-    <Grid container spacing={4} sx={{ justifyContent: "center" }}>
-      <Grid item xs={11}>
+    <Grid
+      container
+      spacing={{ xs: 2, md: 4 }}
+      sx={{ maxWidth: "100vw", justifyContent: "center" }}
+    >
+      <Grid item xs={12}>
         <Paper elevation={3}>
           <Typography sx={{ padding: "1em" }}>
             Please enter the same email that was used for submission for
@@ -24,7 +28,7 @@ export default function VerifyAuthor({
           )}
         </Paper>
       </Grid>
-      <Grid item xs={8}>
+      <Grid item xs={12} md={8}>
         <TextField
           fullWidth
           required

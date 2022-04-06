@@ -7,8 +7,12 @@ export default function NewAuthor({
   articleError,
 }) {
   return (
-    <Grid container spacing={4} sx={{ justifyContent: "center" }}>
-      <Grid item xs={11}>
+    <Grid
+      container
+      spacing={{ xs: 2, md: 4 }}
+      sx={{ maxWidth: "100vw", justifyContent: "center" }}
+    >
+      <Grid item zeroMinWidth xs={12}>
         <Paper elevation={3}>
           <Typography sx={{ padding: "1rem" }}>
             MGW require all submissions to have at least contact name and email
@@ -19,7 +23,7 @@ export default function NewAuthor({
           </Typography>
         </Paper>
       </Grid>
-      <Grid item xs={8}>
+      <Grid item xs={12} md={6}>
         <TextField
           fullWidth
           label="Display Name"
@@ -31,9 +35,10 @@ export default function NewAuthor({
           helperText={articleError?.displayName}
         />
       </Grid>
-      <Grid item xs={8}>
+      <Grid item xs={12} md={6}>
         <TextField
-          fullWidth required
+          fullWidth
+          required
           label="Contact Name"
           aria-label="Contact Name"
           name="name"
@@ -43,9 +48,10 @@ export default function NewAuthor({
           helperText={articleError?.name}
         />
       </Grid>
-      <Grid item xs={8}>
+      <Grid item xs={12} md={8}>
         <TextField
-          fullWidth required
+          fullWidth
+          required
           label="Email"
           aria-label="Email"
           name="email"
@@ -55,7 +61,7 @@ export default function NewAuthor({
           helperText={articleError?.email}
         />
       </Grid>
-      <Grid item xs={8} sx={{ display: "flex", alignItems: "center" }}>
+      <Grid item xs={12} md={8} sx={{ display: "flex", alignItems: "center" }}>
         <Switch
           inputProps={{ "aria-label": "Allow Public Edits?" }}
           name="allowPublic"

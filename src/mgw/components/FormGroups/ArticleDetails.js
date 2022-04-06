@@ -75,8 +75,12 @@ export default function ArticleDetails({
   };
 
   return (
-    <Grid container spacing={4} sx={{ justifyContent: "center" }}>
-      <Grid item xs={8}>
+    <Grid
+      container
+      spacing={{ xs: 2, md: 4 }}
+      sx={{ maxWidth: "100vw", justifyContent: "center" }}
+    >
+      <Grid item xs={12} md={8}>
         {articleState?.photos?.map((photo, i) => (
           <Fragment key={i}>
             <TextField
@@ -112,7 +116,7 @@ export default function ArticleDetails({
           </IconButton>
         </Box>
       </Grid>
-      <Grid item xs={8}>
+      <Grid item xs={12} md={8}>
         {articleState?.details?.map((dtl, i) => (
           <Fragment key={i}>
             <Box>

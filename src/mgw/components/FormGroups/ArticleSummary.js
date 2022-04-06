@@ -9,8 +9,12 @@ export default function ArticleSummary({
   locationOpts
 }) {
   return (
-    <Grid container spacing={4} sx={{ justifyContent: "center" }}>
-      <Grid item xs={8}>
+    <Grid
+      container
+      spacing={{ xs: 2, md: 4 }}
+      sx={{ maxWidth: "100vw", justifyContent: "center" }}
+    >
+      <Grid item xs={12} md={8}>
         <TextField
           fullWidth
           required
@@ -23,7 +27,7 @@ export default function ArticleSummary({
           helperText={articleError?.title}
         />
       </Grid>
-      <Grid item xs={8}>
+      <Grid item xs={12} md={8}>
         <TextField
           fullWidth
           required
@@ -38,7 +42,7 @@ export default function ArticleSummary({
           helperText={articleError?.description}
         />
       </Grid>
-      <Grid item xs={8}>
+      <Grid item xs={12} md={8}>
         <TextField
           fullWidth
           required
@@ -51,7 +55,7 @@ export default function ArticleSummary({
           helperText={articleError?.address}
         />
       </Grid>
-      <Grid item xs={8}>
+      <Grid item xs={12} md={5}>
         <Autocomplete
           autoSelect
           fullWidth
@@ -76,7 +80,7 @@ export default function ArticleSummary({
           }}
         />
       </Grid>
-      <Grid item xs={8}>
+      <Grid item xs={12} md={5}>
         <Autocomplete
           autoSelect
           fullWidth
