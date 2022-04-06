@@ -8,12 +8,17 @@ import {
   Box,
   Button,
   Typography,
+  useMediaQuery
 } from "@mui/material";
 import { Masonry } from "@mui/lab";
 
 export default function Listing({ articles, allCategories }) {
+  const smQ = useMediaQuery((theme) => theme.breakpoints.down('sm'));
+  const mdQ = useMediaQuery((theme) => theme.breakpoints.down('md'));
+  const getCol = () => smQ ? 1 : mdQ ? 2 : articles?.length < 3 ? 2 : 4;
+
   return (
-    <Masonry columns={3} spacing={2}>
+    <Masonry columns={getCol()} spacing={2}>
       {articles.map((card) => {
         const catId = card.categories.length ? card.categories[0].catId : "";
         const catObj = allCategories.filter((c) => c._id === catId);
