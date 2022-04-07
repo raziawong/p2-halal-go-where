@@ -47,7 +47,7 @@ export default function Explore({
             component="section"
             sx={{
               display: { xs: "none", md: "block" },
-              minWidth: "30vw",
+              minWidth: { xs: "30vw", xl: "30%"},
               m: 4,
             }}
           >

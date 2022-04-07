@@ -65,7 +65,7 @@ export default function CompactStepper({
             <WarningAmber fontSize="small" color="warning" />
           </Icon>
         )}
-        <Typography variant="h5" color={hasError ? "warning.main" : ""}>
+        <Typography component="h4" variant="h4" color={hasError ? "warning.main" : "primary"} sx={{ textDecoration: "underline"}}>
           {stepsList[activeStep].title}
         </Typography>
       </Paper>
@@ -148,6 +148,7 @@ export default function CompactStepper({
         steps={stepsList.length}
         position="bottom"
         activeStep={activeStep}
+        sx={{"& .MuiMobileStepper-dot": { width: "12px", height: "12px" }}}
         nextButton={
           <Button aria-label="submit step and go to next" onClick={handleNext}>
             {activeStep === stepsList.length - 1
@@ -160,10 +161,10 @@ export default function CompactStepper({
         }
         backButton={
           <Button
-            aria-label="previous step"
-            size="small"
+            aria-label="previous step"  
             disabled={!!Object.entries(articleError).length}
             onClick={handleBack}
+            sx={{visibility: activeStep === 0 ? "hidden" : ""}}
           >
             <KeyboardArrowLeft /> Back
           </Button>
