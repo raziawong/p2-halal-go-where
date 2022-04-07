@@ -1,5 +1,4 @@
 import { Link, useNavigate } from "react-router-dom";
-import { mgwCategoriesMap } from "../../utils/data";
 import helper from "../../utils/helper";
 import {
   Card,
@@ -27,7 +26,7 @@ export default function Listing({
   const navigate = useNavigate();
   const smQ = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   const mdQ = useMediaQuery((theme) => theme.breakpoints.down("md"));
-  const getCol = () => (smQ ? 1 : mdQ ? 2 : articles?.length < 3 ? 2 : 3);
+  const colNum = smQ ? 1 : mdQ ? 2 : articles?.length < 3 ? 2 : 3;
   const showPagination = articles?.length < articlesTotal;
   const pageCount = Math.ceil(articlesTotal / helper.articlesLimit);
   const handleChange = (evt, val) => {
@@ -42,18 +41,11 @@ export default function Listing({
   }, [navigate])
   return (
     <Fragment>
-      <Masonry columns={getCol()} spacing={2}>
+      <Masonry columns={colNum} spacing={2}>
         {articles.map((card) => {
-          const catId = card.categories.length ? card.categories[0].catId : "";
-          const catObj = allCategories.filter((c) => c._id === catId);
-          const imgUrl = card.photos.length
-            ? card.photos[0]
-            : catObj.length
-            ? mgwCategoriesMap[catObj[0].value].default
-            : mgwCategoriesMap.attractions.default;
           return (
             <Card key={card._id}>
-              <CardMedia component="img" image={imgUrl} />
+              <CardMedia component="img" image={helper.getImg(card)} />
               <CardContent>
                 <Typography gutterBottom variant="h6" component="h5">
                   {card.title}

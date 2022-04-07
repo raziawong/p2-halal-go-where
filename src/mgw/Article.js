@@ -8,7 +8,6 @@ import ArticleTags from "./components/article/ArticleTags";
 import AuthorAction from "./components/article/AuthorAction"
 import ArticleComments from "./components/article/ArticleComments";
 import ImageCarousel from "./components/article/ImageCarousel";
-import { mgwCategoriesMap } from "./utils/data";
 
 export default function Article({
   tagOpts,
@@ -52,15 +51,12 @@ export default function Article({
     }
     return "";
   }, [mounted, execSearch, params.id]);
-  const imgList = () => {
-    return article.photos?.length ? article.photos : [mgwCategoriesMap[article.catLabels[0].value].default];
-  }
   return (
     <Fragment>
       {article.title && loaded && (
         <Container component="main" disableGutters maxWidth="xl" sx={{width: "100vw"}}>
           <Box component="article" sx={{ my: { xs: 0.5, lg: 4 }, mx: 0 }}>
-            <ImageCarousel images={imgList()} />
+            <ImageCarousel images={helper.getImg(article, true)} />
             <Box sx={{ my: { xs: 3, lg: 5 }, mx: { xs: 3, lg: 2 } }}>
               <Typography component="h1" variant="h2">
                 {article.title}

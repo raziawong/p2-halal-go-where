@@ -1,6 +1,7 @@
 import { Checkbox, ListItemText, MenuItem } from "@mui/material";
 import { EditorState, convertToRaw } from "draft-js";
 import { draftToMarkdown, markdownToDraft } from "markdown-draft-js";
+import { mgwCategoriesMap } from "./data";
 
 const helper = {
   exploreView: "listing",
@@ -270,6 +271,17 @@ const helper = {
       return { catId: cId, subcatIds: depSubcatIds };
     });
     return { catIds, subcatIds, depCatArr };
+  },
+  getImg: (article, isArray=false) => {
+    const { photos, catLabels } = article;
+    if (photos?.length) {
+      return isArray ? photos : photos[0];
+    } else {
+      const def = catLabels?.length
+        ? mgwCategoriesMap[catLabels[0].value].default
+        : mgwCategoriesMap.attractions.default;
+      return isArray ? [def] : def;
+    }
   },
   transformArticleForUpdate: (inputData) => {
     let pd = JSON.parse(JSON.stringify(inputData));
