@@ -12,7 +12,7 @@ import NavDrawer from "./NavDrawer";
 export default function NavBar() {
   return (
     <Fragment>
-      <AppBar position="static">
+      <AppBar position="sticky">
         <Container maxWidth="xl">
           <Toolbar component="nav">
             <NavBarLogo to="/">
