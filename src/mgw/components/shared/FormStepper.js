@@ -1,13 +1,12 @@
-import React from "react";
-import { Container } from "@mui/material";
+import React, {Fragment} from "react";
 import HorizontalStepper from "./HorizontalStepper";
 import CompactStepper from "./CompactStepper";
 
-export default function FormStepper (props) {
+export default function FormStepper(props) {
   return (
-    <Container disableGutters maxWidth="xl" sx={{width: "100vw"}}>
-        <HorizontalStepper {...props} />
-        <CompactStepper {...props} />
-    </Container>
+    <Fragment>
+      <HorizontalStepper {...props} />
+      <CompactStepper {...props} />
+    </Fragment>
   );
 }

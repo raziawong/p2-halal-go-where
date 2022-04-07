@@ -14,7 +14,7 @@ export default function NavBar() {
     <Fragment>
       <AppBar position="static">
         <Container maxWidth="xl">
-          <Toolbar>
+          <Toolbar component="nav">
             <NavBarLogo to="/">
               <img src={logo} alt="Muslim Go Where" />
             </NavBarLogo>

@@ -20,7 +20,7 @@ export default function Explore({
     return setMgwState({ isRedirectListing: false });
   }, [setMgwState]);
   return (
-    <Container disableGutters maxWidth="xl" sx={{width: "100vw"}}>
+    <Container component="main" disableGutters maxWidth="xl" sx={{width: "100vw"}}>
       {!loaded ? (
         <></>
       ) : (

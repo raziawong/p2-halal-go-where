@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { Container } from "@mui/material";
 import FormStepper from "./components/shared/FormStepper";
 import helper from "./utils/helper";
 
@@ -16,6 +17,8 @@ export default function Create(props) {
   }, [setMgwState]);
 
   return (
-    <FormStepper {...props} type="create"/>
+    <Container component="main" disableGutters maxWidth="xl" sx={{width: "100vw"}}>
+      <FormStepper {...props} type="create"/>
+    </Container>
   );
 }
