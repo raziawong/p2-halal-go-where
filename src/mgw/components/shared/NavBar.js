@@ -1,15 +1,38 @@
 import React, { Fragment } from "react";
 import logo from "../../../assets/image/mgw-logo.svg";
 import { NavBarLogo, NavBarLink } from "../../utils/mgwStyle";
-import { AppBar, Box, Container, Toolbar } from "@mui/material";
 import {
-  CollectionsBookmarkSharp,
-  NoteAddSharp,
-  ViewListSharp,
-} from "@mui/icons-material";
+  AppBar,
+  Box,
+  Container,
+  IconButton,
+  InputAdornment,
+  List,
+  ListItem,
+  ListItemText,
+  TextField,
+  Toolbar,
+} from "@mui/material";
+import { SearchSharp } from "@mui/icons-material";
 import NavDrawer from "./NavDrawer";
+import helper from "../../utils/helper";
+import { useNavigate } from "react-router-dom";
 
-export default function NavBar() {
+export default function NavBar({
+  navOpen,
+  setMgwState,
+  fetchArticles,
+  filterOpts,
+  setFilterOpts,
+}) {
+  const navigate = useNavigate();
+  const handleSearch = (evt) => {
+    const { type, key } = evt;
+    if (type === "mousedown" || type === "click" || key === "Enter") {
+      fetchArticles(helper.exploreView);
+      navigate("/explore");
+    }
+  };
   return (
     <Fragment>
       <AppBar position="sticky">
@@ -18,23 +41,52 @@ export default function NavBar() {
             <NavBarLogo to="/">
               <img src={logo} alt="Muslim Go Where" />
             </NavBarLogo>
+            <Box sx={{ display: { xs: "none", sm: "block" } }}>
+              <TextField
+                name="text"
+                arial-label="Search"
+                value={filterOpts.text}
+                onChange={(evt) => setFilterOpts(evt.target)}
+                onKeyDown={handleSearch}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="start">
+                      <IconButton
+                        aria-label="Submit Search"
+                        onClick={handleSearch}
+                        onMouseDown={handleSearch}
+                        onKeyDown={handleSearch}
+                      >
+                        <SearchSharp />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+                variant="standard"
+              />
+            </Box>
             <Box sx={{ display: "flex", marginLeft: "1rem" }}>
               <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-                <NavDrawer />
+                <NavDrawer
+                  navOpen={navOpen}
+                  setMgwState={setMgwState}
+                  filterOpts={filterOpts}
+                  setFilterOpts={setFilterOpts}
+                  handleSearch={handleSearch}
+                />
               </Box>
-              <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-                <NavBarLink to="/explore">
-                  <ViewListSharp fontSize="small" sx={{ mx: 1 }} />
-                  Explore
-                </NavBarLink>
-                {/* <Link to="/curate" className={nav-link-item}>
-                  <CollectionsBookmarkSharp fontSize="small" /> Curate
-                </Link> */}
-                <NavBarLink to="/create">
-                  <NoteAddSharp fontSize="small" sx={{ mx: 1 }} />
-                  Create
-                </NavBarLink>
-              </Box>
+              <List sx={{ display: { xs: "none", md: "inline-flex" } }}>
+                <ListItem>
+                  <ListItemText>
+                    <NavBarLink to="/explore">Explore</NavBarLink>
+                  </ListItemText>
+                </ListItem>
+                <ListItem>
+                  <ListItemText>
+                    <NavBarLink to="/create">Create</NavBarLink>
+                  </ListItemText>
+                </ListItem>
+              </List>
             </Box>
           </Toolbar>
         </Container>

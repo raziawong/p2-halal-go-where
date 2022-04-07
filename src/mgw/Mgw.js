@@ -48,13 +48,13 @@ export default class Mgw extends Component {
     editModal: false,
     deleteModal: false,
     actionModal: false,
+    navDrawer: false,
     userEmail: "",
     userVerifyErrorMsg: false,
-    isRedirectListing: false,
     isMounted: false,
     isLoaded: false,
     requestError: "",
-    requestSuccess: ""
+    requestSuccess: "",
   };
 
   render() {
@@ -62,21 +62,23 @@ export default class Mgw extends Component {
       <ThemeProvider theme={mgwTheme}>
         <SiteContainer sx={{ overflow: this.state.isLoaded ? "" : "hidden" }}>
           <ViewContainer>
-            <NavBar />
+            <NavBar
+              navOpen={this.state.navDrawer}
+              setMgwState={this.setMgwState}
+              fetchArticles={this.fetchArticles}
+              filterOpts={this.state.filterOpts}
+              setFilterOpts={this.setFilterOpts}
+            />
             <Routes>
               <Route
                 index
                 path="/"
                 element={
-                  this.state.isRedirectListing ? (
-                    <Navigate replace to="/explore" />
-                  ) : (
-                    <Landing
-                      filterOpts={this.state.filterOpts}
-                      setFilterOpts={this.setFilterOpts}
-                      detectSearch={this.detectSearch}
-                    />
-                  )
+                  <Landing
+                    filterOpts={this.state.filterOpts}
+                    setFilterOpts={this.setFilterOpts}
+                    detectSearch={this.detectSearch}
+                  />
                 }
               />
               <Route
@@ -97,7 +99,27 @@ export default class Mgw extends Component {
                     requestError={this.state.requestError}
                   />
                 }
-              />
+              >
+                <Route
+                  path=":page"
+                  element={
+                    <Explore
+                      filterOpts={this.state.filterOpts}
+                      sortIndex={this.state.sortIndex}
+                      sortAnchor={this.state.sortMenuAnchor}
+                      countries={this.state.articlesLocations}
+                      categories={this.state.allCategories}
+                      articles={this.state.articlesFetched}
+                      actionModal={this.state.actionModal}
+                      loaded={this.state.isLoaded}
+                      setMgwState={this.setMgwState}
+                      setFilterOpts={this.setFilterOpts}
+                      detectSearch={this.detectSearch}
+                      requestError={this.state.requestError}
+                    />
+                  }
+                />
+              </Route>
               <Route
                 path="create"
                 element={
@@ -204,6 +226,11 @@ export default class Mgw extends Component {
     if (prevState.sortIndex !== this.state.sortIndex) {
       this.fetchArticles(helper.exploreView);
     }
+    // if (prevState.navDrawer) {
+    //   this.setState({
+    //     navDrawer: false,
+    //   });
+    // }
   }
 
   detectSearch = (evt, viewType) => {
@@ -284,7 +311,6 @@ export default class Mgw extends Component {
                   requestError: "",
                 })
               : this.setState({
-                  isRedirectListing: true,
                   articlesFetched: [...transformed] || [],
                   isLoaded: true,
                   requestError: "",
@@ -360,7 +386,7 @@ export default class Mgw extends Component {
             await postArticle(pd)
               .then((resp) => {
                 this.setState({
-                  articleInputs: {...helper.initArticleInputs},
+                  articleInputs: { ...helper.initArticleInputs },
                   articleErrors: {},
                   articlePosted: resp.data.results.insertedId,
                   createActiveStep: 0,
@@ -561,9 +587,9 @@ export default class Mgw extends Component {
             this.setState({
               articleDetail: {
                 ...dtl,
-                comments: [ ...resp.data.results[0].comments ]
+                comments: [...resp.data.results[0].comments],
               },
-              commentInputs: {...helper.initCommentInputs},
+              commentInputs: { ...helper.initCommentInputs },
               commentInputsErrors: {},
               requestError: "",
             });
@@ -588,11 +614,11 @@ export default class Mgw extends Component {
       .filter((v) => v)
       .reduce((a, v) => ({ ...a, [v.fieldName]: v.message }), {});
 
-    this.setState({ commentInputsErrors: validation || {} }, 
-      async () => {
-        if (!Object.entries(validation)?.length) {
-          const bodyContent = {...this.state.commentInputs, articleId};
-          await postComment(bodyContent).then((resp) => {
+    this.setState({ commentInputsErrors: validation || {} }, async () => {
+      if (!Object.entries(validation)?.length) {
+        const bodyContent = { ...this.state.commentInputs, articleId };
+        await postComment(bodyContent)
+          .then((resp) => {
             this.fetchArticleComments(articleId);
           })
           .catch((err) => {
@@ -600,7 +626,7 @@ export default class Mgw extends Component {
               requestError: "Failed to post article comment",
             });
           });
-        }
-      });
+      }
+    });
   };
 }

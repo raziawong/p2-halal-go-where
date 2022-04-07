@@ -1,8 +1,9 @@
 import React, { Fragment, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
 import { Box, Container, Fab, Typography } from "@mui/material";
+import { FilterListSharp } from "@mui/icons-material";
 import ActionGroup from "./components/explore/ActionGroup";
 import Listing from "./components/explore/Listing";
-import { FilterListSharp } from "@mui/icons-material";
 import ActionModal from "./components/explore/ActionModal";
 
 export default function Explore({
@@ -18,8 +19,12 @@ export default function Explore({
   articles,
   loaded,
 }) {
+  const params = useParams();
+
   useEffect(() => {
-    return setMgwState({ isRedirectListing: false });
+    return setMgwState({
+      pageIndex: params.page
+    });
   }, [setMgwState]);
 
   const handleFabClick = () => {
