@@ -15,7 +15,7 @@ import { Masonry } from "@mui/lab";
 export default function Listing({ articles, allCategories }) {
   const smQ = useMediaQuery((theme) => theme.breakpoints.down('sm'));
   const mdQ = useMediaQuery((theme) => theme.breakpoints.down('md'));
-  const getCol = () => smQ ? 1 : mdQ ? 2 : articles?.length < 3 ? 2 : 4;
+  const getCol = () => smQ ? 1 : mdQ ? 2 : articles?.length < 3 ? 2 : 3;
 
   return (
     <Masonry columns={getCol()} spacing={2}>

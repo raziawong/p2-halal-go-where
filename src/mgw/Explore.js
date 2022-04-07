@@ -31,28 +31,40 @@ export default function Explore({
       ) : (
         <Fragment>
           <Box component="section" sx={{ minWidth: "30vw", m: 4 }}>
+            <SortSelection
+              sortIndex={sortIndex}
+              sortAnchor={sortAnchor}
+              setMgwState={setMgwState}
+            />
             <FilterGroup
               detectSearch={detectSearch}
               filterOpts={filterOpts}
               setFilterOpts={setFilterOpts}
               countries={countries}
               categories={categories}
-            />
-            <SortSelection
-              sortIndex={sortIndex}
-              sortAnchor={sortAnchor}
               setMgwState={setMgwState}
             />
           </Box>
-          <Box sx={{ maxHeight: "80vh", flexGrow: 1, my: 4, mx: 0.5, overflowY: "hidden" }}>
-            <Box component="section" sx={{ overflowY: "scroll", height: "100%" }}>
-            {articles.length ? (
-              <Listing articles={articles} allCategories={categories} />
-            ) : (
-              <Typography component="h3" variant="h4">
-                No results found
-              </Typography>
-            )}
+          <Box
+            sx={{
+              maxHeight: "80vh",
+              flexGrow: 1,
+              my: 4,
+              mx: 0.5,
+              overflowY: "hidden",
+            }}
+          >
+            <Box
+              component="section"
+              sx={{ overflowY: "scroll", height: "100%" }}
+            >
+              {articles.length ? (
+                <Listing articles={articles} allCategories={categories} />
+              ) : (
+                <Typography component="h3" variant="h4">
+                  No results found
+                </Typography>
+              )}
             </Box>
           </Box>
         </Fragment>

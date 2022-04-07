@@ -224,6 +224,23 @@ export default class Mgw extends Component {
   setFilterOpts = ({ name, value }) => {
     let opts = { ...this.state.filterOpts };
     opts[name] = value;
+
+    if (name === "catIds" || name === "subcatIds") {
+      const selCatIds =
+        name === "catIds" ? opts.catIds : this.state.filterOpts.catIds;
+      const selSubcatIds =
+        name === "subcatIds"
+          ? opts.subcatIds
+          : this.state.filterOpts.subcatIds;
+      const catDep = helper.getCatDep(
+        this.state.allCategories,
+        selCatIds,
+        selSubcatIds
+      );
+      opts.catIds = [...catDep.catIds];
+      opts.subcatIds = [...catDep.subcatIds];
+    }
+
     this.setState({
       filterOpts: opts,
     });
