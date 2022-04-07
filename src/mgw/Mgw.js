@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import mgwTheme from "./utils/mgwTheme";
 import { Alert, Snackbar, ThemeProvider } from "@mui/material";
-import { Navigate, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import {
   getMgwFixed,
   getMgwArticles,

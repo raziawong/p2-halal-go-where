@@ -26,15 +26,15 @@ let mgwTheme = createTheme({
     },
   },
   typography: {
-    fontFamily: "Raleway, sans-serif",
+    fontFamily: "Reem Kufi, sans-serif",
     body1: {
-      fontFamily: "Rubik, sans-serif",
+      fontFamily: "Raleway, sans-serif",
     },
     body2: {
-      fontFamily: "Rubik, sans-serif",
+      fontFamily: "Raleway, sans-serif",
     },
     button: {
-      fontFamily: "Rubik, sans-serif",
+      fontFamily: "Reem Kufi, sans-serif",
     },
   },
   components: {
