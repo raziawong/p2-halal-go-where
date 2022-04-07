@@ -5,7 +5,7 @@ import CompactStepper from "./CompactStepper";
 
 export default function FormStepper (props) {
   return (
-    <Container disableGutters sx={{maxWidth: "100vw"}}>
+    <Container disableGutters maxWidth="xl" sx={{width: "100vw"}}>
         <HorizontalStepper {...props} />
         <CompactStepper {...props} />
     </Container>

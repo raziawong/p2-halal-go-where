@@ -10,9 +10,9 @@ import {
 } from "@mui/material";
 
 export default function FilterGroup({
-  detectFilter,
   detectSearch,
   filterOpts,
+  setFilterOpts,
   countries,
   categories,
 }) {
@@ -25,7 +25,7 @@ export default function FilterGroup({
           name="text"
           size="small"
           value={filterOpts.text}
-          onChange={detectFilter}
+          onChange={(evt) => setFilterOpts(evt.target)}
         />
       </FormControl>
       <FormControl sx={{ width: "100%" }}>
@@ -36,10 +36,10 @@ export default function FilterGroup({
           name="countryId"
           size="small"
           value={filterOpts.countryId}
-          onChange={detectFilter}
+          onChange={(evt) => setFilterOpts(evt.target)}
         >
           <MenuItem value="">
-            <em>None</em>
+            <em>All</em>
           </MenuItem>
           {helper.countryOptDisplay(countries)}
         </Select>
@@ -52,10 +52,10 @@ export default function FilterGroup({
           name="cityId"
           size="small"
           value={filterOpts.cityId}
-          onChange={detectFilter}
+          onChange={(evt) => setFilterOpts(evt.target)}
         >
           <MenuItem value="">
-            <em>None</em>
+            <em>All</em>
           </MenuItem>
           {helper.cityOptDisplay(countries, filterOpts.countryId)}
         </Select>
@@ -69,7 +69,7 @@ export default function FilterGroup({
           name="catIds"
           size="small"
           value={filterOpts.catIds}
-          onChange={detectFilter}
+          onChange={(evt) => setFilterOpts(evt.target)}
           renderValue={(vals) =>
             vals.length ? (
               categories
@@ -77,12 +77,12 @@ export default function FilterGroup({
                 .map((f) => f.name)
                 .join(", ")
             ) : (
-              <em>None</em>
+              <em>All</em>
             )
           }
         >
           <MenuItem value="">
-            <em>None</em>
+            <em>All</em>
           </MenuItem>
           {helper.categoriesOptDispay(
             categories?.length > 0 ? categories : [],
@@ -99,7 +99,7 @@ export default function FilterGroup({
           name="subcatIds"
           size="small"
           value={filterOpts.subcatIds}
-          onChange={detectFilter}
+          onChange={(evt) => setFilterOpts(evt.target)}
           renderValue={(vals) =>
             vals.length ? (
               categories
@@ -111,12 +111,12 @@ export default function FilterGroup({
                 .map((f) => f.name)
                 .join(", ")
             ) : (
-              <em>None</em>
+              <em>All</em>
             )
           }
         >
           <MenuItem value="">
-            <em>None</em>
+            <em>All</em>
           </MenuItem>
           {helper.subcategoriesOptDispay(
             categories?.length > 0 ? categories : [],
@@ -136,7 +136,7 @@ export default function FilterGroup({
           name="rating"
           size="small"
           value={filterOpts.rating}
-          onChange={detectFilter}
+          onChange={(evt) => setFilterOpts(evt.target)}
         />
       </FormControl>
       <Button

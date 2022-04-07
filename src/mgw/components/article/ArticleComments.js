@@ -30,6 +30,7 @@ export default function ArticleComments({
   return (
     <Container
       disableGutters
+      maxWidth="xl"
       sx={{
         justifyContent: "center",
         width: { xs: "100%", md: "75%" },

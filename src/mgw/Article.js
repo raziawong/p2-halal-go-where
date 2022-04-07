@@ -58,7 +58,7 @@ export default function Article({
   return (
     <Fragment>
       {article.title && loaded && (
-        <Container disableGutters>
+        <Container disableGutters maxWidth="xl" sx={{width: "100vw"}}>
           <Box sx={{ my: { xs: 0.5, lg: 4 }, mx: 0 }}>
             <ImageCarousel images={imgList()} />
             <Box sx={{ my: { xs: 3, lg: 5 }, mx: { xs: 3, lg: 2 } }}>
