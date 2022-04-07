@@ -21,15 +21,14 @@ export default function Explore({
   articlesTotal,
   loaded,
 }) {
-  // const params = useParams();
+  const params = useParams();
 
-  // useEffect(() => {
-  //   const pg = params.page;
-  //   console.log(pageNumber, pg);
-  //   return setMgwState({
-  //     pageNumber: isNaN(pg) ? 1 : Number(pg)
-  //   });
-  // }, [setMgwState, params.page]);
+  useEffect(() => {
+    const pg = params.page;
+    return setMgwState({
+      pageNumber: isNaN(pg) ? 1 : Number(pg)
+    });
+  }, [setMgwState, params.page]);
 
   const handleFabClick = () => {
     setMgwState({

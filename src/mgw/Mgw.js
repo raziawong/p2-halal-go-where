@@ -89,6 +89,7 @@ export default class Mgw extends Component {
                 element={
                   <Explore
                     filterOpts={this.state.filterOpts}
+                    pageNumber={this.state.pageNumber}
                     sortIndex={this.state.sortIndex}
                     sortAnchor={this.state.sortMenuAnchor}
                     countries={this.state.articlesLocations}

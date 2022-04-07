@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { mgwCategoriesMap } from "../../utils/data";
 import helper from "../../utils/helper";
 import {
@@ -15,7 +15,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { Masonry } from "@mui/lab";
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 
 export default function Listing({
   articles,
@@ -24,16 +24,22 @@ export default function Listing({
   pageNumber,
   setMgwState,
 }) {
+  const navigate = useNavigate();
   const smQ = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   const mdQ = useMediaQuery((theme) => theme.breakpoints.down("md"));
   const getCol = () => (smQ ? 1 : mdQ ? 2 : articles?.length < 3 ? 2 : 3);
-  const showPagination = () => articles?.length < articlesTotal;
-  const pageCount = () => Math.ceil(articlesTotal / helper.articlesLimit);
+  const showPagination = articles?.length < articlesTotal;
+  const pageCount = Math.ceil(articlesTotal / helper.articlesLimit);
   const handleChange = (evt, val) => {
     setMgwState({
-      pageNumber: val,
+      pageNumber: val
     });
   };
+  useEffect(() => {
+    if (pageNumber > pageCount) {
+      navigate("/explore/1");
+    }
+  }, [navigate])
   return (
     <Fragment>
       <Masonry columns={getCol()} spacing={2}>
@@ -102,14 +108,14 @@ export default function Listing({
           );
         })}
       </Masonry>
-      {showPagination() ? (
+      {showPagination ? (
         <Grid container sx={{py: 2, mb: 4}}>
           <Grid item xs={12}>
             <Pagination
               size="large"
-              showFirstButton={pageNumber > 3}
-              showLastButton={pageNumber > 3}
-              count={pageCount()}
+              showFirstButton={pageCount > 3}
+              showLastButton={pageCount > 3}
+              count={pageCount}
               page={pageNumber}
               onChange={handleChange}
               sx={{ display: "flex", justifyContent: "center" }}
