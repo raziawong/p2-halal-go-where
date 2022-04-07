@@ -2,23 +2,32 @@ import React from "react";
 import {
   Box,
   Container,
-  FormControl,
-  InputAdornment,
-  IconButton,
   Typography,
   Stack,
-  OutlinedInput,
 } from "@mui/material";
 import banner from "../assets/image/banner.jpg";
 import { HeroBanner, HeroOverlay } from "./utils/mgwStyle";
-import { SearchSharp } from "@mui/icons-material";
-import helper from "./utils/helper";
 
 export default function Landing({ filterOpts, setFilterOpts, detectSearch }) {
   return (
     <Container component="main" disableGutters  maxWidth="xl" sx={{width: "100vw"}}>
       <HeroBanner bgImg={banner}>
         <HeroOverlay>
+          <Typography component="h4" variant="h4" color="secondary" sx={{
+            pl: {xs: 2, sm: 0}, direction: "rtl", textAlign: "center"
+          }}>
+            {"السلام عليكم"}
+          </Typography>
+          <Typography component="h4" variant="h4" color="secondary" sx={{
+            pl: {xs: 2, sm: 0}, textAlign: "center"
+          }}>
+            {"As-salāmu ʿalaykum"}
+          </Typography>
+          <Typography component="h1" variant="h1" color="primary" sx={{
+            pl: {xs: 2, sm: 0}, textAlign: "center"
+          }}>
+            Muslim Go Where
+          </Typography>
         </HeroOverlay>
       </HeroBanner>
       <Box sx={{ m: 2 }}>

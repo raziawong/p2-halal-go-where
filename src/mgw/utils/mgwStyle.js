@@ -74,25 +74,30 @@ const NavBarDrawer= styled(Drawer)(({ theme }) => ({
 const HeroBanner = styled(Box, {
     shouldForwardProp: (prop) => prop !== "bgImg",
   })(({ theme, bgImg }) => ({
-    minHeight: 500,
-    background: bgImg ? `url(${bgImg}) no-repeat center` : alpha(mgwColors.primary, 0.3),
+    minHeight: 600,
+    background: bgImg ? `url(${bgImg}) no-repeat space right` : alpha(mgwColors.primary, 0.3),
     backgroundAttachment: "fixed",
     backgroundSize: "cover",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
     position: "relative",
-    margin: "0 0"
+    margin: "0 0",
+    [theme.breakpoints.down("md")]: {
+        minHeight: 450,
+        backgroundPosition: "center"
+    }
 }));
 
 const HeroOverlay = styled(Box)(({ theme }) => ({
     width: "100%",
     height: "100%",
-    backgroundColor: alpha(mgwColors.background, 0.3),
+    backgroundColor: alpha(mgwColors.background, 0.4),
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    position: "absolute"
+    position: "absolute",
+    flexDirection: "column"
 }));
 
 export { SiteContainer, ViewContainer, LoaderBackdrop, NavBarDrawer, NavBarLogo, NavBarLink, HeroBanner, HeroOverlay };
