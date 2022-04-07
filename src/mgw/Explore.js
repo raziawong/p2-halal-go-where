@@ -20,12 +20,17 @@ export default function Explore({
     return setMgwState({ isRedirectListing: false });
   }, [setMgwState]);
   return (
-    <Container component="main" disableGutters maxWidth="xl" sx={{width: "100vw"}}>
+    <Container
+      component="main"
+      disableGutters
+      maxWidth="xl"
+      sx={{ display: "flex", width: "100vw" }}
+    >
       {!loaded ? (
         <></>
       ) : (
         <Fragment>
-          <Box sx={{ m: 4 }}>
+          <Box component="section" sx={{ minWidth: "30vw", m: 4 }}>
             <FilterGroup
               detectSearch={detectSearch}
               filterOpts={filterOpts}
@@ -33,13 +38,14 @@ export default function Explore({
               countries={countries}
               categories={categories}
             />
-            <SortSelection 
+            <SortSelection
               sortIndex={sortIndex}
               sortAnchor={sortAnchor}
               setMgwState={setMgwState}
             />
           </Box>
-          <Box sx={{ m: 4 }}>
+          <Box sx={{ maxHeight: "80vh", flexGrow: 1, my: 4, mx: 0.5, overflowY: "hidden" }}>
+            <Box component="section" sx={{ overflowY: "scroll", height: "100%" }}>
             {articles.length ? (
               <Listing articles={articles} allCategories={categories} />
             ) : (
@@ -47,6 +53,7 @@ export default function Explore({
                 No results found
               </Typography>
             )}
+            </Box>
           </Box>
         </Fragment>
       )}
