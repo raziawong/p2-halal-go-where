@@ -1,10 +1,12 @@
-import React from "react";
+import React, {Fragment} from "react";
+import { CssBaseline } from "@mui/material";
 import Mgw from "./mgw/Mgw";
 
 export default function App() {
   return (
-    <React.Fragment>
+    <Fragment>
+      <CssBaseline />
       <Mgw />
-    </React.Fragment>
+    </Fragment>
   );
 }
