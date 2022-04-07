@@ -47,6 +47,7 @@ export default class Mgw extends Component {
     deleteActiveStep: 0,
     editModal: false,
     deleteModal: false,
+    actionModal: false,
     userEmail: "",
     userVerifyErrorMsg: false,
     isRedirectListing: false,
@@ -88,6 +89,7 @@ export default class Mgw extends Component {
                     countries={this.state.articlesLocations}
                     categories={this.state.allCategories}
                     articles={this.state.articlesFetched}
+                    actionModal={this.state.actionModal}
                     loaded={this.state.isLoaded}
                     setMgwState={this.setMgwState}
                     setFilterOpts={this.setFilterOpts}

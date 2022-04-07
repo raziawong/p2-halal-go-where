@@ -1,11 +1,7 @@
 import React, { Fragment } from "react";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemText from "@mui/material/ListItemText";
-import MenuItem from "@mui/material/MenuItem";
-import Menu from "@mui/material/Menu";
 import helper from "../../utils/helper";
-import { Box } from "@mui/material";
+import { Box, List, ListItem, ListItemText, Menu, MenuItem } from "@mui/material";
+import { ArrowDropUpSharp, ArrowDropDownSharp } from "@mui/icons-material"
 
 export default function SortSelection({ sortIndex, sortAnchor, setMgwState }) {
   const open = Boolean(sortAnchor);
@@ -29,7 +25,11 @@ export default function SortSelection({ sortIndex, sortAnchor, setMgwState }) {
     <Fragment>
       <Box sx={{mb: 1}}>
       <List aria-label="Sorting Options" sx={{p:0}}>
-        <ListItem button aria-label="sort" sx={{textAlign: "right", py: 0.5, px:0}} onClick={handleClickListItem}>
+        <ListItem button aria-label="sort" sx={{ px:0}} 
+        secondaryAction={
+            open ? <ArrowDropUpSharp/> : <ArrowDropDownSharp />
+        }
+        onClick={handleClickListItem}>
           <ListItemText
             primary="Sort"
             secondary={helper.sortOptions[sortIndex].label}
@@ -40,7 +40,7 @@ export default function SortSelection({ sortIndex, sortAnchor, setMgwState }) {
         anchorEl={sortAnchor}
         open={open}
         onClose={handleClose}
-        MenuListProps={{ role: "listbox", sx: {minWidth: "30vw"} }}
+        MenuListProps={{ role: "listbox", sx: {minWidth: {xs:"93vw", md: "30vw"} } }}
       >
         {helper.sortOptions.map((opt, i) => (
           <MenuItem

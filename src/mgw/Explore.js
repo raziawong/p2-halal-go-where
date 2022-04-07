@@ -1,8 +1,9 @@
 import React, { Fragment, useEffect } from "react";
-import { Container, Box, Typography } from "@mui/material";
-import FilterGroup from "./components/explore/FilterGroup";
+import { Box, Container, Fab, Typography } from "@mui/material";
+import ActionGroup from "./components/explore/ActionGroup";
 import Listing from "./components/explore/Listing";
-import SortSelection from "./components/explore/SortSelection";
+import { FilterListSharp } from "@mui/icons-material";
+import ActionModal from "./components/explore/ActionModal";
 
 export default function Explore({
   setMgwState,
@@ -13,12 +14,19 @@ export default function Explore({
   sortAnchor,
   countries,
   categories,
+  actionModal,
   articles,
   loaded,
 }) {
   useEffect(() => {
     return setMgwState({ isRedirectListing: false });
   }, [setMgwState]);
+
+  const handleFabClick = () => {
+    setMgwState({
+      actionModal: !actionModal,
+    });
+  };
   return (
     <Container
       component="main"
@@ -30,27 +38,59 @@ export default function Explore({
         <></>
       ) : (
         <Fragment>
-          <Box component="section" sx={{ minWidth: "30vw", m: 4 }}>
-            <SortSelection
-              sortIndex={sortIndex}
-              sortAnchor={sortAnchor}
+          <Box
+            component="section"
+            sx={{
+              display: { xs: "none", md: "block" },
+              minWidth: "30vw",
+              m: 4,
+            }}
+          >
+            <ActionGroup
               setMgwState={setMgwState}
-            />
-            <FilterGroup
+              setFilterOpts={setFilterOpts}
               detectSearch={detectSearch}
               filterOpts={filterOpts}
-              setFilterOpts={setFilterOpts}
+              sortIndex={sortIndex}
+              sortAnchor={sortAnchor}
               countries={countries}
               categories={categories}
-              setMgwState={setMgwState}
             />
           </Box>
           <Box
             sx={{
-              maxHeight: "80vh",
+              position: "fixed",
+              bottom: 28,
+              right: 12,
+              display: { xs: "block", md: "none" },
+              "& > :not(style)": { m: 1 },
+            }}
+          >
+            <Fab
+              size="small"
+              aria-label="search actions"
+              onClick={handleFabClick}
+            >
+              <FilterListSharp color="primary" />
+            </Fab>
+            <ActionModal
+              actionModal={actionModal}
+              setMgwState={setMgwState}
+              setFilterOpts={setFilterOpts}
+              detectSearch={detectSearch}
+              filterOpts={filterOpts}
+              sortIndex={sortIndex}
+              sortAnchor={sortAnchor}
+              countries={countries}
+              categories={categories}
+            />
+          </Box>
+          <Box
+            sx={{
+              maxHeight: { xs: "88vh", md: "80vh" },
               flexGrow: 1,
-              my: 4,
-              mx: 0.5,
+              my: { xs: 1, md: 4 },
+              mx: { xs: 1, md: 0.5 },
               overflowY: "hidden",
             }}
           >

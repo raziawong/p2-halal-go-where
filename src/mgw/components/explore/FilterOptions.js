@@ -13,9 +13,8 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import SortSelection from "./SortSelection";
 
-export default function FilterGroup({
+export default function FilterOptions({
   detectSearch,
   filterOpts,
   setFilterOpts,
@@ -23,32 +22,37 @@ export default function FilterGroup({
   categories,
   setMgwState,
 }) {
+  const handleReset = (evt) => {
+    setMgwState({ filterOpts: { ...helper.initFilterOpts } });
+    detectSearch(evt, helper.exploreView);
+  };
   return (
     <Fragment>
-      <Grid container spacing={2} sx={{alignItems: "center", mb: 2}}>
+      <Grid container spacing={2} sx={{ alignItems: "center", mb: 2 }}>
         <Grid item xs={6}>
           <Typography>Options</Typography>
         </Grid>
-        <Grid item xs={3} sx={{textAlign: "right"}}>
-          <Button
-            type="submit"
-            size="small"
-            variant="contained"
-            onClick={(evt) => detectSearch(evt, helper.exploreView)}
-          >
-            Filter
-          </Button>
-        </Grid>
-        <Grid item xs={3} sx={{textAlign: "right"}}>
-          <Button
-            type="reset"
-            size="small"
-            variant="contained"
-            color="secondary"
-            onClick={(evt) => setMgwState({ filterOpts: {...helper.initFilterOpts }})}
-          >
-            Reset
-          </Button>
+        <Grid item xs={6} sx={{ textAlign: "right" }}>
+          <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+            <Button
+              type="submit"
+              size="small"
+              variant="contained"
+              sx={{ mr: "2px" }}
+              onClick={(evt) => detectSearch(evt, helper.exploreView)}
+            >
+              Filter
+            </Button>
+            <Button
+              type="reset"
+              size="small"
+              variant="contained"
+              color="secondary"
+              onClick={handleReset}
+            >
+              Reset
+            </Button>
+          </Box>
         </Grid>
         <Grid item xs={12}>
           <Divider />
