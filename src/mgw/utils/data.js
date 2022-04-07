@@ -3,24 +3,21 @@ import defaultAttractions from "../../assets/image/default-attractions.jpg";
 import defaultFood from "../../assets/image/default-food.jpg";
 import defaultMasjid from "../../assets/image/default-masjid.jpg";
 import defaultMusolla from "../../assets/image/default-musolla.jpg";
+import helper from "./helper";
 
 const mgwRequests = {
     axiosBase: axios.create({
         baseURL: "http://localhost:3388"
     }),
-    dataPaths: {
-        countries: "/countries/cities",
-        locationTagged: "/countries/cities/tagged",
-        categories : "/categories/subcats",
-        articles: "/articles/listing",
-        articlesTags: "/articles/tags"
-    },
     queryPaths: {
         countries: "/countries",
         countriesCities: "/countries/cities",
         categories : "/categories",
         categoriesSubcats : "/categories/subcats",
         articles: "/articles",
+        articlesDefault: "/articles/createdDate/desc/1",
+        articleTags: "/article/tags",
+        locationTagged: "/countries/cities/tagged",
         articleContributor: "/article/contributor",
         articleRating: "/article/rating",
         articleComments: "/article/comments"
@@ -60,8 +57,8 @@ const mgwCategoriesMap = {
 }
 
 const getMgwFixed = async () => {
-  let gCountries = mgwRequests.axiosBase.get(mgwRequests.dataPaths.countries);
-  let gCategories = mgwRequests.axiosBase.get(mgwRequests.dataPaths.categories);
+  const gCountries = mgwRequests.axiosBase.get(mgwRequests.queryPaths.countriesCities);
+  const gCategories = mgwRequests.axiosBase.get(mgwRequests.queryPaths.categoriesSubcats);
   let data = {};
 
   await Promise.all([gCountries, gCategories]).then(r => {
@@ -77,9 +74,9 @@ const getMgwFixed = async () => {
 }
 
 const getMgwArticles = async () => {
-    let gArticles = mgwRequests.axiosBase.get(mgwRequests.dataPaths.articles);
-    let gArticleTags = mgwRequests.axiosBase.get(mgwRequests.dataPaths.articlesTags);
-    let gCountriesTagged = mgwRequests.axiosBase.get(mgwRequests.dataPaths.locationTagged);
+    const gArticles = mgwRequests.axiosBase.get(mgwRequests.queryPaths.articlesDefault);
+    const gArticleTags = mgwRequests.axiosBase.get(mgwRequests.queryPaths.articleTags);
+    const gCountriesTagged = mgwRequests.axiosBase.get(mgwRequests.queryPaths.locationTagged);
     let data = {};
 
     await Promise.all([gArticles, gArticleTags, gCountriesTagged]).then(r => {
@@ -95,11 +92,14 @@ const getMgwArticles = async () => {
     return data;
 }
 
-const getArticles = async (params, viewType, { sortField="createdDate", sortOrder="desc"}) => {
+const getArticles = async (params, viewType, { sortField="createdDate", sortOrder="desc"}, page) => {
   let qPath = mgwRequests.queryPaths.articles + '/' + viewType;
-  
-  if (sortField && sortOrder) {
+
+  if (viewType === helper.exploreView && sortField && sortOrder) {
     qPath += '/' + sortField + '/' + sortOrder;
+    if (page) {
+      qPath += '/' + page;
+    }
   }
   return await mgwRequests.axiosBase.get(qPath, { params });
 }
@@ -128,6 +128,10 @@ const getCountries = async (params) => {
   return await mgwRequests.axiosBase.get(mgwRequests.queryPaths.countries, { params });
 }
 
+const getLocationsTagged = async (params) => {
+  return await mgwRequests.axiosBase.get(mgwRequests.queryPaths.locationTagged, { params });
+}
+
 const getCategories = async (params) => {
   return await mgwRequests.axiosBase.get(mgwRequests.queryPaths.categories, { params });
 }
@@ -152,5 +156,20 @@ const postComment = async (body) => {
   });
 }
 
-export { mgwCategoriesMap, getMgwFixed, getMgwArticles, getArticles, getArticleContributor, getCountries, getCategories,
-  postArticle, updateArticle, deleteArticle, getRating, updateRating, getComments, postComment };
+export {
+  mgwCategoriesMap,
+  getMgwFixed,
+  getMgwArticles,
+  getArticles,
+  getArticleContributor,
+  getCountries,
+  getLocationsTagged,
+  getCategories,
+  postArticle,
+  updateArticle,
+  deleteArticle,
+  getRating,
+  updateRating,
+  getComments,
+  postComment,
+};

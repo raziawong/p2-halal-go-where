@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Box, Container, Fab, Typography } from "@mui/material";
 import { FilterListSharp } from "@mui/icons-material";
 import ActionGroup from "./components/explore/ActionGroup";
@@ -11,21 +11,25 @@ export default function Explore({
   setFilterOpts,
   detectSearch,
   filterOpts,
+  pageNumber,
   sortIndex,
   sortAnchor,
   countries,
   categories,
   actionModal,
   articles,
+  articlesTotal,
   loaded,
 }) {
-  const params = useParams();
+  // const params = useParams();
 
-  useEffect(() => {
-    return setMgwState({
-      pageIndex: params.page
-    });
-  }, [setMgwState]);
+  // useEffect(() => {
+  //   const pg = params.page;
+  //   console.log(pageNumber, pg);
+  //   return setMgwState({
+  //     pageNumber: isNaN(pg) ? 1 : Number(pg)
+  //   });
+  // }, [setMgwState, params.page]);
 
   const handleFabClick = () => {
     setMgwState({
@@ -47,7 +51,7 @@ export default function Explore({
             component="section"
             sx={{
               display: { xs: "none", md: "block" },
-              minWidth: { xs: "30vw", xl: "30%"},
+              minWidth: { xs: "30vw", xl: "30%" },
               m: 4,
             }}
           >
@@ -104,7 +108,13 @@ export default function Explore({
               sx={{ overflowY: "scroll", height: "100%" }}
             >
               {articles.length ? (
-                <Listing articles={articles} allCategories={categories} />
+                <Listing
+                  articles={articles}
+                  articlesTotal={articlesTotal}
+                  allCategories={categories}
+                  pageNumber={pageNumber}
+                  setMgwState={setMgwState}
+                />
               ) : (
                 <Typography component="h3" variant="h4">
                   No results found

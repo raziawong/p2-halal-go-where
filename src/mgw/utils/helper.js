@@ -32,6 +32,7 @@ const helper = {
       sortOrder: "desc",
     },
   ],
+  articlesLimit: 10,
   createSteps: [
     {
       title: "Author",
@@ -366,7 +367,7 @@ const helper = {
       if (tf) {
         resolve(tf);
       } else {
-        reject("Error encountered while transforming article for read");
+        reject("Error encountered while transforming article for display");
       }
     });
   },

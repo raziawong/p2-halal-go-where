@@ -14,6 +14,7 @@ import {
   getRating,
   postComment,
   getComments,
+  getLocationsTagged,
 } from "./utils/data";
 import helper from "./utils/helper";
 import { SiteContainer, ViewContainer } from "./utils/mgwStyle";
@@ -33,10 +34,11 @@ export default class Mgw extends Component {
     filterOpts: { ...helper.initFilterOpts },
     sortIndex: 0,
     sortMenuAnchor: null,
-    pageIndex: 1,
+    pageNumber: 1,
     articleInputs: { ...helper.initArticleInputs },
     articleInputsErrors: {},
     articlesFetched: [],
+    articlesTotal: [],
     articleDetail: [],
     articlesTags: [],
     articlesLocations: [],
@@ -92,6 +94,7 @@ export default class Mgw extends Component {
                     countries={this.state.articlesLocations}
                     categories={this.state.allCategories}
                     articles={this.state.articlesFetched}
+                    articlesTotal={this.state.articlesTotal}
                     actionModal={this.state.actionModal}
                     loaded={this.state.isLoaded}
                     setMgwState={this.setMgwState}
@@ -106,6 +109,7 @@ export default class Mgw extends Component {
                   element={
                     <Explore
                       filterOpts={this.state.filterOpts}
+                      pageNumber={this.state.pageNumber}
                       sortIndex={this.state.sortIndex}
                       sortAnchor={this.state.sortMenuAnchor}
                       countries={this.state.articlesLocations}
@@ -208,12 +212,18 @@ export default class Mgw extends Component {
     const uniqueTags = articles.tags.results
       .reduce((a, r) => [...a, ...r.tags], [])
       .filter((v, i, a) => a.indexOf(v) === i);
+    const transformed = await helper.transformArticlesForRead(
+        articles.main.results,
+        articles.location.results,
+        fixed.categories.results
+    );  
 
     this.setState({
       allCountries: fixed.countries.results,
       allCategories: fixed.categories.results,
       allArticles: articles.main,
-      articlesFetched: articles.main.count ? articles.main.results : [],
+      articlesFetched: articles.main.count ? [...transformed] : [],
+      articlesTotal: articles.main.totalCount || null,
       articlesTags: uniqueTags,
       articlesLocations: articles.location.count
         ? articles.location.results
@@ -224,8 +234,14 @@ export default class Mgw extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.sortIndex !== this.state.sortIndex) {
+    if (
+      prevState.sortIndex !== this.state.sortIndex ||
+      prevState.pageNumber !== this.state.pageNumber
+    ) {
       this.fetchArticles(helper.exploreView);
+    }
+    if (prevState.articlePosted !== this.state.articlePosted && this.state.articlePosted.length) {
+      this.fetchLocationsTagged();
     }
     // if (prevState.navDrawer) {
     //   this.setState({
@@ -296,7 +312,7 @@ export default class Mgw extends Component {
         params = { articleId: filterOpts.id };
       }
 
-      await getArticles(params, viewType, sortOptions)
+      await getArticles(params, viewType, sortOptions, this.state.pageNumber)
         .then(async (resp) => {
           if (resp.data.results) {
             let { articlesLocations, allCategories } = this.state;
@@ -422,6 +438,7 @@ export default class Mgw extends Component {
                 this.setState({
                   articleErrors: {},
                   editActiveStep: 0,
+                  articlePosted: resp.data.results.insertedId,
                   requestSuccess: "Article updated successfully, close the modal to view the updates",
                   requestError: "",
                 });
@@ -524,6 +541,17 @@ export default class Mgw extends Component {
         });
       });
   };
+
+  fetchLocationsTagged = async (articleId="") => {
+    const promise = articleId.length ? getLocationsTagged({articleId}) : getLocationsTagged({});
+    await promise.then((resp) => {
+      if (resp.data.count) {
+        this.setState({
+          articlesLocations: [...resp.data.results]
+        });
+      }
+    });
+  }
 
   fetchArticleRating = async (articleId) => {
     let dtl = { ...this.state.articleDetail } || {};
