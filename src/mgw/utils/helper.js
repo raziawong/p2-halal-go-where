@@ -104,6 +104,19 @@ const helper = {
     subcatIds: {
       required: true,
     },
+    newContributor: {
+      displayName: {
+        patterns: ["displayName", "spaces"],
+        maxLength: 80,
+        minLength: 3,
+      },
+      name: {
+        required: true,
+        patterns: ["displayName", "spaces"],
+        maxLength: 80,
+        minLength: 3,
+      }
+    },
     comments: {
       title: {
         patterns: ["displayName"],
@@ -286,11 +299,22 @@ const helper = {
       return isArray ? [def] : def;
     }
   },
-  transformArticleForUpdate: (inputData) => {
+  transformArticleForUpdate: (inputData, isExistUser=false) => {
     let pd = JSON.parse(JSON.stringify(inputData));
     if (pd._id) {
       pd.articleId = pd._id;
-      delete pd["allowPubic"];
+      if (pd.allowPublic) {
+        if (isExistUser) {
+          delete pd["contributor"];
+        } else {
+          pd.contributor = {};
+          pd.contributor.displayName = pd.displayName || "";
+          pd.contributor.name = pd.name;
+          pd.contributor.email = pd.email;
+        }
+      }
+      delete pd["allowPublic"];
+      delete pd["contributors"];
     } else {
       pd.contributor = {};
       pd.contributor.displayName = pd.displayName || "";
@@ -407,6 +431,7 @@ const helper = {
     email: `This is not a valid email address`,
     url: `This is not a valid URL`,
     user: `User verification failed`,
+    userPublic: `You are not a registered user yet, please fill up at least contact name to proceed`
   },
   validate: (fieldName, inputs, valKey = "") => {
     let inputVal = inputs[fieldName];

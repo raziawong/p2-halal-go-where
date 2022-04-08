@@ -16,9 +16,30 @@ export default function VerifyAuthor({
     >
       <Grid item xs={12}>
         <Paper elevation={3}>
-          <Typography sx={{ padding: "1em" }}>
+          <Typography
+            sx={{
+              padding: "1em",
+              display:
+                !articleState.allowPublic && type !== "delete"
+                  ? "block"
+                  : "none",
+            }}
+          >
             Please enter the same email that was used for submission for
             verifying permission.
+          </Typography>
+          <Typography
+            sx={{
+              padding: "1em",
+              display:
+                articleState.allowPublic && type !== "delete"
+                  ? "block"
+                  : "none",
+            }}
+          >
+            Creator have allowed public to contribute, please provide at least
+            email and contact name to register and proceed. For registered
+            users, kindly enter only the email used before to proceed.
           </Typography>
           {type === "delete" && (
             <Typography sx={{ padding: "1em" }}>
@@ -39,6 +60,46 @@ export default function VerifyAuthor({
           onChange={setArticleState}
           error={!!userVerifyErrorMsg || !!articleError?.email}
           helperText={userVerifyErrorMsg || articleError?.email}
+        />
+      </Grid>
+      <Grid
+        item
+        xs={12}
+        md={8}
+        sx={{
+          display:
+            articleState.allowPublic && type !== "delete" ? "block" : "none",
+        }}
+      >
+        <TextField
+          fullWidth
+          label="Display Name"
+          aria-label="Display Name"
+          name="displayName"
+          value={articleState.displayName}
+          onChange={setArticleState}
+          error={!!articleError?.displayName}
+          helperText={articleError?.displayName}
+        />
+      </Grid>
+      <Grid
+        item
+        xs={12}
+        md={8}
+        sx={{
+          display:
+            articleState.allowPublic && type !== "delete" ? "block" : "none",
+        }}
+      >
+        <TextField
+          fullWidth
+          label="Contact Name"
+          aria-label="Contact Name"
+          name="name"
+          value={articleState.name}
+          onChange={setArticleState}
+          error={!!articleError?.name}
+          helperText={articleError?.name}
         />
       </Grid>
     </Grid>

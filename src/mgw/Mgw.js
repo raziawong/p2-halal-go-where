@@ -54,7 +54,7 @@ export default class Mgw extends Component {
     actionModal: false,
     navDrawer: false,
     userEmail: "",
-    userVerifyErrorMsg: false,
+    userVerifyErrorMsg: "",
     isMounted: false,
     isLoaded: false,
     requestError: "",
@@ -195,17 +195,18 @@ export default class Mgw extends Component {
       .reduce((a, r) => [...a, ...r.tags], [])
       .filter((v, i, a) => a.indexOf(v) === i);
     const transformed = await helper.transformArticlesForRead(
-        articles.main.results,
-        articles.location.results,
-        fixed.categories.results
-    );  
+      articles.main.results,
+      articles.location.results,
+      fixed.categories.results
+    );
 
     this.setState({
       allCountries: fixed.countries.results,
       allCategories: fixed.categories.results,
       allArticles: articles.main,
       articlesFetched: articles.main.count ? [...transformed] : [],
-      articlesLatest: articles.main.totalCount > 2 ? [...transformed].slice(0, 3) : [],
+      articlesLatest:
+        articles.main.totalCount > 2 ? [...transformed].slice(0, 3) : [],
       articlesTotal: articles.main.totalCount || null,
       articlesTags: uniqueTags,
       articlesLocations: articles.location.count
@@ -223,7 +224,10 @@ export default class Mgw extends Component {
     ) {
       this.fetchArticles(helper.exploreView);
     }
-    if (this.state.articlePosted && prevState.articlePosted !== this.state.articlePosted) {
+    if (
+      this.state.articlePosted &&
+      prevState.articlePosted !== this.state.articlePosted
+    ) {
       this.fetchLocationsTagged();
       this.fetchArticles(helper.exploreView);
       this.fetchArticlesLatest();
@@ -241,7 +245,7 @@ export default class Mgw extends Component {
       this.fetchArticles(viewType);
       this.setState({
         pageNumber: 1,
-        actionModal: false
+        actionModal: false,
       });
     }
   };
@@ -263,9 +267,7 @@ export default class Mgw extends Component {
       const selCatIds =
         name === "catIds" ? opts.catIds : this.state.filterOpts.catIds;
       const selSubcatIds =
-        name === "subcatIds"
-          ? opts.subcatIds
-          : this.state.filterOpts.subcatIds;
+        name === "subcatIds" ? opts.subcatIds : this.state.filterOpts.subcatIds;
       const catDep = helper.getCatDep(
         this.state.allCategories,
         selCatIds,
@@ -324,17 +326,17 @@ export default class Mgw extends Component {
                 });
           } else {
             viewType === helper.articleView
-            ? this.setState({
-                articleDetail: [],
-                isLoaded: true,
-                requestError: "",
-              })
-            : this.setState({
-                articlesFetched: [],
-                articlesTotal: 0,
-                isLoaded: true,
-                requestError: "",
-              });
+              ? this.setState({
+                  articleDetail: [],
+                  isLoaded: true,
+                  requestError: "",
+                })
+              : this.setState({
+                  articlesFetched: [],
+                  articlesTotal: 0,
+                  isLoaded: true,
+                  requestError: "",
+                });
           }
         })
         .catch((err) => {
@@ -346,26 +348,28 @@ export default class Mgw extends Component {
   };
 
   fetchArticlesLatest = async () => {
-    await getArticles({}, helper.exploreView).then(async (resp) => {
-      if (resp.data.results && resp.data.totalCount > 2) {
-        const { articlesLocations, allCategories } = this.state;
-        const transformed = await helper.transformArticlesForRead(
-          resp.data.results.slice(0, 3),
-          articlesLocations,
-          allCategories
-        );
-        this.setState({
-          articlesLatest: [...transformed] || []
-        });
-      } else {
-        this.setState({
-          articlesLatest: []
-        });
-      }
-    }).catch((err) => {
-      console.log("Failed to load latest articles");
-    });
-  }
+    await getArticles({}, helper.exploreView)
+      .then(async (resp) => {
+        if (resp.data.results && resp.data.totalCount > 2) {
+          const { articlesLocations, allCategories } = this.state;
+          const transformed = await helper.transformArticlesForRead(
+            resp.data.results.slice(0, 3),
+            articlesLocations,
+            allCategories
+          );
+          this.setState({
+            articlesLatest: [...transformed] || [],
+          });
+        } else {
+          this.setState({
+            articlesLatest: [],
+          });
+        }
+      })
+      .catch((err) => {
+        console.log("Failed to load latest articles");
+      });
+  };
 
   setArticleInputs = ({ target }) => {
     let inputs = { ...this.state.articleInputs };
@@ -408,7 +412,7 @@ export default class Mgw extends Component {
   validateArticleInputs = (fields, type) => {
     const validation = fields
       .map((fieldName) => {
-        return helper.validate(fieldName, { ...this.state.articleInputs });
+        return helper.validate(fieldName, {...this.state.articleInputs});
       })
       .filter((v) => v)
       .reduce((a, v) => ({ ...a, [v.fieldName]: v.message }), {});
@@ -419,7 +423,8 @@ export default class Mgw extends Component {
           createActiveStep,
           editActiveStep,
           deleteActiveStep,
-          articleInputs
+          articleInputs,
+          userEmail
         } = this.state;
 
         if (type === "create") {
@@ -447,24 +452,36 @@ export default class Mgw extends Component {
               createActiveStep: createActiveStep + 1,
             });
           }
-        }
-
-        if (type === "edit") {
-          if (editActiveStep === 0 && articleInputs.email) {
+        } else if (type === "edit") {
+          if (editActiveStep === 0 && articleInputs.email && articleInputs.allowPublic) {
             await this.verifyArticleUser(
-              articleInputs._id,
-              articleInputs.email,
+              { ...articleInputs, articleId: articleInputs._id },
+              type
+            );
+            if (!this.state.userEmail) {
+              const newContributorValidation =
+              ["displayName", "name"].map((fieldName) => {
+                  return helper.validate(fieldName, articleInputs, "newContributor");
+                })
+                .filter((v) => v)
+                .reduce((a, v) => ({ ...a, [v.fieldName]: v.message }), {});
+                this.setState({ articleInputsErrors: {...this.state.articleInputsErrors, ...newContributorValidation}});
+            }
+          } else if (editActiveStep === 0 && articleInputs.email) {
+            await this.verifyArticleUser(
+              { ...articleInputs, articleId: articleInputs._id },
               type
             );
           } else if (editActiveStep === helper.editSteps.length - 1) {
-            const pd = helper.transformArticleForUpdate(articleInputs);
+            const pd = helper.transformArticleForUpdate(articleInputs, userEmail?.length);
             await updateArticle(pd)
               .then((resp) => {
                 this.setState({
                   articleErrors: {},
                   editActiveStep: 0,
                   articlePosted: resp.data.results.insertedId,
-                  requestSuccess: "Article updated successfully, close the modal to view the updates",
+                  requestSuccess:
+                    "Article updated successfully, close the modal to view the updates",
                   requestError: "",
                 });
               })
@@ -480,13 +497,10 @@ export default class Mgw extends Component {
               editActiveStep: editActiveStep + 1,
             });
           }
-        }
-
-        if (type === "delete") {
+        } else if (type === "delete") {
           if (deleteActiveStep === 0 && articleInputs.email) {
             await this.verifyArticleUser(
-              articleInputs._id,
-              articleInputs.email,
+              { ...articleInputs, articleId: articleInputs._id },
               type
             );
           } else if (deleteActiveStep === helper.deleteSteps.length - 1) {
@@ -535,30 +549,39 @@ export default class Mgw extends Component {
     });
   };
 
-  verifyArticleUser = async (articleId, email, type) => {
+  verifyArticleUser = async ({ articleId, email, name, allowPublic }, type) => {
     await getArticleContributor({ articleId, email })
       .then((resp) => {
-        if (resp.data.count) {
-          let update = {
-            userEmail: email,
-            userVerifyErrorMsg: "",
-            requestError: "",
-          };
-
+        const contributors = resp.data.count
+          ? resp.data.results[0].contributors
+          : [];
+        const stateUpdate = {
+          userEmail: "",
+          userVerifyErrorMsg: "",
+          requestError: "",
+          isNewUser: false
+        };
+        if (contributors.length) {
+          stateUpdate.userEmail = email;
           if (type === "edit" && this.state.editActiveStep === 0) {
-            update.editActiveStep = 1;
+            stateUpdate.editActiveStep = 1;
           }
           if (type === "delete" && this.state.deleteActiveStep === 0) {
-            update.deleteActiveStep = 1;
+            stateUpdate.deleteActiveStep = 1;
           }
-          this.setState(update);
+          this.setState(stateUpdate);
+        } else if (type === "edit" && allowPublic && this.state.editActiveStep === 0) {
+          if (!name) {
+            stateUpdate.userVerifyErrorMsg = helper.templates.userPublic;
+          } else {
+            stateUpdate.userVerifyErrorMsg = "";
+            stateUpdate.editActiveStep = 1;
+          }
         } else {
-          this.setState({
-            userEmail: "",
-            userVerifyErrorMsg: helper.templates.user,
-            requestError: "",
-          });
+          stateUpdate.userVerifyErrorMsg = helper.templates.user;
         }
+
+        this.setState(stateUpdate);
       })
       .catch((err) => {
         this.setState({
@@ -567,16 +590,18 @@ export default class Mgw extends Component {
       });
   };
 
-  fetchLocationsTagged = async (articleId="") => {
-    const promise = articleId.length ? getLocationsTagged({articleId}) : getLocationsTagged({});
+  fetchLocationsTagged = async (articleId = "") => {
+    const promise = articleId.length
+      ? getLocationsTagged({ articleId })
+      : getLocationsTagged({});
     await promise.then((resp) => {
       if (resp.data.count) {
         this.setState({
-          articlesLocations: [...resp.data.results]
+          articlesLocations: [...resp.data.results],
         });
       }
     });
-  }
+  };
 
   fetchArticleRating = async (articleId) => {
     const dtl = { ...this.state.articleDetail } || {};

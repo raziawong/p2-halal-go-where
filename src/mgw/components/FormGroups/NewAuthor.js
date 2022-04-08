@@ -68,7 +68,7 @@ export default function NewAuthor({
           checked={articleState.allowPublic}
           onChange={setArticleState}
         />
-        <Typography color="secondary">Allow Public Edits?</Typography>
+        <Typography color="text.secondary">Allow Public Edits?</Typography>
       </Grid>
     </Grid>
   );

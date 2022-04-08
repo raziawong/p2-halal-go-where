@@ -34,23 +34,27 @@ export default function AuthorAction({
 }) {
   const handleEdit = () => {
     let inputs = { ...helper.initArticleInputs, ...article };
-    if (userVerifyErrorMsg) {
+    if (!userVerifyErrorMsg) {
       inputs.email = userEmail;
+      inputs.displayName = "";
+      inputs.name = "";
     }
     setMgwState({
       editModal: true,
       articleInputs: inputs,
+      requestSuccess: "",
       articleInputsErrors: {},
     });
   };
   const handleDelete = () => {
     let inputs = { ...helper.initArticleInputs, ...article };
-    if (userVerifyErrorMsg) {
+    if (!userVerifyErrorMsg) {
       inputs.email = userEmail;
     }
     setMgwState({
       deleteModal: true,
       articleInputs: inputs,
+      requestSuccess: "",
       articleInputsErrors: {},
     });
   };
@@ -74,7 +78,7 @@ export default function AuthorAction({
         <Box sx={{ px: 1 }}>
           <Typography>{authorName()}</Typography>
           <Typography>
-            <Moment format="DD MMM YYYY, ddd">{article.lastModified}</Moment>
+            <Moment format="DD MMM YYYY, ddd">{article.createdDate}</Moment>
           </Typography>
         </Box>
       </Box>
