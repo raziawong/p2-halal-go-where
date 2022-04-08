@@ -29,6 +29,7 @@ export default function AuthorAction({
   userVerifyErrorMsg,
   setMgwState,
   article,
+  requestSuccess,
   requestError
 }) {
   const handleEdit = () => {
@@ -100,6 +101,7 @@ export default function AuthorAction({
           editModal={editModal}
           userEmail={userEmail}
           userVerifyErrorMsg={userVerifyErrorMsg}
+          requestSuccess={requestSuccess}
           requestError={requestError}
         />
         <IconButton
@@ -119,6 +121,7 @@ export default function AuthorAction({
           deleteModal={deleteModal}
           userEmail={userEmail}
           userVerifyErrorMsg={userVerifyErrorMsg}
+          requestSuccess={requestSuccess}
           requestError={requestError}
         />
       </Box>

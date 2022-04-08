@@ -223,7 +223,7 @@ export default class Mgw extends Component {
     ) {
       this.fetchArticles(helper.exploreView);
     }
-    if (prevState.articlePosted !== this.state.articlePosted && this.state.articlePosted.length) {
+    if (this.state.articlePosted && prevState.articlePosted !== this.state.articlePosted) {
       this.fetchLocationsTagged();
       this.fetchArticles(helper.exploreView);
       this.fetchArticlesLatest();

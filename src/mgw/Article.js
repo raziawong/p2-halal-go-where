@@ -36,6 +36,7 @@ export default function Article({
   commentError,
   validateComment,
   setCommentState,
+  requestSuccess,
   requestError,
 }) {
   const params = useParams();
@@ -112,6 +113,7 @@ export default function Article({
               deleteModal={deleteModal}
               userEmail={userEmail}
               userVerifyErrorMsg={userVerifyErrorMsg}
+              requestSuccess={requestSuccess}
               requestError={requestError}
             />
             <ArticleComments

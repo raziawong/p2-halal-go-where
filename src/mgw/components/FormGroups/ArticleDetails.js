@@ -2,7 +2,14 @@ import React, { Fragment } from "react";
 import helper from "../../utils/helper";
 import { default as Editor } from "mui-rte";
 import { convertToRaw } from "draft-js";
-import { Box, IconButton, FormHelperText, Grid, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  IconButton,
+  FormHelperText,
+  Grid,
+  TextField,
+  Typography,
+} from "@mui/material";
 import {
   AddCircleOutlineSharp,
   RemoveCircleOutlineSharp,
@@ -105,7 +112,17 @@ export default function ArticleDetails({
             </Box>
           </Fragment>
         ))}
-        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexWrap: "wrap-reverse",
+            justifyContent: "flex-end",
+            alignItems: "center",
+          }}
+        >
+          <FormHelperText>
+            A default image based on first category selected will be used if there is no image URL
+          </FormHelperText>
           <IconButton
             color="primary"
             aria-label="Add Photo"
@@ -129,11 +146,17 @@ export default function ArticleDetails({
                 error={!!checkError("details", i)?.sectionName}
                 helperText={checkError("details", i)?.sectionName}
               />
-              <Box sx={!!checkError("details", i)?.content ? {
-                borderColor: "error.main",
-                borderWidth: "1px",
-                borderStyle: "solid"
-              } : {}}>
+              <Box
+                sx={
+                  !!checkError("details", i)?.content
+                    ? {
+                        borderColor: "error.main",
+                        borderWidth: "1px",
+                        borderStyle: "solid",
+                      }
+                    : {}
+                }
+              >
                 <Editor
                   toolbarButtonSize="small"
                   controls={helper.rteControls}
@@ -163,7 +186,18 @@ export default function ArticleDetails({
             </Box>
           </Fragment>
         ))}
-        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexWrap: "wrap-reverse",
+            justifyContent: "flex-end",
+            alignItems: "center",
+          }}
+        >
+          <FormHelperText>
+            Encouraged to insert details like directions, openining hours, or
+            things to note
+          </FormHelperText>
           <IconButton
             color="primary"
             aria-label="Add Details"
