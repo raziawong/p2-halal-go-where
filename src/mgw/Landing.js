@@ -1,15 +1,16 @@
 import React from "react";
-import {
-  Box,
-  Container,
-  Typography,
-  Stack,
-} from "@mui/material";
+import { Container, Typography } from "@mui/material";
 import banner from "../assets/image/banner.jpg";
 import { HeroBanner, HeroOverlay } from "./utils/mgwStyle";
 import LatestGrid from "./components/landing/LatestGrid";
+import CategoriesStack from "./components/landing/CategoriesStack";
 
-export default function Landing({ latest }) {
+export default function Landing({
+  latestArticles,
+  allCategories,
+  setFilterOpts,
+  fetchArticles,
+}) {
   return (
     <Container
       component="main"
@@ -24,7 +25,6 @@ export default function Landing({ latest }) {
             variant="h4"
             color="secondary"
             sx={{
-              pl: { xs: 2, sm: 0 },
               direction: "rtl",
               textAlign: "center",
             }}
@@ -36,7 +36,6 @@ export default function Landing({ latest }) {
             variant="h4"
             color="secondary"
             sx={{
-              pl: { xs: 2, sm: 0 },
               textAlign: "center",
             }}
           >
@@ -47,7 +46,6 @@ export default function Landing({ latest }) {
             variant="h1"
             color="primary"
             sx={{
-              pl: { xs: 2, sm: 0 },
               textAlign: "center",
             }}
           >
@@ -55,34 +53,12 @@ export default function Landing({ latest }) {
           </Typography>
         </HeroOverlay>
       </HeroBanner>
-      <LatestGrid latest={latest} />
-      <Box sx={{ m: 2 }}>
-        <Typography component="h2" variant="h3">
-          Categories
-        </Typography>
-        <Stack spacing={2}>
-          <Box id="">
-            <Typography component="h3" variant="4">
-              Attractions
-            </Typography>
-          </Box>
-          <Box>
-            <Typography component="h3" variant="4">
-              Mosques
-            </Typography>
-          </Box>
-          <Box>
-            <Typography component="h3" variant="4">
-              Praying Spaces
-            </Typography>
-          </Box>
-          <Box>
-            <Typography component="h3" variant="4">
-              Food
-            </Typography>
-          </Box>
-        </Stack>
-      </Box>
+      <LatestGrid latestArticles={latestArticles} />
+      <CategoriesStack
+        allCategories={allCategories}
+        setFilterOpts={setFilterOpts}
+        fetchArticles={fetchArticles}
+      />
     </Container>
   );
 }

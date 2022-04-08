@@ -1,17 +1,17 @@
-import React, { Fragment } from "react";
+import React from "react";
 import { Box, Grid, Typography } from "@mui/material";
 import helper from "../../utils/helper";
 import Carousel from "react-material-ui-carousel";
 import { LatestLink } from "../../utils/mgwStyle";
 import { ArrowRightAlt } from "@mui/icons-material";
 
-export default function LatestGrid({ latest }) {
+export default function LatestGrid({ latestArticles }) {
   return (
-    <Box sx={{ m: 4 }}>
+    <Box sx={{ m: 4, pt: 4 }}>
       <Typography component="h2" variant="h3">
         What's New
       </Typography>
-      {latest?.length && latest.length > 2 && (
+      {latestArticles?.length && latestArticles.length > 2 && (
         <Grid
           container
           sx={{
@@ -25,26 +25,27 @@ export default function LatestGrid({ latest }) {
             item
             xs={6}
             sx={{
-              height: "600px",
-              backgroundImage: `url(${helper.getImg(latest[0])})`,
+              height: "50vh",
+              backgroundImage: `url(${helper.getImg(latestArticles[0])})`,
               backgroundPosition: "center",
               backgroundSize: "cover",
+              borderRadius: "4px"              
             }}
           >
             <Box
               sx={{ p: 4, height: "100%", bgcolor: "rgba(108, 122, 137, 0.4)" }}
             >
               <Typography component="h3" variant="h3" color="#F7F7FF">
-                {latest[0].title}
+                {latestArticles[0].title}
               </Typography>
               <Typography variant="subtitle1" color="#F7F7FF">
-                {latest[0].country?.name} {", " + latest[0].city?.name}
+                {latestArticles[0].country?.name} {", " + latestArticles[0].city?.name}
               </Typography>
               <Typography color="#F7F7FF" sx={{ pt: 4 }}>
-                {latest[0].description}
+                {latestArticles[0].description}
               </Typography>
               <Typography sx={{ pt: 4 }}>
-                <LatestLink to={`/article/${latest[0]._id}`}>
+                <LatestLink to={`/article/${latestArticles[0]._id}`}>
                   Read More <ArrowRightAlt />
                 </LatestLink>
               </Typography>
@@ -56,10 +57,11 @@ export default function LatestGrid({ latest }) {
                 item
                 xs
                 sx={{
-                  height: "300px",
-                  backgroundImage: `url(${helper.getImg(latest[1])})`,
+                  height: "25vh",
+                  backgroundImage: `url(${helper.getImg(latestArticles[1])})`,
                   backgroundPosition: "center",
                   backgroundSize: "cover",
+                  borderRadius: "4px"
                 }}
               >
                 <Box
@@ -70,13 +72,13 @@ export default function LatestGrid({ latest }) {
                   }}
                 >
                   <Typography component="h3" variant="h3" color="#F7F7FF">
-                    {latest[1].title.length > 60 ? latest[1].title.substr(0, 60) + "..." : latest[1].title}
+                    {latestArticles[1].title.length > 60 ? latestArticles[1].title.substr(0, 60) + "..." : latestArticles[1].title}
                   </Typography>
                   <Typography variant="subtitle1" color="#F7F7FF">
-                    {latest[1].country?.name} {", " + latest[1].city?.name}
+                    {latestArticles[1].country?.name} {", " + latestArticles[1].city?.name}
                   </Typography>
                   <Typography sx={{ pt: 3 }}>
-                    <LatestLink to={`/article/${latest[1]._id}`}>
+                    <LatestLink to={`/article/${latestArticles[1]._id}`}>
                       Read More <ArrowRightAlt />
                     </LatestLink>
                   </Typography>
@@ -86,10 +88,11 @@ export default function LatestGrid({ latest }) {
                 item
                 xs
                 sx={{
-                  height: "300px",
-                  backgroundImage: `url(${helper.getImg(latest[2])})`,
+                  height: "25vh",
+                  backgroundImage: `url(${helper.getImg(latestArticles[2])})`,
                   backgroundPosition: "center",
                   backgroundSize: "cover",
+                  borderRadius: "4px"
                 }}
               >
                 <Box
@@ -100,13 +103,13 @@ export default function LatestGrid({ latest }) {
                   }}
                 >
                   <Typography component="h3" variant="h3" color="#F7F7FF">
-                    {latest[2].title.length > 60 ? latest[2].title.substr(0, 60) + "..." : latest[2].title}
+                    {latestArticles[2].title.length > 60 ? latestArticles[2].title.substr(0, 60) + "..." : latestArticles[2].title}
                   </Typography>
                   <Typography variant="subtitle1" color="#F7F7FF">
-                    {latest[2].country?.name} {", " + latest[2].city?.name}
+                    {latestArticles[2].country?.name} {", " + latestArticles[2].city?.name}
                   </Typography>
                   <Typography sx={{ pt: 3 }}>
-                    <LatestLink to={`/article/${latest[2]._id}`}>
+                    <LatestLink to={`/article/${latestArticles[2]._id}`}>
                       Read More <ArrowRightAlt />
                     </LatestLink>
                   </Typography>
@@ -117,31 +120,32 @@ export default function LatestGrid({ latest }) {
         </Grid>
       )}
       <Carousel
-        height={450}
-        sx={{  display: { lg: "none" } }}
+        height={"50vh"}
+        sx={{ my: 2, display: { lg: "none" } }}
         animation="slide"
         interval={8000}
-        navButtonsAlwaysVisible
       >
-        {latest?.slice(0, 3).map((slide, i) => (
+        {latestArticles?.slice(0, 3).map((slide, i) => (
           <Grid
             key={i}
             item
             container
             xs
             sx={{
-              height: "450px",
+              height: "50vh",
               backgroundImage: `url(${helper.getImg(slide)})`,
               backgroundPosition: "center",
               backgroundSize: "cover",
+              borderRadius: "4px",
+              boxShadow: "0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12)",
             }}
           >
             <Box
               sx={{
                 height: "100%",
                 width: "100%",
-                py: 5,
-                px: 10,
+                py: {xs: 1, md: 5},
+                px: {xs: 2, md: 10},
                 bgcolor: "rgba(108, 122, 137, 0.4)",
               }}
             >

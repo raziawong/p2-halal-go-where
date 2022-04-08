@@ -3,6 +3,10 @@ import defaultAttractions from "../../assets/image/default-attractions.jpg";
 import defaultFood from "../../assets/image/default-food.jpg";
 import defaultMasjid from "../../assets/image/default-masjid.jpg";
 import defaultMusolla from "../../assets/image/default-musolla.jpg";
+import bannerAttractions from "../../assets/image/banner-attractions.jpg";
+import bannerFood from "../../assets/image/banner-food.jpg";
+import bannerMasjid from "../../assets/image/banner-masjid.jpg";
+import bannerMusolla from "../../assets/image/banner-musolla.jpg";
 import helper from "./helper";
 
 const mgwRequests = {
@@ -33,25 +37,25 @@ const mgwCategoriesMap = {
     attractions: {
         title: "Islamic Attractions",
         value: "attractions",
-        banner: "",
+        banner: bannerAttractions,
         default: defaultAttractions
     },
     masjids: {
         title: "Mosques",
         value: "masjids",
-        banner: "",
+        banner: bannerMasjid,
         default: defaultMasjid
     },
     food: {
         title: "Food",
         value: "food",
-        banner: "",
+        banner: bannerFood,
         default: defaultFood
     },
     musollahs: {
         title: "Praying Spaces",
         value: "musollahs",
-        banner: "",
+        banner: bannerMusolla,
         default: defaultMusolla
     }
 }

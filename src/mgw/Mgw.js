@@ -32,7 +32,6 @@ export default class Mgw extends Component {
     allCategories: [],
     allArticles: [],
     filterOpts: { ...helper.initFilterOpts },
-    filterSubmit: false,
     sortIndex: 0,
     sortMenuAnchor: null,
     articleInputs: { ...helper.initArticleInputs },
@@ -79,7 +78,10 @@ export default class Mgw extends Component {
                 path="/"
                 element={
                   <Landing
-                    latest={this.state.articlesLatest}
+                    latestArticles={this.state.articlesLatest}
+                    allCategories={this.state.allCategories}
+                    setFilterOpts={this.setFilterOpts}
+                    fetchArticles={this.fetchArticles}
                   />
                 }
               />
