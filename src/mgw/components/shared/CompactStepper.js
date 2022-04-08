@@ -62,13 +62,13 @@ export default function CompactStepper({
       >
         {hasError && (
           <Icon>
-            <WarningAmber fontSize="small" color="warning" />
+            <WarningAmber fontSize="small" color="error" />
           </Icon>
         )}
         <Typography
           component="h4"
           variant="h4"
-          color={hasError ? "warning.main" : "primary"}
+          color={hasError ? "error.main" : "primary"}
           sx={{ textDecoration: "underline" }}
         >
           {stepsList[activeStep].title}

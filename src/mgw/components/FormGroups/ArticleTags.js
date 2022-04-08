@@ -36,14 +36,14 @@ export default function ArticleTags({
       <Grid item xs={12} md={5}>
         <FormControl sx={{ width: "100%" }}>
           <InputLabel id="create-cat-label" error={!!articleError?.catIds}>
-            Categories
+            Categories *
           </InputLabel>
           <Select
             multiple
             fullWidth
             displayEmpty
             required
-            label="Categories"
+            label="Categories *"
             arial-label="Categories"
             labelId="create-cat-label"
             name="catIds"
@@ -78,7 +78,7 @@ export default function ArticleTags({
             id="create-subcat-label"
             error={!!articleError?.subcatIds}
           >
-            Sub-Categories
+            Sub-Categories *
           </InputLabel>
           <Select
             multiple
@@ -87,7 +87,7 @@ export default function ArticleTags({
             required
             disabled={!articleState.catIds.length}
             labelId="create-subcat-label"
-            label="Sub-Categories"
+            label="Sub-Categories *"
             arial-label="Sub-Categories"
             name="subcatIds"
             value={articleState.subcatIds || []}
@@ -114,8 +114,13 @@ export default function ArticleTags({
             )}
           </Select>
           {articleError?.subcatIds && (
-            <FormHelperText error={!!articleError?.subcatIds}>
+            <FormHelperText error>
               {articleError?.subcatIds}
+            </FormHelperText>
+          )}
+          {!articleState.catIds.length && (
+            <FormHelperText>
+              Please select Categories first
             </FormHelperText>
           )}
         </FormControl>
