@@ -34,6 +34,7 @@ export default class Mgw extends Component {
     filterOpts: { ...helper.initFilterOpts },
     sortIndex: 0,
     sortMenuAnchor: null,
+    pageNumber: 1,
     articleInputs: { ...helper.initArticleInputs },
     articleInputsErrors: {},
     articlesFetched: [],

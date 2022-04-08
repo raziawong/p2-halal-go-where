@@ -24,11 +24,11 @@ export default function CategoriesStack({
       <Stack sx={{ my: 2 }} spacing={2}>
         {Object.entries(mgwCategoriesMap).map(([k, v]) => (
           <Link
+            key={k}
             sx={{ textDecoration: "none" }}
             onClick={(evt) => handleClick(evt, findDBCat(v.value)?._id)}
           >
             <Paper
-              key={k}
               sx={{
                 height: "45vh",
                 backgroundImage: `url(${v.banner})`,
