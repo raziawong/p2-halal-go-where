@@ -32,9 +32,9 @@ export default class Mgw extends Component {
     allCategories: [],
     allArticles: [],
     filterOpts: { ...helper.initFilterOpts },
+    filterSubmit: false,
     sortIndex: 0,
     sortMenuAnchor: null,
-    pageNumber: 1,
     articleInputs: { ...helper.initArticleInputs },
     articleInputsErrors: {},
     articlesFetched: [],
@@ -103,28 +103,7 @@ export default class Mgw extends Component {
                     requestError={this.state.requestError}
                   />
                 }
-              >
-                <Route
-                  path=":page"
-                  element={
-                    <Explore
-                      filterOpts={this.state.filterOpts}
-                      pageNumber={this.state.pageNumber}
-                      sortIndex={this.state.sortIndex}
-                      sortAnchor={this.state.sortMenuAnchor}
-                      countries={this.state.articlesLocations}
-                      categories={this.state.allCategories}
-                      articles={this.state.articlesFetched}
-                      actionModal={this.state.actionModal}
-                      loaded={this.state.isLoaded}
-                      setMgwState={this.setMgwState}
-                      setFilterOpts={this.setFilterOpts}
-                      detectSearch={this.detectSearch}
-                      requestError={this.state.requestError}
-                    />
-                  }
-                />
-              </Route>
+              />
               <Route
                 path="create"
                 element={
@@ -257,6 +236,9 @@ export default class Mgw extends Component {
     const { type, key } = evt;
     if (type === "mousedown" || type === "click" || key === "Enter") {
       this.fetchArticles(viewType);
+      this.setState({
+        pageNumber: 1
+      });
     }
   };
 
@@ -311,6 +293,7 @@ export default class Mgw extends Component {
           params.ratingFrom = params.rating[0];
           params.ratingTo = params.rating[1];
         }
+        delete params["rating"];
       } else if (viewType === helper.articleView) {
         params = { articleId: filterOpts.id };
       }
@@ -332,6 +315,7 @@ export default class Mgw extends Component {
                 })
               : this.setState({
                   articlesFetched: [...transformed] || [],
+                  articlesTotal: resp.data.totalCount,
                   isLoaded: true,
                   requestError: "",
                 });

@@ -1,4 +1,5 @@
-import { Link, useNavigate } from "react-router-dom";
+import React, { Fragment } from "react";
+import { Link } from "react-router-dom";
 import helper from "../../utils/helper";
 import {
   Card,
@@ -9,36 +10,27 @@ import {
   Button,
   Grid,
   Pagination,
-  PaginationItem,
   Typography,
   useMediaQuery,
 } from "@mui/material";
 import { Masonry } from "@mui/lab";
-import { Fragment, useEffect } from "react";
 
 export default function Listing({
   articles,
   articlesTotal,
-  allCategories,
   pageNumber,
   setMgwState,
 }) {
-  const navigate = useNavigate();
   const smQ = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   const mdQ = useMediaQuery((theme) => theme.breakpoints.down("md"));
   const colNum = smQ ? 1 : mdQ ? 2 : articles?.length < 3 ? 2 : 3;
-  const showPagination = articles?.length < articlesTotal;
+  const showPagination = articlesTotal > helper.articlesLimit;
   const pageCount = Math.ceil(articlesTotal / helper.articlesLimit);
   const handleChange = (evt, val) => {
     setMgwState({
       pageNumber: val
     });
   };
-  useEffect(() => {
-    if (pageNumber > pageCount) {
-      navigate("/explore/1");
-    }
-  }, [navigate, pageNumber, pageCount])
   return (
     <Fragment>
       <Masonry columns={colNum} spacing={2}>
@@ -111,13 +103,6 @@ export default function Listing({
               page={pageNumber}
               onChange={handleChange}
               sx={{ display: "flex", justifyContent: "center" }}
-              renderItem={(item) => (
-                <PaginationItem
-                  component={Link}
-                  to={`/explore${item.page === 1 ? "" : `/${item.page}`}`}
-                  {...item}
-                />
-              )}
             />
           </Grid>
         </Grid>

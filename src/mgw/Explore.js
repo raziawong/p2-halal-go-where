@@ -1,5 +1,4 @@
-import React, { Fragment, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import React, { Fragment } from "react";
 import { Box, Container, Fab, Typography } from "@mui/material";
 import { FilterListSharp } from "@mui/icons-material";
 import ActionGroup from "./components/explore/ActionGroup";
@@ -21,15 +20,6 @@ export default function Explore({
   articlesTotal,
   loaded,
 }) {
-  const params = useParams();
-
-  useEffect(() => {
-    const pg = params.page;
-    return setMgwState({
-      pageNumber: isNaN(pg) ? 1 : Number(pg)
-    });
-  }, [setMgwState, params.page]);
-
   const handleFabClick = () => {
     setMgwState({
       actionModal: !actionModal,
@@ -110,7 +100,6 @@ export default function Explore({
                 <Listing
                   articles={articles}
                   articlesTotal={articlesTotal}
-                  allCategories={categories}
                   pageNumber={pageNumber}
                   setMgwState={setMgwState}
                 />
