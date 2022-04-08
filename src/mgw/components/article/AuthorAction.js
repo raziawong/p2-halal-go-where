@@ -65,7 +65,7 @@ export default function AuthorAction({
         justifyContent: "space-between",
         alignItems: "center",
         my: { xs: 3, lg: 0 },
-        mx: { xs: 3, lg: 2 },
+        mx: { xs: 3, lg: 5 },
       }}
     >
       <Box sx={{ display: "flex", alignItems: "center" }}>

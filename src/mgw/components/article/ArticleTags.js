@@ -1,13 +1,27 @@
 import React from "react";
 import { Box, ListItem, Chip } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import helper from "../../utils/helper";
 
-export default function ArticleTags({ categories, subCategories, userTags }) {
+export default function ArticleTags({
+  categories,
+  subCategories,
+  userTags,
+  setFilterOpts,
+  execSearch,
+}) {
+  const navgigate = useNavigate();
+  const handleClick = (evt, filterName, filterVal) => {
+    setFilterOpts({ name: filterName, value: [filterVal] });
+    execSearch(helper.exploreView);
+    navgigate("/explore");
+  };
   return (
     <Box
       component="ul"
       sx={{
         py: 3,
-        px: 1,
+        px: 3,
         display: "flex",
         flexWrap: "wrap",
         listStyle: "none",
@@ -18,7 +32,12 @@ export default function ArticleTags({ categories, subCategories, userTags }) {
           key={tag._id}
           sx={{ marginLeft: "3px", width: "fit-content" }}
         >
-          <Chip variant="outlined" color="primary" label={tag.name} />
+          <Chip
+            variant="outlined"
+            color="info"
+            label={tag.name}
+            onClick={(evt) => handleClick(evt, "catIds", tag._id)}
+          />
         </ListItem>
       ))}
       {subCategories?.map((tag, i) => (
@@ -26,12 +45,22 @@ export default function ArticleTags({ categories, subCategories, userTags }) {
           key={tag._id}
           sx={{ marginLeft: "3px", width: "fit-content" }}
         >
-          <Chip variant="outlined" color="secondary" label={tag.name} />
+          <Chip
+            variant="outlined"
+            color="primary"
+            label={tag.name}
+            onClick={(evt) =>  handleClick(evt, "subcatIds", tag._id)}
+          />
         </ListItem>
       ))}
       {userTags?.map((tag, i) => (
         <ListItem key={tag} sx={{ marginLeft: "3px", width: "fit-content" }}>
-          <Chip variant="outlined" color="info" label={tag} />
+          <Chip
+            variant="outlined"
+            color="warning"
+            label={tag}
+            onClick={(evt) =>  handleClick(evt, "tags", tag)}
+          />
         </ListItem>
       ))}
     </Box>

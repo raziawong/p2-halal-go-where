@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, CardMedia, Link, Paper, Stack, Typography } from "@mui/material";
+import { Box, Link, Paper, Stack, Typography } from "@mui/material";
 import { mgwCategoriesMap } from "../../utils/data";
 import { useNavigate } from "react-router-dom";
 import helper from "../../utils/helper";
@@ -7,12 +7,12 @@ import helper from "../../utils/helper";
 export default function CategoriesStack({
   allCategories,
   setFilterOpts,
-  fetchArticles,
+  execSearch,
 }) {
   const navgigate = useNavigate();
   const handleClick = (evt, catId) => {
     setFilterOpts({ name: "catIds", value: [catId] });
-    fetchArticles(helper.exploreView);
+    execSearch(helper.exploreView);
     navgigate("/explore");
   };
   const findDBCat = (val) => allCategories.find((cat) => cat.value === val);

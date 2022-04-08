@@ -9,7 +9,7 @@ export default function Landing({
   latestArticles,
   allCategories,
   setFilterOpts,
-  fetchArticles,
+  execSearch,
 }) {
   return (
     <Container
@@ -57,7 +57,7 @@ export default function Landing({
       <CategoriesStack
         allCategories={allCategories}
         setFilterOpts={setFilterOpts}
-        fetchArticles={fetchArticles}
+        execSearch={execSearch}
       />
     </Container>
   );

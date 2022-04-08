@@ -82,7 +82,7 @@ export default class Mgw extends Component {
                     latestArticles={this.state.articlesLatest}
                     allCategories={this.state.allCategories}
                     setFilterOpts={this.setFilterOpts}
-                    fetchArticles={this.fetchArticles}
+                    execSearch={this.fetchArticles}
                   />
                 }
               />

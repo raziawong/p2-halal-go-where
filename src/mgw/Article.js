@@ -57,7 +57,7 @@ export default function Article({
         <Container component="main" disableGutters maxWidth="xl" sx={{width: "100vw"}}>
           <Box component="article" sx={{ my: { xs: 0.5, lg: 4 }, mx: 0 }}>
             <ImageCarousel images={helper.getImg(article, true)} />
-            <Box sx={{ my: { xs: 3, lg: 5 }, mx: { xs: 3, lg: 2 } }}>
+            <Box sx={{ my: { xs: 3, lg: 5 }, mx: { xs: 3, lg: 5 } }}>
               <Typography component="h1" variant="h2">
                 {article.title}
               </Typography>
@@ -91,6 +91,8 @@ export default function Article({
               categories={article.catLabels}
               subCategories={article.subcatLabels}
               userTags={article.tags}
+              setFilterOpts={setFilterOpts}
+              execSearch={execSearch}
             />
             <AuthorAction
               locationOpts={locationOpts}

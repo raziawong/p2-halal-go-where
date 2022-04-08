@@ -35,6 +35,12 @@ export default function Listing({
   };
   return (
     <Fragment>
+      <Typography component="p" variant="subtitle1" sx={{pb: 2}}>
+        {`Displaying ${articles.length} `}
+        {showPagination
+          ? `of ${articlesTotal} results`
+          : "result(s)"}
+      </Typography>
       <Masonry columns={colNum} spacing={2}>
         {articles.map((card) => {
           return (

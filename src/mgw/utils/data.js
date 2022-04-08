@@ -35,7 +35,7 @@ const mgwRequests = {
 
 const mgwCategoriesMap = {
     attractions: {
-        title: "Islamic Attractions",
+        title: "Attractions",
         value: "attractions",
         banner: bannerAttractions,
         default: defaultAttractions
