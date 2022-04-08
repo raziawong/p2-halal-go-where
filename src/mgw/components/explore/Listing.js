@@ -6,12 +6,14 @@ import {
   CardActions,
   CardContent,
   CardMedia,
+  Chip,
   Box,
   Button,
   Grid,
   Pagination,
   Typography,
   useMediaQuery,
+  CardHeader,
 } from "@mui/material";
 import { Masonry } from "@mui/lab";
 
@@ -28,7 +30,7 @@ export default function Listing({
   const pageCount = Math.ceil(articlesTotal / helper.articlesLimit);
   const handleChange = (evt, val) => {
     setMgwState({
-      pageNumber: val
+      pageNumber: val,
     });
   };
   return (
@@ -37,14 +39,14 @@ export default function Listing({
         {articles.map((card) => {
           return (
             <Card key={card._id}>
+              <CardHeader
+                title={card.title}
+                subheader={([card.country?.name, card.city?.name] || "").join(
+                  ", "
+                )}
+              />
               <CardMedia component="img" image={helper.getImg(card)} />
               <CardContent>
-                <Typography gutterBottom variant="h6" component="h5">
-                  {card.title}
-                </Typography>
-                <Typography gutterBottom variant="subtitle1" component="h6">
-                  {([card.country?.name, card.city?.name] || "").join(", ")}
-                </Typography>
                 <Typography gutterBottom variant="body2" color="text.secondary">
                   {card.description}
                 </Typography>
@@ -53,28 +55,16 @@ export default function Listing({
                     pt: 2,
                     display: "flex",
                     flexWrap: "wrap",
-                    justifyContent: "space-around",
                   }}
                 >
                   {card.catLabels?.map((tag) => (
-                    <Typography
+                    <Chip
                       key={tag._id}
-                      variant="subtitle2"
-                      component="span"
-                      color="primary"
-                    >
-                      {tag.name}
-                    </Typography>
-                  ))}
-                  {card.tags?.map((tag, i) => (
-                    <Typography
-                      key={tag}
-                      variant="subtitle2"
-                      component="span"
-                      color="info.dark"
-                    >
-                      {tag}
-                    </Typography>
+                      label={tag.name}
+                      color="info"
+                      size="small"
+                      variant="outlined"
+                    ></Chip>
                   ))}
                 </Box>
               </CardContent>
@@ -85,7 +75,7 @@ export default function Listing({
                   size="small"
                   color="primary"
                 >
-                  Find out more
+                  Read More
                 </Button>
               </CardActions>
             </Card>
@@ -93,7 +83,7 @@ export default function Listing({
         })}
       </Masonry>
       {showPagination ? (
-        <Grid container sx={{py: 2, mb: 4}}>
+        <Grid container sx={{ py: 2, mb: 4 }}>
           <Grid item xs={12}>
             <Pagination
               size="large"
