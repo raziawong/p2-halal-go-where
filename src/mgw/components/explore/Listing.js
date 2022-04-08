@@ -38,7 +38,7 @@ export default function Listing({
     if (pageNumber > pageCount) {
       navigate("/explore/1");
     }
-  }, [navigate])
+  }, [navigate, pageNumber, pageCount])
   return (
     <Fragment>
       <Masonry columns={colNum} spacing={2}>

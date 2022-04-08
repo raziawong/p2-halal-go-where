@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { Box, Rating, Typography } from "@mui/material";
+import { Rating, Typography } from "@mui/material";
 
 export default function ArticleRating({ articleId, avg, count, updateRating }) {
   const handleClick = (evt, newValue) => {
