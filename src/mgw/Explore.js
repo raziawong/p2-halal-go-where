@@ -41,6 +41,7 @@ export default function Explore({
             sx={{
               display: { xs: "none", md: "block" },
               minWidth: { xs: "30vw", xl: "30%" },
+              width: { xs: "30vw", xl: "30%" },
               m: 4,
             }}
           >
@@ -94,7 +95,7 @@ export default function Explore({
           >
             <Box
               component="section"
-              sx={{ overflowY: "scroll", height: "100%" }}
+              sx={{ overflowY: "scroll", height: "100%"}}
             >
               {articles.length ? (
                 <Listing

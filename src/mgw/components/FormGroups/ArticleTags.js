@@ -42,6 +42,7 @@ export default function ArticleTags({
             multiple
             fullWidth
             displayEmpty
+            required
             label="Categories"
             arial-label="Categories"
             labelId="create-cat-label"
@@ -83,6 +84,8 @@ export default function ArticleTags({
             multiple
             fullWidth
             displayEmpty
+            required
+            disabled={!articleState.catIds.length}
             labelId="create-subcat-label"
             label="Sub-Categories"
             arial-label="Sub-Categories"

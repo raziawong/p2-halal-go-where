@@ -6,12 +6,12 @@ import helper from "../../utils/helper";
 
 export default function CategoriesStack({
   allCategories,
-  setFilterOpts,
+  setMgwState,
   execSearch,
 }) {
   const navgigate = useNavigate();
-  const handleClick = (evt, catId) => {
-    setFilterOpts({ name: "catIds", value: [catId] });
+  const handleClick = (evt, id) => {
+    setMgwState({ filterOpts: { ...helper.initFilterOpts, catIds: [id]} });
     execSearch(helper.exploreView);
     navgigate("/explore");
   };
@@ -25,7 +25,7 @@ export default function CategoriesStack({
         {Object.entries(mgwCategoriesMap).map(([k, v]) => (
           <Link
             key={k}
-            sx={{ textDecoration: "none" }}
+            sx={{ textDecoration: "none", cursor: "pointer" }}
             onClick={(evt) => handleClick(evt, findDBCat(v.value)?._id)}
           >
             <Paper

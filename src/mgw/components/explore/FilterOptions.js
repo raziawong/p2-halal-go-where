@@ -71,10 +71,11 @@ export default function FilterOptions({
         </Grid>
         <Grid item xs={12}>
           <FormControl sx={{ width: "100%" }}>
-            <InputLabel id="country-label">Country</InputLabel>
+            <InputLabel shrink id="country-label">Country</InputLabel>
             <Select
               fullWidth
               displayEmpty
+              notched
               label="Country"
               arial-label="Country"
               labelId="categories-label"
@@ -82,17 +83,18 @@ export default function FilterOptions({
               value={filterOpts.countryId}
               onChange={(evt) => setFilterOpts(evt.target)}
             >
-              <MenuItem value=""></MenuItem>
+              <MenuItem disabled value=""><em>Please select</em></MenuItem>
               {helper.countryOptDisplay(countries)}
             </Select>
           </FormControl>
         </Grid>
         <Grid item xs={12}>
           <FormControl sx={{ width: "100%" }}>
-            <InputLabel id="city-label">City</InputLabel>
+            <InputLabel shrink id="city-label">City</InputLabel>
             <Select
               fullWidth
               displayEmpty
+              notched
               label="City"
               arial-label="City"
               labelId="city-label"
@@ -100,18 +102,19 @@ export default function FilterOptions({
               value={filterOpts.cityId}
               onChange={(evt) => setFilterOpts(evt.target)}
             >
-              <MenuItem value=""></MenuItem>
+              <MenuItem disabled value=""><em>Please select</em></MenuItem>
               {helper.cityOptDisplay(countries, filterOpts.countryId)}
             </Select>
           </FormControl>
         </Grid>
         <Grid item xs={12}>
           <FormControl sx={{ width: "100%" }}>
-            <InputLabel id="categories-label">Categories</InputLabel>
+            <InputLabel shrink id="categories-label">Categories</InputLabel>
             <Select
               multiple
               fullWidth
               displayEmpty
+              notched
               label="Categories"
               arial-label="Categories"
               labelId="categories-label"
@@ -124,10 +127,10 @@ export default function FilterOptions({
                       .filter((c) => vals.includes(c._id))
                       .map((f) => f.name)
                       .join(", ")
-                  : ""
+                  : <em>Please select</em>
               }
             >
-              <MenuItem value=""></MenuItem>
+              <MenuItem disabled value=""><em>Please select</em></MenuItem>
               {helper.categoriesOptDispay(
                 categories?.length > 0 ? categories : [],
                 filterOpts.catIds
@@ -137,11 +140,12 @@ export default function FilterOptions({
         </Grid>
         <Grid item xs={12}>
           <FormControl sx={{ width: "100%" }}>
-            <InputLabel id="subcats-label">Sub-Categories</InputLabel>
+            <InputLabel shrink id="subcats-label">Sub-Categories</InputLabel>
             <Select
               multiple
               fullWidth
               displayEmpty
+              notched
               labelId="subcats-label"
               label="Sub-Categories"
               arial-label="Sub-Categories"
@@ -158,10 +162,10 @@ export default function FilterOptions({
                       }, [])
                       .map((f) => f.name)
                       .join(", ")
-                  : ""
+                  : <em>Please select</em>
               }
             >
-              <MenuItem value=""></MenuItem>
+              <MenuItem disabled value=""><em>Please select</em></MenuItem>
               {helper.subcategoriesOptDispay(
                 categories?.length > 0 ? categories : [],
                 filterOpts.catIds,

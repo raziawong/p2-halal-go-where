@@ -8,7 +8,7 @@ import CategoriesStack from "./components/landing/CategoriesStack";
 export default function Landing({
   latestArticles,
   allCategories,
-  setFilterOpts,
+  setMgwState,
   execSearch,
 }) {
   return (
@@ -56,7 +56,7 @@ export default function Landing({
       <LatestGrid latestArticles={latestArticles} />
       <CategoriesStack
         allCategories={allCategories}
-        setFilterOpts={setFilterOpts}
+        setMgwState={setMgwState}
         execSearch={execSearch}
       />
     </Container>

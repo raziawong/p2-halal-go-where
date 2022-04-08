@@ -255,22 +255,25 @@ const helper = {
   },
   getCatDep: (allCats, selCats, selSubcats) => {
     const catIds = [...selCats];
-    let subcatIds = [];
-    const depCatArr = catIds.map((cId, i) => {
-      const foundSub = allCats.find((c) => c._id === cId)?.subcats;
-      const depSubcatIds = selSubcats
-        .map((scId) => {
-          const newSub = foundSub.find((sc) => sc._id === scId);
-          if (newSub) {
-            subcatIds.push(scId);
-            return scId;
-          }
-          return false;
-        })
-        .filter((sc) => !!sc);
-      return { catId: cId, subcatIds: depSubcatIds };
-    });
-    return { catIds, subcatIds, depCatArr };
+    if (catIds.length) {
+      let subcatIds = [];
+      const depCatArr = catIds.map((cId, i) => {
+        const foundSub = allCats.find((c) => c._id === cId)?.subcats;
+        const depSubcatIds = selSubcats
+          .map((scId) => {
+            const newSub = foundSub.find((sc) => sc._id === scId);
+            if (newSub) {
+              subcatIds.push(scId);
+              return scId;
+            }
+            return false;
+          })
+          .filter((sc) => !!sc);
+        return { catId: cId, subcatIds: depSubcatIds };
+      });
+      return { catIds, subcatIds, depCatArr };
+    }
+    return { catIds: selCats, subcatIds: selSubcats, depCatArr: [] };
   },
   getImg: (article, isArray=false) => {
     const { photos, catLabels } = article;

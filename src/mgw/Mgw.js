@@ -81,7 +81,7 @@ export default class Mgw extends Component {
                   <Landing
                     latestArticles={this.state.articlesLatest}
                     allCategories={this.state.allCategories}
-                    setFilterOpts={this.setFilterOpts}
+                    setMgwState={this.setMgwState}
                     execSearch={this.fetchArticles}
                   />
                 }
@@ -240,7 +240,8 @@ export default class Mgw extends Component {
     if (type === "mousedown" || type === "click" || key === "Enter") {
       this.fetchArticles(viewType);
       this.setState({
-        pageNumber: 1
+        pageNumber: 1,
+        actionModal: false
       });
     }
   };
@@ -258,7 +259,6 @@ export default class Mgw extends Component {
   setFilterOpts = ({ name, value }) => {
     let opts = { ...this.state.filterOpts };
     opts[name] = value;
-
     if (name === "catIds" || name === "subcatIds") {
       const selCatIds =
         name === "catIds" ? opts.catIds : this.state.filterOpts.catIds;
@@ -303,7 +303,7 @@ export default class Mgw extends Component {
 
       await getArticles(params, viewType, sortOptions, this.state.pageNumber)
         .then(async (resp) => {
-          if (resp.data.results) {
+          if (resp.data.results?.length) {
             const { articlesLocations, allCategories } = this.state;
             const transformed = await helper.transformArticlesForRead(
               resp.data.results,
@@ -312,16 +312,29 @@ export default class Mgw extends Component {
             );
             viewType === helper.articleView
               ? this.setState({
-                  articleDetail: [...transformed][0] || [],
+                  articleDetail: [...transformed][0],
                   isLoaded: true,
                   requestError: "",
                 })
               : this.setState({
-                  articlesFetched: [...transformed] || [],
+                  articlesFetched: [...transformed],
                   articlesTotal: resp.data.totalCount,
                   isLoaded: true,
                   requestError: "",
                 });
+          } else {
+            viewType === helper.articleView
+            ? this.setState({
+                articleDetail: [],
+                isLoaded: true,
+                requestError: "",
+              })
+            : this.setState({
+                articlesFetched: [],
+                articlesTotal: 0,
+                isLoaded: true,
+                requestError: "",
+              });
           }
         })
         .catch((err) => {

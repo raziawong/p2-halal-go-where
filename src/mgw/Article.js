@@ -4,7 +4,7 @@ import helper from "./utils/helper";
 import { Container, Box, Typography } from "@mui/material";
 import ReactMarkdown from "react-markdown";
 import NotFound from "./NotFound";
-import ArticleTags from "./components/article/ArticleTags";
+import ArticleChips from "./components/article/ArticleChips";
 import AuthorAction from "./components/article/AuthorAction"
 import ArticleComments from "./components/article/ArticleComments";
 import ImageCarousel from "./components/article/ImageCarousel";
@@ -87,11 +87,11 @@ export default function Article({
                 ].join(", ")}
               </Typography>
             </Box>
-            <ArticleTags
+            <ArticleChips
               categories={article.catLabels}
               subCategories={article.subcatLabels}
               userTags={article.tags}
-              setFilterOpts={setFilterOpts}
+              setMgwState={setMgwState}
               execSearch={execSearch}
             />
             <AuthorAction

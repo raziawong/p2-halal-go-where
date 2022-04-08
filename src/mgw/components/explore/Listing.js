@@ -41,7 +41,7 @@ export default function Listing({
           ? `of ${articlesTotal} results`
           : "result(s)"}
       </Typography>
-      <Masonry columns={colNum} spacing={2}>
+      <Masonry columns={colNum} spacing={{xs: 1, md: 2}} sx={{alignItems: {xs: "center", sm: "unset"}}}>
         {articles.map((card) => {
           return (
             <Card key={card._id}>

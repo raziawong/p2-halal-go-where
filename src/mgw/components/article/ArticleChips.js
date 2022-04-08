@@ -3,16 +3,16 @@ import { Box, ListItem, Chip } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import helper from "../../utils/helper";
 
-export default function ArticleTags({
+export default function ArticleChips({
   categories,
   subCategories,
   userTags,
-  setFilterOpts,
+  setMgwState,
   execSearch,
 }) {
   const navgigate = useNavigate();
   const handleClick = (evt, filterName, filterVal) => {
-    setFilterOpts({ name: filterName, value: [filterVal] });
+    setMgwState({ filterOpts: { ...helper.initFilterOpts, [filterName]: [filterVal]} });
     execSearch(helper.exploreView);
     navgigate("/explore");
   };
