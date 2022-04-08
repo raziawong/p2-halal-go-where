@@ -7,34 +7,55 @@ import {
 } from "@mui/material";
 import banner from "../assets/image/banner.jpg";
 import { HeroBanner, HeroOverlay } from "./utils/mgwStyle";
+import LatestGrid from "./components/landing/LatestGrid";
 
-export default function Landing({ filterOpts, setFilterOpts, detectSearch }) {
+export default function Landing({ latest }) {
   return (
-    <Container component="main" disableGutters  maxWidth="xl" sx={{width: "100vw"}}>
+    <Container
+      component="main"
+      disableGutters
+      maxWidth="xl"
+      sx={{ width: "100vw" }}
+    >
       <HeroBanner bgImg={banner}>
         <HeroOverlay>
-          <Typography component="h4" variant="h4" color="secondary" sx={{
-            pl: {xs: 2, sm: 0}, direction: "rtl", textAlign: "center"
-          }}>
+          <Typography
+            component="h4"
+            variant="h4"
+            color="secondary"
+            sx={{
+              pl: { xs: 2, sm: 0 },
+              direction: "rtl",
+              textAlign: "center",
+            }}
+          >
             {"السلام عليكم"}
           </Typography>
-          <Typography component="h4" variant="h4" color="secondary" sx={{
-            pl: {xs: 2, sm: 0}, textAlign: "center"
-          }}>
+          <Typography
+            component="h4"
+            variant="h4"
+            color="secondary"
+            sx={{
+              pl: { xs: 2, sm: 0 },
+              textAlign: "center",
+            }}
+          >
             {"As-salāmu ʿalaykum"}
           </Typography>
-          <Typography component="h1" variant="h1" color="primary" sx={{
-            pl: {xs: 2, sm: 0}, textAlign: "center"
-          }}>
+          <Typography
+            component="h1"
+            variant="h1"
+            color="primary"
+            sx={{
+              pl: { xs: 2, sm: 0 },
+              textAlign: "center",
+            }}
+          >
             Muslim Go Where
           </Typography>
         </HeroOverlay>
       </HeroBanner>
-      <Box sx={{ m: 2 }}>
-        <Typography component="h2" variant="h3">
-          What's New
-        </Typography>
-      </Box>
+      <LatestGrid latest={latest} />
       <Box sx={{ m: 2 }}>
         <Typography component="h2" variant="h3">
           Categories

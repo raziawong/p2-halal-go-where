@@ -38,6 +38,7 @@ export default class Mgw extends Component {
     articleInputs: { ...helper.initArticleInputs },
     articleInputsErrors: {},
     articlesFetched: [],
+    articlesLatest: [],
     articlesTotal: [],
     articleDetail: [],
     articlesTags: [],
@@ -78,9 +79,7 @@ export default class Mgw extends Component {
                 path="/"
                 element={
                   <Landing
-                    filterOpts={this.state.filterOpts}
-                    setFilterOpts={this.setFilterOpts}
-                    detectSearch={this.detectSearch}
+                    latest={this.state.articlesLatest}
                   />
                 }
               />
@@ -224,6 +223,7 @@ export default class Mgw extends Component {
       allCategories: fixed.categories.results,
       allArticles: articles.main,
       articlesFetched: articles.main.count ? [...transformed] : [],
+      articlesLatest: articles.main.totalCount > 2 ? [...transformed].slice(0, 3) : [],
       articlesTotal: articles.main.totalCount || null,
       articlesTags: uniqueTags,
       articlesLocations: articles.location.count
@@ -243,6 +243,8 @@ export default class Mgw extends Component {
     }
     if (prevState.articlePosted !== this.state.articlePosted && this.state.articlePosted.length) {
       this.fetchLocationsTagged();
+      this.fetchArticles(helper.exploreView);
+      this.fetchArticlesLatest();
     }
     // if (prevState.navDrawer) {
     //   this.setState({
@@ -295,8 +297,8 @@ export default class Mgw extends Component {
 
   fetchArticles = (viewType) => {
     this.setState({ isLoaded: false }, async () => {
-      let { filterOpts, sortIndex } = this.state;
-      let sortOptions = helper.sortOptions[sortIndex];
+      const { filterOpts, sortIndex } = this.state;
+      const sortOptions = helper.sortOptions[sortIndex];
       let params = {};
 
       if (viewType === helper.exploreView) {
@@ -316,8 +318,8 @@ export default class Mgw extends Component {
       await getArticles(params, viewType, sortOptions, this.state.pageNumber)
         .then(async (resp) => {
           if (resp.data.results) {
-            let { articlesLocations, allCategories } = this.state;
-            let transformed = await helper.transformArticlesForRead(
+            const { articlesLocations, allCategories } = this.state;
+            const transformed = await helper.transformArticlesForRead(
               resp.data.results,
               articlesLocations,
               allCategories
@@ -342,6 +344,28 @@ export default class Mgw extends Component {
         });
     });
   };
+
+  fetchArticlesLatest = async () => {
+    await getArticles({}, helper.exploreView).then(async (resp) => {
+      if (resp.data.results && resp.data.totalCount > 2) {
+        const { articlesLocations, allCategories } = this.state;
+        const transformed = await helper.transformArticlesForRead(
+          resp.data.results.slice(0, 3),
+          articlesLocations,
+          allCategories
+        );
+        this.setState({
+          articlesLatest: [...transformed] || []
+        });
+      } else {
+        this.setState({
+          articlesLatest: []
+        });
+      }
+    }).catch((err) => {
+      console.log("Failed to load latest articles");
+    });
+  }
 
   setArticleInputs = ({ target }) => {
     let inputs = { ...this.state.articleInputs };
@@ -391,7 +415,7 @@ export default class Mgw extends Component {
 
     this.setState({ articleInputsErrors: validation || {} }, async () => {
       if (!Object.entries(validation)?.length) {
-        let {
+        const {
           createActiveStep,
           editActiveStep,
           deleteActiveStep,
@@ -400,7 +424,7 @@ export default class Mgw extends Component {
 
         if (type === "create") {
           if (createActiveStep === helper.createSteps.length - 1) {
-            let pd = helper.transformArticleForUpdate(articleInputs);
+            const pd = helper.transformArticleForUpdate(articleInputs);
             await postArticle(pd)
               .then((resp) => {
                 this.setState({
@@ -433,7 +457,7 @@ export default class Mgw extends Component {
               type
             );
           } else if (editActiveStep === helper.editSteps.length - 1) {
-            let pd = helper.transformArticleForUpdate(articleInputs);
+            const pd = helper.transformArticleForUpdate(articleInputs);
             await updateArticle(pd)
               .then((resp) => {
                 this.setState({
@@ -466,7 +490,7 @@ export default class Mgw extends Component {
               type
             );
           } else if (deleteActiveStep === helper.deleteSteps.length - 1) {
-            let articleId = articleInputs._id;
+            const articleId = articleInputs._id;
             if (articleId) {
               await deleteArticle({ articleId })
                 .then((resp) => {
@@ -555,7 +579,7 @@ export default class Mgw extends Component {
   }
 
   fetchArticleRating = async (articleId) => {
-    let dtl = { ...this.state.articleDetail } || {};
+    const dtl = { ...this.state.articleDetail } || {};
     if (
       articleId &&
       articleId === dtl._id &&
@@ -565,7 +589,7 @@ export default class Mgw extends Component {
       await getRating({ articleId })
         .then((resp) => {
           if (resp.data.count) {
-            let newRating = { ...dtl.rating, ...resp.data.results[0].rating };
+            const newRating = { ...dtl.rating, ...resp.data.results[0].rating };
             this.setState({
               articleDetail: {
                 ...dtl,
@@ -609,7 +633,7 @@ export default class Mgw extends Component {
   };
 
   fetchArticleComments = async (articleId) => {
-    let dtl = { ...this.state.articleDetail } || {};
+    const dtl = { ...this.state.articleDetail } || {};
     if (articleId && articleId === dtl._id) {
       await getComments({ articleId })
         .then((resp) => {

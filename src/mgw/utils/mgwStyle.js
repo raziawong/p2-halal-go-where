@@ -100,4 +100,15 @@ const HeroOverlay = styled(Box)(({ theme }) => ({
     flexDirection: "column"
 }));
 
-export { SiteContainer, ViewContainer, LoaderBackdrop, NavBarDrawer, NavBarLogo, NavBarLink, HeroBanner, HeroOverlay };
+const LatestLink = styled(Link)(({ theme }) => ({
+    color: mgwColors.background,
+    textDecoration: "none",
+    display: "flex",
+    alignItems: "center",
+    "&:hover": {
+        color: mgwColors.secText,
+        borderBottom: `1px solid ${mgwColors.secText}`
+    }
+}));
+
+export { SiteContainer, ViewContainer, LoaderBackdrop, NavBarDrawer, NavBarLogo, NavBarLink, HeroBanner, HeroOverlay, LatestLink};
