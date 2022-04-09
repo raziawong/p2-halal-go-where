@@ -1,6 +1,6 @@
 import React from "react";
 import helper from "../../utils/helper";
-import { Autocomplete, Grid, TextField } from "@mui/material";
+import { Autocomplete, Grid, FormHelperText, TextField } from "@mui/material";
 
 export default function ArticleSummary({
   articleState,
@@ -105,6 +105,9 @@ export default function ArticleSummary({
             setArticleState(arg);
           }}
         />
+        <FormHelperText sx={{display: !!articleError?.cityId && articleState.country?.name ? "none" : "block"}}>
+          Please select Country first
+        </FormHelperText>
       </Grid>
     </Grid>
   );
