@@ -16,8 +16,8 @@ import {
   getComments,
   getLocationsTagged,
   getCollection,
-  postCollection,
-  deleteCollection,
+  postCollectionItem,
+  deleteCollectionItem,
 } from "./utils/data";
 import helper from "./utils/helper";
 import { SiteContainer, ViewContainer } from "./utils/mgwStyle";
@@ -155,6 +155,8 @@ export default class Mgw extends Component {
                     curateErrors={this.state.curateInputsErrors}
                     setMgwState={this.setMgwState}
                     validateCurate={this.validateCurateInputs}
+                    requestSuccess={this.state.requestSuccess}
+                    requestError={this.state.requestError}
                   />
                 }
               />
@@ -203,7 +205,8 @@ export default class Mgw extends Component {
               open={
                 !!this.state.requestError &&
                 !this.state.editModal &&
-                !this.state.deleteModal
+                !this.state.deleteModal &&
+                !this.state.collectionModal
               }
               autoHideDuration={6000}
               onClose={this.handleToastClose}
@@ -790,7 +793,7 @@ export default class Mgw extends Component {
     this.setState({ curateInputsErrors: validation || {} }, async () => {
       if (!Object.entries(validation)?.length) {
         if (collectionAction === "add") {
-          await postCollection({ ...curateInputs })
+          await postCollectionItem({ ...curateInputs })
             .then((resp) => {
               this.fetchCollection();
               this.setState({
@@ -807,7 +810,7 @@ export default class Mgw extends Component {
               });
             });
         } else if (collectionAction === "delete") {
-          await deleteCollection({ ...curateInputs })
+          await deleteCollectionItem({ ...curateInputs })
             .then((resp) => {
               this.fetchCollection();
               this.setState({

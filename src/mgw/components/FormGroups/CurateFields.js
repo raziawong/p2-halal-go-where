@@ -19,7 +19,7 @@ export default function CurateFields({
   return (
     <Grid
       container
-      spacing={{ xs: 2, md: 4 }}
+      spacing={{ xs: 3, md: 4 }}
       sx={{ maxWidth: "100vw", justifyContent: "center" }}
     >
       <Grid item xs={12}>

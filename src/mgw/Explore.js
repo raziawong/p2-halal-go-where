@@ -24,7 +24,8 @@ export default function Explore({
   curateState,
   curateErrors,
   validateCurate,
-  requestSuccess
+  requestSuccess,
+  requestError
 }) {
   const handleFabClick = () => {
     setMgwState({
@@ -116,6 +117,7 @@ export default function Explore({
                   curateErrors={curateErrors}
                   validateCurate={validateCurate}
                   requestSuccess={requestSuccess}
+                  requestError={requestError}
                 />
               ) : (
                 <Typography component="h3" variant="h4">

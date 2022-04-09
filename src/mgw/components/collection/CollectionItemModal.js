@@ -1,5 +1,7 @@
 import React from "react";
 import {
+  Alert,
+  Box,
   Dialog,
   DialogContent,
   DialogTitle,
@@ -23,6 +25,8 @@ export default function CollectionItemModal({
   collectionModal,
   validateCurate,
   setMgwState,
+  requestSuccess,
+  requestError,
 }) {
   const handleClose = () => {
     setMgwState({
@@ -30,12 +34,13 @@ export default function CollectionItemModal({
       collectionAction: "retrieve",
       curateInputs: { ...helper.initCurateInputs },
       curateInputsErrors: {},
+      requstSuccess: "",
+      requestError: "",
     });
   };
 
   return (
     <Dialog
-      sx={{ display: { xs: "block", md: "none" } }}
       TransitionComponent={Transition}
       fullScreen={useMediaQuery(useTheme().breakpoints.down("md"))}
       open={collectionModal}
@@ -57,6 +62,18 @@ export default function CollectionItemModal({
         </IconButton>
       </DialogTitle>
       <DialogContent>
+        <Box sx={{ my: 4 }}>
+          {requestSuccess && (
+            <Alert square severity="success">
+              {requestSuccess}
+            </Alert>
+          )}
+          {requestError && (
+            <Alert square severity="error">
+              {requestError}
+            </Alert>
+          )}
+        </Box>
         <CurateFields
           collectionAction={collectionAction}
           curateState={curateState}

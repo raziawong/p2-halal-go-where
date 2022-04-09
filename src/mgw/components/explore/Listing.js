@@ -14,6 +14,7 @@ export default function Listing({
   curateErrors,
   validateCurate,
   requestSuccess,
+  requestError
 }) {
   const showPagination = articlesTotal > helper.articlesLimit;
   const pageCount = Math.ceil(articlesTotal / helper.articlesLimit);
@@ -37,7 +38,8 @@ export default function Listing({
         curateState={curateState}
         curateErrors={curateErrors}
         validateCurate={validateCurate}
-        requstSuccess={requestSuccess}
+        requestError={requestError}
+        requestSuccess={requestSuccess}
       />
       {showPagination ? (
         <Grid container sx={{ py: 2, mb: 4 }}>

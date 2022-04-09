@@ -31,7 +31,7 @@ const mgwRequests = {
         article: "/article",
         articleRating: "/article/rating",
         articleComment: "/article/comment",
-        collection: "/collection"     
+        collectionItem: "/collection/item"     
     }
 }
 
@@ -166,12 +166,12 @@ const getCollection = async (params) => {
   return await mgwRequests.axiosBase.get(mgwRequests.queryPaths.collection, { params });
 }
 
-const postCollection = async (params) => {
-  return await mgwRequests.axiosBase.post(mgwRequests.submitPaths.collection, { params });
+const postCollectionItem = async (body) => {
+  return await mgwRequests.axiosBase.post(mgwRequests.submitPaths.collectionItem, { ...body });
 }
 
-const deleteCollection = async (params) => {
-  return await mgwRequests.axiosBase.delete(mgwRequests.submitPaths.collection, { params });
+const deleteCollectionItem = async (params) => {
+  return await mgwRequests.axiosBase.delete(mgwRequests.submitPaths.collectionItem, { params });
 }
 
 export {
@@ -191,6 +191,6 @@ export {
   getComments,
   postComment,
   getCollection,
-  postCollection,
-  deleteCollection
+  postCollectionItem,
+  deleteCollectionItem
 };

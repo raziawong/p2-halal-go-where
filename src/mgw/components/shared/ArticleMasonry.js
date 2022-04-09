@@ -29,8 +29,10 @@ export default function ArticleMasonry({
   curateErrors,
   collectionAction,
   collectionModal,
+  validateCurate,
   setMgwState,
   requestSuccess,
+  requestError
 }) {
   const smQ = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   const mdQ = useMediaQuery((theme) => theme.breakpoints.down("md"));
@@ -123,8 +125,10 @@ export default function ArticleMasonry({
         collectionModal={collectionModal}
         curateState={curateState}
         curateErrors={curateErrors}
-        requstSuccess={requestSuccess}
+        validateCurate={validateCurate}
         setMgwState={setMgwState}
+        requestSuccess={requestSuccess}
+        requestError={requestError}
       />
     </Fragment>
   );

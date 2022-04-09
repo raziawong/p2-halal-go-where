@@ -2,9 +2,9 @@ import React from "react";
 import { Box, Container, Divider } from "@mui/material";
 import CurateFields from "./components/formgroups/CurateFields";
 import ArticleMasonry from "./components/shared/ArticleMasonry";
+import helper from "./utils/helper";
 
 export default function Collection(props) {
-  
   return (
     <Container
       component="main"
@@ -16,8 +16,13 @@ export default function Collection(props) {
         <CurateFields {...props} />
       </Box>
       <Box>
-        <Divider />
-        {props.curatedFetched && <ArticleMasonry {...props} articles={props.curatedFetched} />}
+        {props.curatedFetched && (
+          <ArticleMasonry
+            {...props}
+            articles={props.curatedFetched}
+            type={helper.collectionView}
+          />
+        )}
       </Box>
     </Container>
   );
