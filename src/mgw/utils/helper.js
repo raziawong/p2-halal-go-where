@@ -6,6 +6,7 @@ import { mgwCategoriesMap } from "./data";
 const helper = {
   exploreView: "listing",
   articleView: "details",
+  collectionView: "collection",
   sortOptions: [
     {
       label: "What's New",
@@ -193,6 +194,7 @@ const helper = {
     content: "",
   },
   initCurateInputs: {
+    articleId: "",
     curateEmail: ""
   },
   ratingMarks: [

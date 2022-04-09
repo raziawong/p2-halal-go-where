@@ -62,6 +62,8 @@ export default class Mgw extends Component {
     curatedFetched: [],
     curateInputs: { ...helper.initCurateInputs },
     curateInputsErrors: {},
+    addItemModal: false,
+    removeItemModal: false,
     isMounted: false,
     isLoaded: false,
     requestError: "",
@@ -110,6 +112,10 @@ export default class Mgw extends Component {
                     setMgwState={this.setMgwState}
                     setFilterOpts={this.setFilterOpts}
                     detectSearch={this.detectSearch}
+                    addItemModal={this.state.addItemModal}
+                    curateState={this.state.curateInputs}
+                    curateErrors={this.state.curateInputsErrors}
+                    requestSuccess={this.state.requestSuccess}
                     requestError={this.state.requestError}
                   />
                 }

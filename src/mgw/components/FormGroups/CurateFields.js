@@ -23,7 +23,7 @@ export default function CurateFields({
               padding: "1em",
             }}
           >
-            Please enter email to store/retrieve curated list
+            Please enter email to store to/retrieve from collection
           </Typography>
         </Paper>
       </Grid>
