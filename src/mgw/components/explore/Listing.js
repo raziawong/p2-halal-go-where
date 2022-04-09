@@ -8,9 +8,11 @@ export default function Listing({
   articlesTotal,
   pageNumber,
   setMgwState,
-  addItemModal,
+  collectionAction,
+  collectionModal,
   curateState,
   curateErrors,
+  validateCurate,
   requestSuccess,
 }) {
   const showPagination = articlesTotal > helper.articlesLimit;
@@ -30,9 +32,11 @@ export default function Listing({
         articles={articles}
         type={helper.exploreView}
         setMgwState={setMgwState}
-        addItemModal={addItemModal}
+        collectionAction={collectionAction}
+        collectionModal={collectionModal}
         curateState={curateState}
         curateErrors={curateErrors}
+        validateCurate={validateCurate}
         requstSuccess={requestSuccess}
       />
       {showPagination ? (

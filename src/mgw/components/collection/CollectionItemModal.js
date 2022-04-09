@@ -10,32 +10,39 @@ import {
 } from "@mui/material";
 import { CloseSharp } from "@mui/icons-material";
 import CurateFields from "../formgroups/CurateFields";
+import helper from "../../utils/helper";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function AddItemModal({
+export default function CollectionItemModal({
   curateState,
   curateErrors,
-  addItemModal,
+  collectionAction,
+  collectionModal,
+  validateCurate,
   setMgwState,
 }) {
   const handleClose = () => {
     setMgwState({
-      addItemModal: false,
+      collectionModal: false,
+      collectionAction: "retrieve",
+      curateInputs: { ...helper.initCurateInputs },
+      curateInputsErrors: {},
     });
   };
+
   return (
     <Dialog
       sx={{ display: { xs: "block", md: "none" } }}
       TransitionComponent={Transition}
       fullScreen={useMediaQuery(useTheme().breakpoints.down("md"))}
-      open={addItemModal}
+      open={collectionModal}
       onClose={handleClose}
     >
       <DialogTitle sx={{ m: 0, p: 2 }}>
-        Add to Collection
+        {collectionAction === "delete" ? "Remove from" : "Add to"} Collection
         <IconButton
           aria-label="Close"
           onClick={handleClose}
@@ -51,8 +58,10 @@ export default function AddItemModal({
       </DialogTitle>
       <DialogContent>
         <CurateFields
+          collectionAction={collectionAction}
           curateState={curateState}
           curateErrors={curateErrors}
+          validateCurate={validateCurate}
           setMgwState={setMgwState}
         />
       </DialogContent>

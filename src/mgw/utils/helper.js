@@ -147,7 +147,7 @@ const helper = {
       },
     },
     curate: {
-      email: {
+      curateEmail: {
         required: true,
         patterns: ["email"],
       }

@@ -20,14 +20,15 @@ import {
   BookmarkAddSharp,
   BookmarkRemoveSharp,
 } from "@mui/icons-material";
-import AddItemModal from "../collection/AddItemModal";
+import CollectionItemModal from "../collection/CollectionItemModal";
 
 export default function ArticleMasonry({
   articles,
   type,
   curateState,
   curateErrors,
-  addItemModal,
+  collectionAction,
+  collectionModal,
   setMgwState,
   requestSuccess,
 }) {
@@ -35,18 +36,13 @@ export default function ArticleMasonry({
   const mdQ = useMediaQuery((theme) => theme.breakpoints.down("md"));
   const colNum = smQ ? 1 : mdQ ? 2 : articles?.length < 3 ? 2 : 3;
 
-  const handleAdd = (articleId) => {
-    console.log(articleId);
+  const handleCollectionClick = (articleId, action) => {
     setMgwState({
       curateInputs: { ...curateState, articleId },
-      addItemModal: true,
-    });
-  };
-
-  const handleRemove = (articleId) => {
-    setMgwState({
-      curateInputs: { ...curateState, articleId },
-      deleteItemModal: true,
+      collectionModal: true,
+      collectionAction: action,
+      requestSuccess: "",
+      requestError: ""
     });
   };
 
@@ -70,7 +66,7 @@ export default function ArticleMasonry({
                     <IconButton
                       size="small"
                       aria-label="Remove from Collection"
-                      onClick={(evt) => handleRemove(card._id)}
+                      onClick={(evt) => handleCollectionClick(card._id, "delete")}
                     >
                       <BookmarkRemoveSharp fontSize="small" />
                     </IconButton>
@@ -78,7 +74,7 @@ export default function ArticleMasonry({
                     <IconButton
                       size="small"
                       aria-label="Add to Collection"
-                      onClick={(evt) => handleAdd(card._id)}
+                      onClick={(evt) => handleCollectionClick(card._id, "add")}
                     >
                       <BookmarkAddSharp fontSize="small" />
                     </IconButton>
@@ -122,8 +118,9 @@ export default function ArticleMasonry({
           );
         })}
       </Masonry>
-      <AddItemModal
-        addItemModal={addItemModal}
+      <CollectionItemModal
+        collectionAction={collectionAction}
+        collectionModal={collectionModal}
         curateState={curateState}
         curateErrors={curateErrors}
         requstSuccess={requestSuccess}

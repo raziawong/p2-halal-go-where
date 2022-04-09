@@ -1,14 +1,20 @@
 import React from "react";
-import { Grid, Paper, TextField, Typography } from "@mui/material";
+import { Grid, Button, Paper, TextField, Typography } from "@mui/material";
+import helper from "../../utils/helper";
 
 export default function CurateFields({
+  collectionAction,
   curateState,
   curateErrors,
+  validateCurate,
   setMgwState,
 }) {
   const handleChange = ({ target }) => {
     const updated = { ...curateState, [target.name]: target.value };
     setMgwState({ curateInputs: updated });
+  };
+  const handleClick = () => {
+    validateCurate(helper.curateSteps[0].fields);
   };
   return (
     <Grid
@@ -36,9 +42,26 @@ export default function CurateFields({
           name="curateEmail"
           value={curateState.curateEmail}
           onChange={handleChange}
-          error={!!curateErrors?.email}
-          helperText={curateErrors?.email}
+          error={!!curateErrors?.curateEmail}
+          helperText={curateErrors?.curateEmail}
         />
+      </Grid>
+      <Grid
+        item
+        xs={12}
+        sx={{ display: "flex", justifyContent: "flex-end", pt: 5 }}
+      >
+        <Button
+          aria-label={`${collectionAction} collection`}
+          onClick={handleClick}
+          variant="contained"
+        >
+          {collectionAction === "delete"
+            ? "Confirm"
+            : collectionAction === "add"
+            ? "Add"
+            : "Retrieve"}
+        </Button>
       </Grid>
     </Grid>
   );

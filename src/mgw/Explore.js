@@ -19,9 +19,11 @@ export default function Explore({
   articles,
   articlesTotal,
   loaded,
-  addItemModal,
+  collectionAction,
+  collectionModal,
   curateState,
   curateErrors,
+  validateCurate,
   requestSuccess
 }) {
   const handleFabClick = () => {
@@ -108,9 +110,11 @@ export default function Explore({
                   articlesTotal={articlesTotal}
                   pageNumber={pageNumber}
                   setMgwState={setMgwState}
-                  addItemModal={addItemModal}
+                  collectionAction={collectionAction}
+                  collectionModal={collectionModal}
                   curateState={curateState}
                   curateErrors={curateErrors}
+                  validateCurate={validateCurate}
                   requestSuccess={requestSuccess}
                 />
               ) : (

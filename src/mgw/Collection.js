@@ -1,16 +1,23 @@
 import React from "react";
-import { Box, Container } from "@mui/material";
+import { Box, Container, Divider } from "@mui/material";
 import CurateFields from "./components/formgroups/CurateFields";
-import Curation from "./components/collection/Curation";
+import ArticleMasonry from "./components/shared/ArticleMasonry";
 
 export default function Collection(props) {
+  
   return (
-    <Container component="main" disableGutters maxWidth="xl" sx={{width: "100vw"}}>
-      <Box sx={{display: "flex", justifyContent: "center", pt: 5}}>
-        <CurateFields {...props}/>
+    <Container
+      component="main"
+      disableGutters
+      maxWidth="xl"
+      sx={{ width: "100vw" }}
+    >
+      <Box sx={{ display: "flex", justifyContent: "center", pt: 5 }}>
+        <CurateFields {...props} />
       </Box>
       <Box>
-        <Curation {...props} />
+        <Divider />
+        {props.curatedFetched && <ArticleMasonry {...props} articles={props.curatedFetched} />}
       </Box>
     </Container>
   );
