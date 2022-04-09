@@ -88,7 +88,7 @@ export default function NavBar({
                 </ListItem>
                 <ListItem>
                   <ListItemText>
-                    <NavBarLink to="/curate">Curate</NavBarLink>
+                    <NavBarLink to="/collection">Collection</NavBarLink>
                   </ListItemText>
                 </ListItem>
               </List>
