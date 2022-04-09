@@ -1,7 +1,15 @@
 import React from "react";
 import { Grid, Paper, TextField, Typography } from "@mui/material";
 
-export default function CurateFields({ curateEmail, setMgwState }) {
+export default function CurateFields({
+  curateState,
+  curateErrors,
+  setMgwState,
+}) {
+  const handleChange = ({ target }) => {
+    const updated = { ...curateState, [target.name]: target.value };
+    setMgwState({ curateInputs: updated });
+  };
   return (
     <Grid
       container
@@ -25,11 +33,11 @@ export default function CurateFields({ curateEmail, setMgwState }) {
           required
           label="Email"
           aria-label="Email"
-          name="email"
-          value={curateEmail}
-          onChange={(evt) => setMgwState({curateEmail})}
-          error={!!userVerifyErrorMsg || !!articleError?.email}
-          helperText={userVerifyErrorMsg || articleError?.email}
+          name="curateEmail"
+          value={curateState.curateEmail}
+          onChange={handleChange}
+          error={!!curateErrors?.email}
+          helperText={curateErrors?.email}
         />
       </Grid>
     </Grid>

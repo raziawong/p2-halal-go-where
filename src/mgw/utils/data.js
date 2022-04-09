@@ -25,13 +25,13 @@ const mgwRequests = {
         articleContributor: "/article/contributor",
         articleRating: "/article/rating",
         articleComments: "/article/comments",
-        curate: "/curated"
+        collection: "/collection"
     },
     submitPaths: {
         article: "/article",
         articleRating: "/article/rating",
         articleComment: "/article/comment",
-        curate: "/curated"     
+        collection: "/collection"     
     }
 }
 
@@ -162,16 +162,16 @@ const postComment = async (body) => {
   });
 }
 
-const getCurated = async (params) => {
-  return await mgwRequests.axiosBase.get(mgwRequests.queryPaths.curate, { params });
+const getCollection = async (params) => {
+  return await mgwRequests.axiosBase.get(mgwRequests.queryPaths.collection, { params });
 }
 
-const postCurated = async (params) => {
-  return await mgwRequests.axiosBase.post(mgwRequests.submitPaths.curate, { params });
+const postCollection = async (params) => {
+  return await mgwRequests.axiosBase.post(mgwRequests.submitPaths.collection, { params });
 }
 
-const deleteCurated = async (params) => {
-  return await mgwRequests.axiosBase.delete(mgwRequests.submitPaths.curate, { params });
+const deleteCollection = async (params) => {
+  return await mgwRequests.axiosBase.delete(mgwRequests.submitPaths.collection, { params });
 }
 
 export {
@@ -190,7 +190,7 @@ export {
   updateRating,
   getComments,
   postComment,
-  getCurated,
-  postCurated,
-  deleteCurated
+  getCollection,
+  postCollection,
+  deleteCollection
 };

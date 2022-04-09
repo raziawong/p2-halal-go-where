@@ -15,6 +15,9 @@ import {
   postComment,
   getComments,
   getLocationsTagged,
+  getCollection,
+  postCollection,
+  deleteCollection
 } from "./utils/data";
 import helper from "./utils/helper";
 import { SiteContainer, ViewContainer } from "./utils/mgwStyle";
@@ -22,6 +25,7 @@ import Loader from "./components/shared/Loader";
 import Landing from "./Landing";
 import Explore from "./Explore";
 import Create from "./Create";
+import Collection from "./Collection";
 import Article from "./Article";
 import NavBar from "./components/shared/NavBar";
 import NotFound from "./NotFound";
@@ -55,6 +59,9 @@ export default class Mgw extends Component {
     navDrawer: false,
     userEmail: "",
     userVerifyErrorMsg: "",
+    curatedFetched: [],
+    curateInputs: { ...helper.initCurateInputs },
+    curateInputsErrors: {},
     isMounted: false,
     isLoaded: false,
     requestError: "",
@@ -126,6 +133,17 @@ export default class Mgw extends Component {
                     articlePosted={this.state.articlePosted}
                     requestSuccess={this.state.requestSuccess}
                     requestError={this.state.requestError}
+                  />
+                }
+              />
+              <Route
+                path="collection"
+                element={
+                  <Collection
+                    curatedFetched={this.state.curatedFetched}
+                    curateState={this.state.curateInputs}
+                    curateErrors={this.state.curateInputsErrors}
+                    setMgwState={this.setMgwState}
                   />
                 }
               />
@@ -683,13 +701,13 @@ export default class Mgw extends Component {
 
   validateArticleComment = (articleId, fields) => {
     const validation = fields
-      .map((fieldName) => {
-        return helper.validate(
+      .map((fieldName) =>
+        helper.validate(
           fieldName,
           { ...this.state.commentInputs },
           "comments"
-        );
-      })
+        )
+      )
       .filter((v) => v)
       .reduce((a, v) => ({ ...a, [v.fieldName]: v.message }), {});
 
@@ -699,6 +717,9 @@ export default class Mgw extends Component {
         await postComment(bodyContent)
           .then((resp) => {
             this.fetchArticleComments(articleId);
+            this.setState({
+              requestError: "",
+            });
           })
           .catch((err) => {
             this.setState({
@@ -708,4 +729,72 @@ export default class Mgw extends Component {
       }
     });
   };
+
+  fetchCollection = async () => {
+    const { curateEmail } = {...this.state.curateInputs} ;
+
+    if (curateEmail) {
+      await getCollection({ curateEmail })
+        .then((resp) => {
+          if (resp.data.count)
+            this.setState({
+              curatedFetched: [resp.data.results],
+              curateEmail: curateEmail,
+              requestError: ""
+            });
+        })
+        .catch((err) => {
+          this.setState({
+            requestError: "Failed to get curated articles with " + curateEmail,
+          });
+        });
+    }
+  };
+
+  validateCurateInputs = (articleId, fields) => {
+    const validation = fields.map(fieldName =>
+      helper.validate(
+        fieldName,
+        { ...this.state.curateInputs },
+        "curate"
+      )
+    ).filter((v) => v)
+    .reduce((a, v) => ({ ...a, [v.fieldName]: v.message }), {});
+
+    this.setState({ curateInputsErrors: validation || {} }, async () => {
+      if (!Object.entries(validation)?.length) {
+        await postCollection({...this.state.commentInputs, articleId})
+        .then((resp) => {
+          this.fetchCollection();
+          this.setState({ 
+            requestSuccess: "Article successfully added to your collection", 
+            requestError: "" });
+
+        })
+        .catch((err) => {
+          this.setState({
+            requestError: "Failed to post curated article",
+            requestSuccess: ""
+          });
+        });
+      }
+    })
+  };
+
+  deleteCollectionItem = async (articleId) => {
+    const { curateEmail } = {...this.state.curateInputs};
+    await deleteCollection({curateEmail, articleId})
+    .then(resp => {
+      this.fetchCollection();
+      this.setState({ 
+        requestSuccess: "Article successfully removed from your collection", 
+        requestError: "" 
+      });
+    }).catch((err) => {
+      this.setState({
+        requestError: "Failed to remove article from your collection",
+        requestSuccess: ""
+      });
+    });
+  }
 }
