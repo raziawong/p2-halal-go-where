@@ -23,7 +23,7 @@ export default function Collection(props) {
             type={helper.collectionView}
           />
         )}
-        {!props.curatedFetched && (
+        {!!props.curatedFetched && (
           <Typography component="h3" variant="h4">
             No results found
           </Typography>
