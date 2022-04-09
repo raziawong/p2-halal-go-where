@@ -6,6 +6,7 @@ import { mgwCategoriesMap } from "./data";
 const helper = {
   exploreView: "listing",
   articleView: "details",
+  collectionView: "collection",
   sortOptions: [
     {
       label: "What's New",
@@ -58,6 +59,12 @@ const helper = {
   deleteSteps: [
     { title: "Verify", fields: ["email"] },
     { title: "Confirmation", fields: [] },
+  ],
+  curateSteps: [
+    {
+      title: "Email",
+      fields: ["curateEmail"]
+    }
   ],
   fieldValidations: {
     displayName: {
@@ -139,6 +146,12 @@ const helper = {
         patterns: ["email"],
       },
     },
+    curate: {
+      curateEmail: {
+        required: true,
+        patterns: ["email"],
+      }
+    }
   },
   initFilterOpts: {
     id: "",
@@ -179,6 +192,10 @@ const helper = {
     email: "",
     title: "",
     content: "",
+  },
+  initCurateInputs: {
+    articleId: "",
+    curateEmail: ""
   },
   ratingMarks: [
     { value: 0, text: "No Rating" },

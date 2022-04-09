@@ -9,11 +9,8 @@ import {
   TextField,
 } from "@mui/material";
 import {
-  HomeSharp,
   MenuSharp,
-  NoteAddSharp,
   SearchSharp,
-  ViewListSharp,
 } from "@mui/icons-material";
 
 export default function NavDrawer({
@@ -63,10 +60,9 @@ export default function NavDrawer({
               variant="standard"
             />
           </ListItem>
-          <ListItem>
+          <ListItem sx={{ mt: 3}}>
             <ListItemText>
               <NavBarLink to="/">
-                <HomeSharp fontSize="small" sx={{ mx: 1 }} />
                 Home
               </NavBarLink>
             </ListItemText>
@@ -74,7 +70,6 @@ export default function NavDrawer({
           <ListItem>
             <ListItemText>
               <NavBarLink to="/explore">
-                <ViewListSharp fontSize="small" sx={{ mx: 1 }} />
                 Explore
               </NavBarLink>
             </ListItemText>
@@ -82,8 +77,14 @@ export default function NavDrawer({
           <ListItem>
             <ListItemText>
               <NavBarLink to="/create">
-                <NoteAddSharp fontSize="small" sx={{ mx: 1 }} />
                 Create
+              </NavBarLink>
+            </ListItemText>
+          </ListItem>
+          <ListItem>
+            <ListItemText>
+              <NavBarLink to="/collection">
+                Collection
               </NavBarLink>
             </ListItemText>
           </ListItem>

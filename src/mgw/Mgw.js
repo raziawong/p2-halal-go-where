@@ -15,6 +15,9 @@ import {
   postComment,
   getComments,
   getLocationsTagged,
+  getCollection,
+  postCollectionItem,
+  deleteCollectionItem,
 } from "./utils/data";
 import helper from "./utils/helper";
 import { SiteContainer, ViewContainer } from "./utils/mgwStyle";
@@ -22,6 +25,7 @@ import Loader from "./components/shared/Loader";
 import Landing from "./Landing";
 import Explore from "./Explore";
 import Create from "./Create";
+import Collection from "./Collection";
 import Article from "./Article";
 import NavBar from "./components/shared/NavBar";
 import NotFound from "./NotFound";
@@ -55,6 +59,11 @@ export default class Mgw extends Component {
     navDrawer: false,
     userEmail: "",
     userVerifyErrorMsg: "",
+    curatedFetched: [],
+    curateInputs: { ...helper.initCurateInputs },
+    curateInputsErrors: {},
+    collectionModal: false,
+    collectionAction: "retrieve",
     isMounted: false,
     isLoaded: false,
     requestError: "",
@@ -103,6 +112,12 @@ export default class Mgw extends Component {
                     setMgwState={this.setMgwState}
                     setFilterOpts={this.setFilterOpts}
                     detectSearch={this.detectSearch}
+                    collectionAction={this.state.collectionAction}
+                    collectionModal={this.state.collectionModal}
+                    curateState={this.state.curateInputs}
+                    curateErrors={this.state.curateInputsErrors}
+                    validateCurate={this.validateCurateInputs}
+                    requestSuccess={this.state.requestSuccess}
                     requestError={this.state.requestError}
                   />
                 }
@@ -124,6 +139,22 @@ export default class Mgw extends Component {
                     setArr={this.addArticleArraySize}
                     removeArr={this.removeArticleArraySize}
                     articlePosted={this.state.articlePosted}
+                    requestSuccess={this.state.requestSuccess}
+                    requestError={this.state.requestError}
+                  />
+                }
+              />
+              <Route
+                path="collection"
+                element={
+                  <Collection
+                    collectionAction={this.state.collectionAction}
+                    collectionModal={this.state.collectionModal}
+                    curatedFetched={this.state.curatedFetched}
+                    curateState={this.state.curateInputs}
+                    curateErrors={this.state.curateInputsErrors}
+                    setMgwState={this.setMgwState}
+                    validateCurate={this.validateCurateInputs}
                     requestSuccess={this.state.requestSuccess}
                     requestError={this.state.requestError}
                   />
@@ -174,7 +205,8 @@ export default class Mgw extends Component {
               open={
                 !!this.state.requestError &&
                 !this.state.editModal &&
-                !this.state.deleteModal
+                !this.state.deleteModal &&
+                !this.state.collectionModal
               }
               autoHideDuration={6000}
               onClose={this.handleToastClose}
@@ -412,7 +444,7 @@ export default class Mgw extends Component {
   validateArticleInputs = (fields, type) => {
     const validation = fields
       .map((fieldName) => {
-        return helper.validate(fieldName, {...this.state.articleInputs});
+        return helper.validate(fieldName, { ...this.state.articleInputs });
       })
       .filter((v) => v)
       .reduce((a, v) => ({ ...a, [v.fieldName]: v.message }), {});
@@ -424,7 +456,7 @@ export default class Mgw extends Component {
           editActiveStep,
           deleteActiveStep,
           articleInputs,
-          userEmail
+          userEmail,
         } = this.state;
 
         if (type === "create") {
@@ -453,19 +485,32 @@ export default class Mgw extends Component {
             });
           }
         } else if (type === "edit") {
-          if (editActiveStep === 0 && articleInputs.email && articleInputs.allowPublic) {
+          if (
+            editActiveStep === 0 &&
+            articleInputs.email &&
+            articleInputs.allowPublic
+          ) {
             await this.verifyArticleUser(
               { ...articleInputs, articleId: articleInputs._id },
               type
             );
             if (!this.state.userEmail) {
-              const newContributorValidation =
-              ["displayName", "name"].map((fieldName) => {
-                  return helper.validate(fieldName, articleInputs, "newContributor");
+              const newContributorValidation = ["displayName", "name"]
+                .map((fieldName) => {
+                  return helper.validate(
+                    fieldName,
+                    articleInputs,
+                    "newContributor"
+                  );
                 })
                 .filter((v) => v)
                 .reduce((a, v) => ({ ...a, [v.fieldName]: v.message }), {});
-                this.setState({ articleInputsErrors: {...this.state.articleInputsErrors, ...newContributorValidation}});
+              this.setState({
+                articleInputsErrors: {
+                  ...this.state.articleInputsErrors,
+                  ...newContributorValidation,
+                },
+              });
             }
           } else if (editActiveStep === 0 && articleInputs.email) {
             await this.verifyArticleUser(
@@ -473,7 +518,10 @@ export default class Mgw extends Component {
               type
             );
           } else if (editActiveStep === helper.editSteps.length - 1) {
-            const pd = helper.transformArticleForUpdate(articleInputs, userEmail?.length);
+            const pd = helper.transformArticleForUpdate(
+              articleInputs,
+              userEmail?.length
+            );
             await updateArticle(pd)
               .then((resp) => {
                 this.setState({
@@ -559,7 +607,7 @@ export default class Mgw extends Component {
           userEmail: "",
           userVerifyErrorMsg: "",
           requestError: "",
-          isNewUser: false
+          isNewUser: false,
         };
         if (contributors.length) {
           stateUpdate.userEmail = email;
@@ -570,7 +618,11 @@ export default class Mgw extends Component {
             stateUpdate.deleteActiveStep = 1;
           }
           this.setState(stateUpdate);
-        } else if (type === "edit" && allowPublic && this.state.editActiveStep === 0) {
+        } else if (
+          type === "edit" &&
+          allowPublic &&
+          this.state.editActiveStep === 0
+        ) {
           if (!name) {
             stateUpdate.userVerifyErrorMsg = helper.templates.userPublic;
           } else {
@@ -683,13 +735,9 @@ export default class Mgw extends Component {
 
   validateArticleComment = (articleId, fields) => {
     const validation = fields
-      .map((fieldName) => {
-        return helper.validate(
-          fieldName,
-          { ...this.state.commentInputs },
-          "comments"
-        );
-      })
+      .map((fieldName) =>
+        helper.validate(fieldName, { ...this.state.commentInputs }, "comments")
+      )
       .filter((v) => v)
       .reduce((a, v) => ({ ...a, [v.fieldName]: v.message }), {});
 
@@ -699,12 +747,94 @@ export default class Mgw extends Component {
         await postComment(bodyContent)
           .then((resp) => {
             this.fetchArticleComments(articleId);
+            this.setState({
+              requestError: "",
+            });
           })
           .catch((err) => {
             this.setState({
               requestError: "Failed to post article comment",
             });
           });
+      }
+    });
+  };
+
+  fetchCollection = async () => {
+    const { curateEmail } = { ...this.state.curateInputs };
+    const { articlesLocations, allCategories } = this.state;
+
+    if (curateEmail) {
+      await getCollection({ curateEmail })
+        .then(async (resp) => {
+          if (resp.data.count) {
+            const transformed = await helper.transformArticlesForRead(
+              resp.data.results,
+              articlesLocations,
+              allCategories
+            );
+            this.setState({
+              curatedFetched: [...transformed],
+              curateEmail: curateEmail,
+              requestError: "",
+            });
+          }
+        })
+        .catch((err) => {
+          this.setState({
+            requestError: "Failed to get collection with " + curateEmail,
+          });
+        });
+    }
+  };
+
+  validateCurateInputs = (fields) => {
+    const { collectionAction, curateInputs } = this.state;
+    const validation = fields
+      .map((fieldName) =>
+        helper.validate(fieldName, { ...curateInputs }, "curate")
+      )
+      .filter((v) => v)
+      .reduce((a, v) => ({ ...a, [v.fieldName]: v.message }), {});
+
+    this.setState({ curateInputsErrors: validation || {} }, async () => {
+      if (!Object.entries(validation)?.length) {
+        if (collectionAction === "add") {
+          await postCollectionItem({ ...curateInputs })
+            .then((resp) => {
+              this.fetchCollection();
+              this.setState({
+                curateErrors: {},
+                requestSuccess: "Article successfully added to your collection",
+                requestError: "",
+              });
+            })
+            .catch((err) => {
+              this.setState({
+                curateErrors: {},
+                requestError: "Failed to add article to collection",
+                requestSuccess: "",
+              });
+            });
+        } else if (collectionAction === "delete") {
+          await deleteCollectionItem({ ...curateInputs })
+            .then((resp) => {
+              this.fetchCollection();
+              this.setState({
+                requestSuccess:
+                  "Article successfully removed from your collection",
+                requestError: "",
+              });
+            })
+            .catch((err) => {
+              this.setState({
+                requestError: "Failed to remove article from your collection",
+                requestSuccess: "",
+              });
+            });
+        } else {
+          this.fetchCollection();
+        }
       }
     });
   };

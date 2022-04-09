@@ -24,12 +24,14 @@ const mgwRequests = {
         locationTagged: "/countries/cities/tagged",
         articleContributor: "/article/contributor",
         articleRating: "/article/rating",
-        articleComments: "/article/comments"
+        articleComments: "/article/comments",
+        collection: "/collection"
     },
     submitPaths: {
         article: "/article",
         articleRating: "/article/rating",
-        articleComment: "/article/comment"         
+        articleComment: "/article/comment",
+        collectionItem: "/collection/item"     
     }
 }
 
@@ -160,6 +162,18 @@ const postComment = async (body) => {
   });
 }
 
+const getCollection = async (params) => {
+  return await mgwRequests.axiosBase.get(mgwRequests.queryPaths.collection, { params });
+}
+
+const postCollectionItem = async (body) => {
+  return await mgwRequests.axiosBase.post(mgwRequests.submitPaths.collectionItem, { ...body });
+}
+
+const deleteCollectionItem = async (params) => {
+  return await mgwRequests.axiosBase.delete(mgwRequests.submitPaths.collectionItem, { params });
+}
+
 export {
   mgwCategoriesMap,
   getMgwFixed,
@@ -176,4 +190,7 @@ export {
   updateRating,
   getComments,
   postComment,
+  getCollection,
+  postCollectionItem,
+  deleteCollectionItem
 };

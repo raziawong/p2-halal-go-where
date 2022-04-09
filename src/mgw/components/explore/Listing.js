@@ -1,32 +1,21 @@
 import React, { Fragment } from "react";
-import { Link } from "react-router-dom";
 import helper from "../../utils/helper";
-import {
-  Card,
-  CardActions,
-  CardContent,
-  CardMedia,
-  Chip,
-  Box,
-  Button,
-  Grid,
-  Pagination,
-  Typography,
-  useMediaQuery,
-  CardHeader,
-} from "@mui/material";
-import { Masonry } from "@mui/lab";
-import { ArrowRightAlt } from "@mui/icons-material";
+import { Grid, Pagination, Typography } from "@mui/material";
+import ArticleMasonry from "../shared/ArticleMasonry";
 
 export default function Listing({
   articles,
   articlesTotal,
   pageNumber,
   setMgwState,
+  collectionAction,
+  collectionModal,
+  curateState,
+  curateErrors,
+  validateCurate,
+  requestSuccess,
+  requestError
 }) {
-  const smQ = useMediaQuery((theme) => theme.breakpoints.down("sm"));
-  const mdQ = useMediaQuery((theme) => theme.breakpoints.down("md"));
-  const colNum = smQ ? 1 : mdQ ? 2 : articles?.length < 3 ? 2 : 3;
   const showPagination = articlesTotal > helper.articlesLimit;
   const pageCount = Math.ceil(articlesTotal / helper.articlesLimit);
   const handleChange = (evt, val) => {
@@ -40,57 +29,18 @@ export default function Listing({
         {`Displaying ${articles.length} `}
         {showPagination ? `of ${articlesTotal} results` : "result(s)"}
       </Typography>
-      <Masonry
-        columns={colNum}
-        spacing={{ xs: 1, md: 2 }}
-        sx={{ alignItems: { xs: "center", sm: "unset" } }}
-      >
-        {articles.map((card) => {
-          return (
-            <Card key={card._id}>
-              <CardHeader
-                title={card.title}
-                subheader={([card.country?.name, card.city?.name] || "").join(
-                  ", "
-                )}
-              />
-              <CardMedia component="img" image={helper.getImg(card)} />
-              <CardContent>
-                <Typography gutterBottom variant="body2" color="text.secondary">
-                  {card.description}
-                </Typography>
-                <Box
-                  sx={{
-                    pt: 2,
-                    display: "flex",
-                    flexWrap: "wrap",
-                  }}
-                >
-                  {card.catLabels?.map((tag) =>
-                    <Chip
-                      key={tag._id}
-                      label={tag.name}
-                      color="info"
-                      size="small"
-                      variant="outlined"
-                    ></Chip>
-                  )}
-                </Box>
-              </CardContent>
-              <CardActions sx={{ justifyContent: "flex-end" }}>
-                <Button
-                  component={Link}
-                  to={`/article/${card._id}`}
-                  size="small"
-                  color="primary"
-                >
-                  Read More <ArrowRightAlt />
-                </Button>
-              </CardActions>
-            </Card>
-          );
-        })}
-      </Masonry>
+      <ArticleMasonry
+        articles={articles}
+        type={helper.exploreView}
+        setMgwState={setMgwState}
+        collectionAction={collectionAction}
+        collectionModal={collectionModal}
+        curateState={curateState}
+        curateErrors={curateErrors}
+        validateCurate={validateCurate}
+        requestError={requestError}
+        requestSuccess={requestSuccess}
+      />
       {showPagination ? (
         <Grid container sx={{ py: 2, mb: 4 }}>
           <Grid item xs={12}>

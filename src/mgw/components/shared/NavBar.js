@@ -65,7 +65,7 @@ export default function NavBar({
                 variant="standard"
               />
             </Box>
-            <Box sx={{ display: "flex", marginLeft: "1rem" }}>
+            <Box sx={{ display: "flex", ml: "1rem" }}>
               <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
                 <NavDrawer
                   navOpen={navOpen}
@@ -84,6 +84,11 @@ export default function NavBar({
                 <ListItem>
                   <ListItemText>
                     <NavBarLink to="/create">Create</NavBarLink>
+                  </ListItemText>
+                </ListItem>
+                <ListItem>
+                  <ListItemText>
+                    <NavBarLink to="/collection">Collection</NavBarLink>
                   </ListItemText>
                 </ListItem>
               </List>
