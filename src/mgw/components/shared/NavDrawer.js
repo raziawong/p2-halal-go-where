@@ -9,11 +9,8 @@ import {
   TextField,
 } from "@mui/material";
 import {
-  HomeSharp,
   MenuSharp,
-  NoteAddSharp,
   SearchSharp,
-  ViewListSharp,
 } from "@mui/icons-material";
 
 export default function NavDrawer({
