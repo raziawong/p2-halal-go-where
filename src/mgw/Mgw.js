@@ -761,31 +761,33 @@ export default class Mgw extends Component {
   };
 
   fetchCollection = async () => {
-    const { curateEmail } = { ...this.state.curateInputs };
-    const { articlesLocations, allCategories } = this.state;
-
-    if (curateEmail) {
-      await getCollection({ curateEmail })
-        .then(async (resp) => {
-          if (resp.data.count) {
-            const transformed = await helper.transformArticlesForRead(
-              resp.data.results,
-              articlesLocations,
-              allCategories
-            );
+    this.setState({ isLoaded: false }, async () => {
+      const { curateEmail } = { ...this.state.curateInputs };
+      const { articlesLocations, allCategories } = this.state;
+  
+      if (curateEmail) {
+        await getCollection({ curateEmail })
+          .then(async (resp) => {
+              const transformed = resp.data.count ? await helper.transformArticlesForRead(
+                resp.data.results,
+                articlesLocations,
+                allCategories
+              ) : [];
+              this.setState({
+                curatedFetched: [...transformed],
+                curateEmail: curateEmail,
+                isLoaded: true,
+                requestError: "",
+              });
+          })
+          .catch((err) => {
             this.setState({
-              curatedFetched: [...transformed],
-              curateEmail: curateEmail,
-              requestError: "",
+              requestError: "Failed to get collection with " + curateEmail,
+              isLoaded: true
             });
-          }
-        })
-        .catch((err) => {
-          this.setState({
-            requestError: "Failed to get collection with " + curateEmail,
           });
-        });
-    }
+      }
+    });
   };
 
   validateCurateInputs = (fields) => {

@@ -11,7 +11,7 @@ export default function LatestGrid({ latestArticles }) {
       <Typography component="h2" variant="h3">
         What's New
       </Typography>
-      {latestArticles?.length && latestArticles.length > 2 && (
+      {!!latestArticles.length && latestArticles.length > 2 && (
         <Grid
           container
           sx={{

@@ -16,14 +16,14 @@ export default function Collection(props) {
         <CurateFields {...props} />
       </Box>
       <Box component="section" sx={{ pt: 4, px: { xs: 3, md: 10 } }}>
-        {props.curatedFetched && (
+        {props.curatedFetched && props.curateState.curateEmail && (
           <ArticleMasonry
             {...props}
             articles={props.curatedFetched}
             type={helper.collectionView}
           />
         )}
-        {!!props.curatedFetched && (
+        {!props.curatedFetched.length && (
           <Typography component="h3" variant="h4">
             No results found
           </Typography>
