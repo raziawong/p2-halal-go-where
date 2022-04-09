@@ -1,5 +1,6 @@
 import React from "react";
-import { Box, Grid, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
+import { Box, Button, Grid, Typography } from "@mui/material";
 import helper from "../../utils/helper";
 import Carousel from "react-material-ui-carousel";
 import { LatestLink } from "../../utils/mgwStyle";
@@ -40,7 +41,7 @@ export default function LatestGrid({ latestArticles }) {
                 flexDirection: "column",
                 justifyContent: "space-between",
                 height: "100%",
-                bgcolor: "rgba(108, 122, 137, 0.4)",
+                bgcolor: "rgba(108, 122, 137, 0.6)",
               }}
             >
               <Box>
@@ -55,11 +56,14 @@ export default function LatestGrid({ latestArticles }) {
               <Typography color="#F7F7FF" sx={{ pt: 4 }}>
                 {latestArticles[0].description}
               </Typography>
-              <Typography sx={{ pt: 4 }}>
-                <LatestLink to={`/article/${latestArticles[0]._id}`}>
-                  Read More <ArrowRightAlt />
-                </LatestLink>
-              </Typography>
+              <Button
+                component={Link}
+                to={`/article/${latestArticles[0]._id}`}
+                size="small"
+                sx={{ mt: 4, p: 0, color: "#F7F7FF", justifyContent: "flex-end" }}
+              >
+                Read More <ArrowRightAlt />
+              </Button>
             </Box>
           </Grid>
           <Grid item xs={6} container sx={{ m: 0 }}>
@@ -82,7 +86,7 @@ export default function LatestGrid({ latestArticles }) {
                     flexDirection: "column",
                     justifyContent: "space-between",
                     height: "100%",
-                    bgcolor: "rgba(108, 122, 137, 0.4)",
+                    bgcolor: "rgba(108, 122, 137, 0.6)",
                   }}
                 >
                   <Box>
@@ -96,11 +100,14 @@ export default function LatestGrid({ latestArticles }) {
                       {", " + latestArticles[1].city?.name}
                     </Typography>
                   </Box>
-                  <Typography sx={{ pt: 3 }}>
-                    <LatestLink to={`/article/${latestArticles[1]._id}`}>
-                      Read More <ArrowRightAlt />
-                    </LatestLink>
-                  </Typography>
+                  <Button
+                    component={Link}
+                    to={`/article/${latestArticles[1]._id}`}
+                    size="small"
+                    sx={{ mt: { xs: 1, sm: 2 }, p: 0, color: "#F7F7FF", justifyContent: "flex-end" }}
+                  >
+                    Read More <ArrowRightAlt />
+                  </Button>
                 </Box>
               </Grid>
               <Grid
@@ -121,7 +128,7 @@ export default function LatestGrid({ latestArticles }) {
                     flexDirection: "column",
                     justifyContent: "space-between",
                     height: "100%",
-                    bgcolor: "rgba(108, 122, 137, 0.4)",
+                    bgcolor: "rgba(108, 122, 137, 0.6)",
                   }}
                 >
                   <Box>
@@ -135,11 +142,14 @@ export default function LatestGrid({ latestArticles }) {
                       {", " + latestArticles[2].city?.name}
                     </Typography>
                   </Box>
-                  <Typography sx={{ pt: 3 }}>
-                    <LatestLink to={`/article/${latestArticles[2]._id}`}>
-                      Read More <ArrowRightAlt />
-                    </LatestLink>
-                  </Typography>
+                  <Button
+                    component={Link}
+                    to={`/article/${latestArticles[2]._id}`}
+                    size="small"
+                    sx={{ mt: { xs: 1, sm: 2 }, p: 0, color: "#F7F7FF", justifyContent: "flex-end" }}
+                  >
+                    Read More <ArrowRightAlt />
+                  </Button>
                 </Box>
               </Grid>
             </Grid>
@@ -174,7 +184,7 @@ export default function LatestGrid({ latestArticles }) {
                 width: "100%",
                 py: { xs: 1, md: 5 },
                 px: { xs: 2, md: 10 },
-                bgcolor: "rgba(108, 122, 137, 0.4)",
+                bgcolor: "rgba(108, 122, 137, 0.6)",
               }}
             >
               <Typography component="h3" variant="h3" color="#F7F7FF">
@@ -191,11 +201,14 @@ export default function LatestGrid({ latestArticles }) {
               >
                 {slide.description}
               </Typography>
-              <Typography sx={{ pt: { xs: 1, sm: 2 } }}>
-                <LatestLink to={`/article/${slide._id}`}>
-                  Read More <ArrowRightAlt />
-                </LatestLink>
-              </Typography>
+              <Button
+                component={Link}
+                to={`/article/${slide._id}`}
+                size="small"
+                sx={{ mt: { xs: 1, sm: 2 }, p: 0, color: "#F7F7FF" }}
+              >
+                Read More <ArrowRightAlt />
+              </Button>
             </Box>
           </Grid>
         ))}

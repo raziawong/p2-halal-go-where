@@ -86,10 +86,11 @@ export default function Explore({
           </Box>
           <Box
             sx={{
-              maxHeight: { xs: "88vh", md: "80vh" },
+              maxHeight: { xs: "88vh", md: "88vh" },
               flexGrow: 1,
-              my: { xs: 1, md: 4 },
-              mx: { xs: 1, md: 0.5 },
+              p: {xs: 0, md: 0.4},
+              ml: { xs: 1.2, md: 0 },
+              mt: { xs: 1.5, md: 0.5 },
               overflowY: "hidden",
             }}
           >

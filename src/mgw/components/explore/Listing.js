@@ -16,6 +16,7 @@ import {
   CardHeader,
 } from "@mui/material";
 import { Masonry } from "@mui/lab";
+import { ArrowRightAlt } from "@mui/icons-material";
 
 export default function Listing({
   articles,
@@ -35,13 +36,15 @@ export default function Listing({
   };
   return (
     <Fragment>
-      <Typography component="p" variant="subtitle1" sx={{pb: 2}}>
+      <Typography component="p" variant="subtitle1" sx={{ pb: 2 }}>
         {`Displaying ${articles.length} `}
-        {showPagination
-          ? `of ${articlesTotal} results`
-          : "result(s)"}
+        {showPagination ? `of ${articlesTotal} results` : "result(s)"}
       </Typography>
-      <Masonry columns={colNum} spacing={{xs: 1, md: 2}} sx={{alignItems: {xs: "center", sm: "unset"}}}>
+      <Masonry
+        columns={colNum}
+        spacing={{ xs: 1, md: 2 }}
+        sx={{ alignItems: { xs: "center", sm: "unset" } }}
+      >
         {articles.map((card) => {
           return (
             <Card key={card._id}>
@@ -63,7 +66,7 @@ export default function Listing({
                     flexWrap: "wrap",
                   }}
                 >
-                  {card.catLabels?.map((tag) => (
+                  {card.catLabels?.map((tag) =>
                     <Chip
                       key={tag._id}
                       label={tag.name}
@@ -71,17 +74,17 @@ export default function Listing({
                       size="small"
                       variant="outlined"
                     ></Chip>
-                  ))}
+                  )}
                 </Box>
               </CardContent>
-              <CardActions>
+              <CardActions sx={{ justifyContent: "flex-end" }}>
                 <Button
                   component={Link}
                   to={`/article/${card._id}`}
                   size="small"
                   color="primary"
                 >
-                  Read More
+                  Read More <ArrowRightAlt />
                 </Button>
               </CardActions>
             </Card>

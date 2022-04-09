@@ -12,7 +12,8 @@ export default function ArticleChips({
 }) {
   const navgigate = useNavigate();
   const handleClick = (evt, filterName, filterVal) => {
-    setMgwState({ filterOpts: { ...helper.initFilterOpts, [filterName]: [filterVal]} });
+    const opt = filterName === "text" ? {[filterName] : filterVal} : {[filterName]: [filterVal]};
+    setMgwState({ filterOpts: { ...helper.initFilterOpts, ...opt} });
     execSearch(helper.exploreView);
     navgigate("/explore");
   };
@@ -59,7 +60,7 @@ export default function ArticleChips({
             variant="outlined"
             color="warning"
             label={tag}
-            onClick={(evt) =>  handleClick(evt, "tags", tag)}
+            onClick={(evt) =>  handleClick(evt, "text", tag)}
           />
         </ListItem>
       ))}
