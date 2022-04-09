@@ -118,7 +118,7 @@ export default function ArticleTags({
               {articleError?.subcatIds}
             </FormHelperText>
           )}
-          {!articleState.catIds.length && (
+          {!!articleError?.subcatIds && !articleState.catIds.length && (
             <FormHelperText>
               Please select Categories first
             </FormHelperText>

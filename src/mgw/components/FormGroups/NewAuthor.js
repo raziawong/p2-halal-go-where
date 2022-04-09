@@ -23,7 +23,7 @@ export default function NewAuthor({
           </Typography>
         </Paper>
       </Grid>
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={8}>
         <TextField
           fullWidth
           label="Display Name"
@@ -35,7 +35,7 @@ export default function NewAuthor({
           helperText={articleError?.displayName}
         />
       </Grid>
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={8}>
         <TextField
           fullWidth
           required
