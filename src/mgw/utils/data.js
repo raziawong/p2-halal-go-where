@@ -24,12 +24,14 @@ const mgwRequests = {
         locationTagged: "/countries/cities/tagged",
         articleContributor: "/article/contributor",
         articleRating: "/article/rating",
-        articleComments: "/article/comments"
+        articleComments: "/article/comments",
+        curate: "/curated"
     },
     submitPaths: {
         article: "/article",
         articleRating: "/article/rating",
-        articleComment: "/article/comment"         
+        articleComment: "/article/comment",
+        curate: "/curated"     
     }
 }
 
@@ -160,6 +162,18 @@ const postComment = async (body) => {
   });
 }
 
+const getCurated = async (params) => {
+  return await mgwRequests.axiosBase.get(mgwRequests.queryPaths.curate, { params });
+}
+
+const postCurated = async (params) => {
+  return await mgwRequests.axiosBase.post(mgwRequests.submitPaths.curate, { params });
+}
+
+const deleteCurated = async (params) => {
+  return await mgwRequests.axiosBase.delete(mgwRequests.submitPaths.curate, { params });
+}
+
 export {
   mgwCategoriesMap,
   getMgwFixed,
@@ -176,4 +190,7 @@ export {
   updateRating,
   getComments,
   postComment,
+  getCurated,
+  postCurated,
+  deleteCurated
 };

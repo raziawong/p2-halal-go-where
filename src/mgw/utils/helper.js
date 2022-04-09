@@ -59,6 +59,12 @@ const helper = {
     { title: "Verify", fields: ["email"] },
     { title: "Confirmation", fields: [] },
   ],
+  curateSteps: [
+    {
+      title: "Email",
+      fields: ["curateEmail"]
+    }
+  ],
   fieldValidations: {
     displayName: {
       patterns: ["displayName", "spaces"],
@@ -139,6 +145,12 @@ const helper = {
         patterns: ["email"],
       },
     },
+    curate: {
+      email: {
+        required: true,
+        patterns: ["email"],
+      }
+    }
   },
   initFilterOpts: {
     id: "",
@@ -179,6 +191,9 @@ const helper = {
     email: "",
     title: "",
     content: "",
+  },
+  initCurateInputs: {
+    curateEmail: ""
   },
   ratingMarks: [
     { value: 0, text: "No Rating" },
