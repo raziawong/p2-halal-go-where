@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { Box, Button, Grid, Typography } from "@mui/material";
 import helper from "../../utils/helper";
 import Carousel from "react-material-ui-carousel";
-import { LatestLink } from "../../utils/mgwStyle";
 import { ArrowRightAlt } from "@mui/icons-material";
 
 export default function LatestGrid({ latestArticles }) {
