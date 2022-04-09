@@ -15,7 +15,7 @@ export default function Collection(props) {
       <Box sx={{ display: "flex", justifyContent: "center", pt: 5 }}>
         <CurateFields {...props} />
       </Box>
-      <Box>
+      <Box component="section" sx={{ pt: 4, px: {xs: 3, md: 10 }}}>
         {props.curatedFetched && (
           <ArticleMasonry
             {...props}

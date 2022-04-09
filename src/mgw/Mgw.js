@@ -762,16 +762,23 @@ export default class Mgw extends Component {
 
   fetchCollection = async () => {
     const { curateEmail } = { ...this.state.curateInputs };
+    const { articlesLocations, allCategories } = this.state;
 
     if (curateEmail) {
       await getCollection({ curateEmail })
-        .then((resp) => {
-          if (resp.data.count)
+        .then(async (resp) => {
+          if (resp.data.count) {
+            const transformed = await helper.transformArticlesForRead(
+              resp.data.results,
+              articlesLocations,
+              allCategories
+            );
             this.setState({
-              curatedFetched: resp.data.results,
+              curatedFetched: [...transformed],
               curateEmail: curateEmail,
               requestError: "",
             });
+          }
         })
         .catch((err) => {
           this.setState({
