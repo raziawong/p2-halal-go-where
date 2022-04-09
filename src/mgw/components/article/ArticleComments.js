@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import { AddCommentSharp } from "@mui/icons-material";
 import ArticleRating from "./ArticleRating";
-import NewComment from "../formgroups/NewComment";
+import CommentFields from "../formgroups/CommentFields";
 
 export default function ArticleComments({
   rating,
@@ -129,7 +129,7 @@ export default function ArticleComments({
         </List>
       </Box>
       <Box sx={{ width: "100%", textAlign: { xs: "center", lg: "right" } }}>
-        <NewComment
+        <CommentFields
           commentState={commentState}
           commentError={commentError}
           validateComment={validateComment}

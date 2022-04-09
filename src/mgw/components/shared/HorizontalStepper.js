@@ -71,7 +71,6 @@ export default function HorizontalStepper({
           <Alert
             square
             severity="success"
-            variant="filled"
             action={
               type === "create" &&
               articlePosted && (
@@ -94,7 +93,7 @@ export default function HorizontalStepper({
       )}
       {requestError && (
         <Box sx={{ mb: 4 }}>
-          <Alert square severity="error" variant="filled">
+          <Alert square severity="error">
             <AlertTitle>Error</AlertTitle>
             {requestError}
           </Alert>
