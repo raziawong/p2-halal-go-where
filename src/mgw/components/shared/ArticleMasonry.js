@@ -21,7 +21,6 @@ import {
   BookmarkRemoveSharp,
 } from "@mui/icons-material";
 import CollectionItemModal from "../collection/CollectionItemModal";
-import { getThemeProps } from "@mui/styles";
 
 export default function ArticleMasonry({
   articles,

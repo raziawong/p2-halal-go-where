@@ -2,7 +2,6 @@ import { alpha, styled } from "@mui/material/styles";
 import { Link, NavLink } from "react-router-dom";
 import { Backdrop, Box, Drawer, Paper, Typography } from "@mui/material";
 import { mgwColors } from "./mgwTheme";
-import { borderRadius } from "@mui/system";
 
 const SiteContainer = styled(Box)(({ theme }) => ({
   position: "relative",

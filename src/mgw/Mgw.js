@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Alert, Snackbar, ThemeProvider } from "@mui/material";
+import { Alert, Snackbar } from "@mui/material";
 import { Routes, Route } from "react-router-dom";
 import {
   getMgwFixed,
