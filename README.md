@@ -53,7 +53,7 @@ As a muslim tourist, I am interested in visiting mosque in the local area | Arti
 
 ### Database
 <figure>
-    <img src="/readme/erd.png" height="450" alt="Entity Relationship Diagram">
+    <img src="/readme/erd.jpg" height="450" alt="Entity Relationship Diagram">
 </figure>
 
 ERD is drawn up to demonstrate the different relationship between enitities for the site before proceeding to model the database in MongoDB.
