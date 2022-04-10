@@ -169,6 +169,7 @@ export default function CompactStepper({
             aria-label="previous step"
             disabled={!!Object.entries(articleError).length}
             onClick={handleBack}
+            color="secondary"
             sx={{ visibility: activeStep === 0 ? "hidden" : "" }}
           >
             <KeyboardArrowLeft /> Back

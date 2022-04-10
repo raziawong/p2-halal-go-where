@@ -1,8 +1,13 @@
 import React from "react";
-import { Box, Link, Paper, Stack, Typography } from "@mui/material";
+import { Box, Link, Stack, Typography } from "@mui/material";
 import { mgwCategoriesMap } from "../../utils/data";
 import { useNavigate } from "react-router-dom";
 import helper from "../../utils/helper";
+import {
+  CatStackHeader,
+  CatStackItem,
+  CatStackOverlay,
+} from "../../utils/mgwStyle";
 
 export default function CategoriesStack({
   allCategories,
@@ -11,7 +16,7 @@ export default function CategoriesStack({
 }) {
   const navgigate = useNavigate();
   const handleClick = (evt, id) => {
-    setMgwState({ filterOpts: { ...helper.initFilterOpts, catIds: [id]} });
+    setMgwState({ filterOpts: { ...helper.initFilterOpts, catIds: [id] } });
     execSearch(helper.exploreView);
     navgigate("/explore");
   };
@@ -28,29 +33,11 @@ export default function CategoriesStack({
             sx={{ textDecoration: "none", cursor: "pointer" }}
             onClick={(evt) => handleClick(evt, findDBCat(v.value)?._id)}
           >
-            <Paper
-              sx={{
-                height: "45vh",
-                backgroundImage: `url(${v.banner})`,
-                backgroundPosition: "center",
-                backgroundSize: "cover",
-                boxShadow: "none",
-              }}
-            >
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  height: "100%",
-                  bgcolor: "rgba(108, 122, 137, 0.4)",
-                }}
-              >
-                <Typography component="h3" variant="h2" color="#F7F7FF" sx={{textAlign: "center"}}>
-                  {v.title}
-                </Typography>
-              </Box>
-            </Paper>
+            <CatStackItem bgImg={v.banner}>
+              <CatStackOverlay>
+                <CatStackHeader component="h3">{v.title}</CatStackHeader>
+              </CatStackOverlay>
+            </CatStackItem>
           </Link>
         ))}
       </Stack>

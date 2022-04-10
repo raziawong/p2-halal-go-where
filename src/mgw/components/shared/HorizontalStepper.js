@@ -158,6 +158,7 @@ export default function HorizontalStepper({
           aria-label="previous step"
           disabled={!!Object.entries(articleError).length}
           onClick={handleBack}
+          color="secondary"
           sx={{ mr: 1, display: activeStep === 0 ? "none" : "" }}
         >
           Back

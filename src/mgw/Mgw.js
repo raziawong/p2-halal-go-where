@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import mgwTheme from "./utils/mgwTheme";
 import { Alert, Snackbar, ThemeProvider } from "@mui/material";
 import { Routes, Route } from "react-router-dom";
 import {
@@ -72,151 +71,149 @@ export default class Mgw extends Component {
 
   render() {
     return (
-      <ThemeProvider theme={mgwTheme}>
-        <SiteContainer sx={{ overflow: this.state.isLoaded ? "" : "hidden" }}>
-          <ViewContainer>
-            <NavBar
-              navOpen={this.state.navDrawer}
-              setMgwState={this.setMgwState}
-              fetchArticles={this.fetchArticles}
-              filterOpts={this.state.filterOpts}
-              setFilterOpts={this.setFilterOpts}
-            />
-            <Routes>
-              <Route
-                index
-                path="/"
-                element={
-                  <Landing
-                    latestArticles={this.state.articlesLatest}
-                    allCategories={this.state.allCategories}
-                    setMgwState={this.setMgwState}
-                    execSearch={this.fetchArticles}
-                  />
-                }
-              />
-              <Route
-                path="explore"
-                element={
-                  <Explore
-                    filterOpts={this.state.filterOpts}
-                    pageNumber={this.state.pageNumber}
-                    sortIndex={this.state.sortIndex}
-                    sortAnchor={this.state.sortMenuAnchor}
-                    countries={this.state.articlesLocations}
-                    categories={this.state.allCategories}
-                    articles={this.state.articlesFetched}
-                    articlesTotal={this.state.articlesTotal}
-                    actionModal={this.state.actionModal}
-                    loaded={this.state.isLoaded}
-                    setMgwState={this.setMgwState}
-                    setFilterOpts={this.setFilterOpts}
-                    detectSearch={this.detectSearch}
-                    collectionAction={this.state.collectionAction}
-                    collectionModal={this.state.collectionModal}
-                    curateState={this.state.curateInputs}
-                    curateErrors={this.state.curateInputsErrors}
-                    validateCurate={this.validateCurateInputs}
-                    requestSuccess={this.state.requestSuccess}
-                    requestError={this.state.requestError}
-                  />
-                }
-              />
-              <Route
-                path="create"
-                element={
-                  <Create
-                    tagOpts={this.state.articlesTags}
-                    locationOpts={this.state.allCountries}
-                    catOpts={this.state.allCategories}
-                    articleErrors={this.state.articleInputsErrors}
-                    activeStep={this.state.createActiveStep}
-                    setMgwState={this.setMgwState}
-                    articleState={this.state.articleInputs}
-                    setArticleState={this.setArticleInputs}
-                    articleError={this.state.articleInputsErrors}
-                    validateArticle={this.validateArticleInputs}
-                    setArr={this.addArticleArraySize}
-                    removeArr={this.removeArticleArraySize}
-                    articlePosted={this.state.articlePosted}
-                    requestSuccess={this.state.requestSuccess}
-                    requestError={this.state.requestError}
-                  />
-                }
-              />
-              <Route
-                path="collection"
-                element={
-                  <Collection
-                    collectionAction={this.state.collectionAction}
-                    collectionModal={this.state.collectionModal}
-                    curatedFetched={this.state.curatedFetched}
-                    curateState={this.state.curateInputs}
-                    curateErrors={this.state.curateInputsErrors}
-                    setMgwState={this.setMgwState}
-                    validateCurate={this.validateCurateInputs}
-                    requestSuccess={this.state.requestSuccess}
-                    requestError={this.state.requestError}
-                  />
-                }
-              />
-              <Route
-                path="article/:id"
-                element={
-                  <Article
-                    tagOpts={this.state.articlesTags}
-                    locationOpts={this.state.allCountries}
-                    catOpts={this.state.allCategories}
-                    articleState={this.state.articleInputs}
-                    articleError={this.state.articleInputsErrors}
-                    validateArticle={this.validateArticleInputs}
-                    setArticleState={this.setArticleInputs}
-                    setArr={this.addArticleArraySize}
-                    removeArr={this.removeArticleArraySize}
-                    activeStep={this.state.editActiveStep}
-                    deleteStep={this.state.deleteActiveStep}
-                    loaded={this.state.isLoaded}
-                    mounted={this.state.isMounted}
-                    editModal={this.state.editModal}
-                    deleteModal={this.state.deleteModal}
-                    userEmail={this.state.userEmail}
-                    userVerifyErrorMsg={this.state.userVerifyErrorMsg}
-                    setMgwState={this.setMgwState}
-                    article={this.state.articleDetail}
-                    setFilterOpts={this.setFilterOpts}
-                    execSearch={this.fetchArticles}
-                    updateRating={this.updateArticleRating}
-                    commentState={this.state.commentInputs}
-                    commentError={this.state.commentInputsErrors}
-                    validateComment={this.validateArticleComment}
-                    setCommentState={this.setCommentInputs}
-                    articlePosted={this.state.articlePosted}
-                    requestSuccess={this.state.requestSuccess}
-                    requestError={this.state.requestError}
-                  />
-                }
-              />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </ViewContainer>
-          <Loader toShow={!this.state.isLoaded} />
-          {this.state.requestError && (
-            <Snackbar
-              open={
-                !!this.state.requestError &&
-                !this.state.editModal &&
-                !this.state.deleteModal &&
-                !this.state.collectionModal
+      <SiteContainer sx={{ overflow: this.state.isLoaded ? "" : "hidden" }}>
+        <ViewContainer>
+          <NavBar
+            navOpen={this.state.navDrawer}
+            setMgwState={this.setMgwState}
+            fetchArticles={this.fetchArticles}
+            filterOpts={this.state.filterOpts}
+            setFilterOpts={this.setFilterOpts}
+          />
+          <Routes>
+            <Route
+              index
+              path="/"
+              element={
+                <Landing
+                  latestArticles={this.state.articlesLatest}
+                  allCategories={this.state.allCategories}
+                  setMgwState={this.setMgwState}
+                  execSearch={this.fetchArticles}
+                />
               }
-              autoHideDuration={6000}
-              onClose={this.handleToastClose}
-              sx={{ bottom: 130, left: 10 }}
-            >
-              <Alert severity="error">{this.state.requestError}</Alert>
-            </Snackbar>
-          )}
-        </SiteContainer>
-      </ThemeProvider>
+            />
+            <Route
+              path="explore"
+              element={
+                <Explore
+                  filterOpts={this.state.filterOpts}
+                  pageNumber={this.state.pageNumber}
+                  sortIndex={this.state.sortIndex}
+                  sortAnchor={this.state.sortMenuAnchor}
+                  countries={this.state.articlesLocations}
+                  categories={this.state.allCategories}
+                  articles={this.state.articlesFetched}
+                  articlesTotal={this.state.articlesTotal}
+                  actionModal={this.state.actionModal}
+                  loaded={this.state.isLoaded}
+                  setMgwState={this.setMgwState}
+                  setFilterOpts={this.setFilterOpts}
+                  detectSearch={this.detectSearch}
+                  collectionAction={this.state.collectionAction}
+                  collectionModal={this.state.collectionModal}
+                  curateState={this.state.curateInputs}
+                  curateErrors={this.state.curateInputsErrors}
+                  validateCurate={this.validateCurateInputs}
+                  requestSuccess={this.state.requestSuccess}
+                  requestError={this.state.requestError}
+                />
+              }
+            />
+            <Route
+              path="create"
+              element={
+                <Create
+                  tagOpts={this.state.articlesTags}
+                  locationOpts={this.state.allCountries}
+                  catOpts={this.state.allCategories}
+                  articleErrors={this.state.articleInputsErrors}
+                  activeStep={this.state.createActiveStep}
+                  setMgwState={this.setMgwState}
+                  articleState={this.state.articleInputs}
+                  setArticleState={this.setArticleInputs}
+                  articleError={this.state.articleInputsErrors}
+                  validateArticle={this.validateArticleInputs}
+                  setArr={this.addArticleArraySize}
+                  removeArr={this.removeArticleArraySize}
+                  articlePosted={this.state.articlePosted}
+                  requestSuccess={this.state.requestSuccess}
+                  requestError={this.state.requestError}
+                />
+              }
+            />
+            <Route
+              path="collection"
+              element={
+                <Collection
+                  collectionAction={this.state.collectionAction}
+                  collectionModal={this.state.collectionModal}
+                  curatedFetched={this.state.curatedFetched}
+                  curateState={this.state.curateInputs}
+                  curateErrors={this.state.curateInputsErrors}
+                  setMgwState={this.setMgwState}
+                  validateCurate={this.validateCurateInputs}
+                  requestSuccess={this.state.requestSuccess}
+                  requestError={this.state.requestError}
+                />
+              }
+            />
+            <Route
+              path="article/:id"
+              element={
+                <Article
+                  tagOpts={this.state.articlesTags}
+                  locationOpts={this.state.allCountries}
+                  catOpts={this.state.allCategories}
+                  articleState={this.state.articleInputs}
+                  articleError={this.state.articleInputsErrors}
+                  validateArticle={this.validateArticleInputs}
+                  setArticleState={this.setArticleInputs}
+                  setArr={this.addArticleArraySize}
+                  removeArr={this.removeArticleArraySize}
+                  activeStep={this.state.editActiveStep}
+                  deleteStep={this.state.deleteActiveStep}
+                  loaded={this.state.isLoaded}
+                  mounted={this.state.isMounted}
+                  editModal={this.state.editModal}
+                  deleteModal={this.state.deleteModal}
+                  userEmail={this.state.userEmail}
+                  userVerifyErrorMsg={this.state.userVerifyErrorMsg}
+                  setMgwState={this.setMgwState}
+                  article={this.state.articleDetail}
+                  setFilterOpts={this.setFilterOpts}
+                  execSearch={this.fetchArticles}
+                  updateRating={this.updateArticleRating}
+                  commentState={this.state.commentInputs}
+                  commentError={this.state.commentInputsErrors}
+                  validateComment={this.validateArticleComment}
+                  setCommentState={this.setCommentInputs}
+                  articlePosted={this.state.articlePosted}
+                  requestSuccess={this.state.requestSuccess}
+                  requestError={this.state.requestError}
+                />
+              }
+            />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </ViewContainer>
+        <Loader toShow={!this.state.isLoaded} />
+        {this.state.requestError && (
+          <Snackbar
+            open={
+              !!this.state.requestError &&
+              !this.state.editModal &&
+              !this.state.deleteModal &&
+              !this.state.collectionModal
+            }
+            autoHideDuration={6000}
+            onClose={this.handleToastClose}
+            sx={{ bottom: 130, left: 10 }}
+          >
+            <Alert severity="error">{this.state.requestError}</Alert>
+          </Snackbar>
+        )}
+      </SiteContainer>
     );
   }
 

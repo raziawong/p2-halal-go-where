@@ -12,6 +12,7 @@ import {
   ListItemText,
   TextField,
   Toolbar,
+  Typography,
 } from "@mui/material";
 import { SearchSharp } from "@mui/icons-material";
 import NavDrawer from "./NavDrawer";
@@ -38,9 +39,21 @@ export default function NavBar({
       <AppBar position="sticky">
         <Container maxWidth="xl">
           <Toolbar component="nav">
-            <NavBarLogo to="/">
-              <img src={logo} alt="Muslim Go Where" />
-            </NavBarLogo>
+            <Box sx={{ position: "relative", flexGrow: 1 }}>
+              <NavBarLogo
+                to="/"
+                sx={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <img src={logo} alt="Muslim Go Where" />
+                <Typography>
+                  MGW
+                </Typography>
+              </NavBarLogo>
+            </Box>
             <Box sx={{ display: { xs: "none", sm: "block" } }}>
               <TextField
                 name="text"

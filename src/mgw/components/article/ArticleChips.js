@@ -35,7 +35,7 @@ export default function ArticleChips({
         >
           <Chip
             variant="outlined"
-            color="info"
+            color="tertiary"
             label={tag.name}
             onClick={(evt) => handleClick(evt, "catIds", tag._id)}
           />
@@ -48,7 +48,7 @@ export default function ArticleChips({
         >
           <Chip
             variant="outlined"
-            color="primary"
+            color="secondary"
             label={tag.name}
             onClick={(evt) =>  handleClick(evt, "subcatIds", tag._id)}
           />
@@ -58,7 +58,7 @@ export default function ArticleChips({
         <ListItem key={tag} sx={{ marginLeft: "3px", width: "fit-content" }}>
           <Chip
             variant="outlined"
-            color="warning"
+            color="info"
             label={tag}
             onClick={(evt) =>  handleClick(evt, "text", tag)}
           />

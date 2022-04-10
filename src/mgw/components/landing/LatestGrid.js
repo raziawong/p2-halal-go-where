@@ -1,9 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Box, Button, Grid, Typography } from "@mui/material";
+import { alpha, Box, Button, Grid, Typography } from "@mui/material";
 import helper from "../../utils/helper";
 import Carousel from "react-material-ui-carousel";
 import { ArrowRightAlt } from "@mui/icons-material";
+import { mgwColors } from "../../utils/mgwTheme";
+import { LatestOverlay } from "../../utils/mgwStyle";
 
 export default function LatestGrid({ latestArticles }) {
   return (
@@ -33,37 +35,28 @@ export default function LatestGrid({ latestArticles }) {
               borderRadius: "4px",
             }}
           >
-            <Box
-              sx={{
-                p: 4,
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-                height: "100%",
-                bgcolor: "rgba(108, 122, 137, 0.6)",
-              }}
-            >
+            <LatestOverlay>
               <Box>
-                <Typography component="h3" variant="h3" color="#F7F7FF">
+                <Typography component="h3" variant="h3" color={mgwColors.secContrast}>
                   {latestArticles[0].title}
                 </Typography>
-                <Typography variant="subtitle1" color="#F7F7FF">
+                <Typography variant="subtitle1" color={mgwColors.secContrast}>
                   {latestArticles[0].country?.name}{" "}
                   {", " + latestArticles[0].city?.name}
                 </Typography>
               </Box>
-              <Typography color="#F7F7FF" sx={{ pt: 4 }}>
+              <Typography color={mgwColors.secContrast} sx={{ pt: 4 }}>
                 {latestArticles[0].description}
               </Typography>
               <Button
                 component={Link}
                 to={`/article/${latestArticles[0]._id}`}
                 size="small"
-                sx={{ mt: 4, p: 0, color: "#F7F7FF", justifyContent: "flex-end" }}
+                sx={{ mt: 4, p: 0, color: mgwColors.secContrast, justifyContent: "flex-end" }}
               >
                 Read More <ArrowRightAlt />
               </Button>
-            </Box>
+            </LatestOverlay>
           </Grid>
           <Grid item xs={6} container sx={{ m: 0 }}>
             <Grid item xs container direction="column">
@@ -78,23 +71,14 @@ export default function LatestGrid({ latestArticles }) {
                   borderRadius: "4px",
                 }}
               >
-                <Box
-                  sx={{
-                    p: 4,
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "space-between",
-                    height: "100%",
-                    bgcolor: "rgba(108, 122, 137, 0.6)",
-                  }}
-                >
-                  <Box>
-                    <Typography component="h3" variant="h3" color="#F7F7FF">
+                <LatestOverlay>
+                <Box>
+                    <Typography component="h3" variant="h3" color={mgwColors.secContrast}>
                       {latestArticles[1].title.length > 60
                         ? latestArticles[1].title.substr(0, 60) + "..."
                         : latestArticles[1].title}
                     </Typography>
-                    <Typography variant="subtitle1" color="#F7F7FF">
+                    <Typography variant="subtitle1" color={mgwColors.secContrast}>
                       {latestArticles[1].country?.name}{" "}
                       {", " + latestArticles[1].city?.name}
                     </Typography>
@@ -103,11 +87,11 @@ export default function LatestGrid({ latestArticles }) {
                     component={Link}
                     to={`/article/${latestArticles[1]._id}`}
                     size="small"
-                    sx={{ mt: { xs: 1, sm: 2 }, p: 0, color: "#F7F7FF", justifyContent: "flex-end" }}
+                    sx={{ mt: { xs: 1, sm: 2 }, p: 0, color: mgwColors.secContrast, justifyContent: "flex-end" }}
                   >
                     Read More <ArrowRightAlt />
                   </Button>
-                </Box>
+                </LatestOverlay>
               </Grid>
               <Grid
                 item
@@ -120,23 +104,14 @@ export default function LatestGrid({ latestArticles }) {
                   borderRadius: "4px",
                 }}
               >
-                <Box
-                  sx={{
-                    p: 4,
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "space-between",
-                    height: "100%",
-                    bgcolor: "rgba(108, 122, 137, 0.6)",
-                  }}
-                >
+                <LatestOverlay>
                   <Box>
-                    <Typography component="h3" variant="h3" color="#F7F7FF">
+                    <Typography component="h3" variant="h3" color={mgwColors.secContrast}>
                       {latestArticles[2].title.length > 60
                         ? latestArticles[2].title.substr(0, 60) + "..."
                         : latestArticles[2].title}
                     </Typography>
-                    <Typography variant="subtitle1" color="#F7F7FF">
+                    <Typography variant="subtitle1" color={mgwColors.secContrast}>
                       {latestArticles[2].country?.name}{" "}
                       {", " + latestArticles[2].city?.name}
                     </Typography>
@@ -145,11 +120,11 @@ export default function LatestGrid({ latestArticles }) {
                     component={Link}
                     to={`/article/${latestArticles[2]._id}`}
                     size="small"
-                    sx={{ mt: { xs: 1, sm: 2 }, p: 0, color: "#F7F7FF", justifyContent: "flex-end" }}
+                    sx={{ mt: { xs: 1, sm: 2 }, p: 0, color: mgwColors.secContrast, justifyContent: "flex-end" }}
                   >
                     Read More <ArrowRightAlt />
                   </Button>
-                </Box>
+                </LatestOverlay>
               </Grid>
             </Grid>
           </Grid>
@@ -183,19 +158,19 @@ export default function LatestGrid({ latestArticles }) {
                 width: "100%",
                 py: { xs: 1, md: 5 },
                 px: { xs: 2, md: 10 },
-                bgcolor: "rgba(108, 122, 137, 0.6)",
+                bgcolor: alpha(mgwColors.darkBg, 0.5),
               }}
             >
-              <Typography component="h3" variant="h3" color="#F7F7FF">
+              <Typography component="h3" variant="h3" color={mgwColors.secContrast}>
                 {slide.title.length > 60
                   ? slide.title.substr(0, 60) + "..."
                   : slide.title}
               </Typography>
-              <Typography variant="subtitle1" color="#F7F7FF">
+              <Typography variant="subtitle1" color={mgwColors.secContrast}>
                 {slide.country?.name} {", " + slide.city?.name}
               </Typography>
               <Typography
-                color="#F7F7FF"
+                color={mgwColors.secContrast}
                 sx={{ display: { xs: "none", md: "block" }, pt: 4 }}
               >
                 {slide.description}
@@ -204,7 +179,7 @@ export default function LatestGrid({ latestArticles }) {
                 component={Link}
                 to={`/article/${slide._id}`}
                 size="small"
-                sx={{ mt: { xs: 1, sm: 2 }, p: 0, color: "#F7F7FF" }}
+                sx={{ mt: { xs: 1, sm: 2 }, p: 0, color: mgwColors.secContrast }}
               >
                 Read More <ArrowRightAlt />
               </Button>

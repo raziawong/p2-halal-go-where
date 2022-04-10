@@ -21,6 +21,7 @@ import {
   BookmarkRemoveSharp,
 } from "@mui/icons-material";
 import CollectionItemModal from "../collection/CollectionItemModal";
+import { getThemeProps } from "@mui/styles";
 
 export default function ArticleMasonry({
   articles,
@@ -99,7 +100,7 @@ export default function ArticleMasonry({
                     <Chip
                       key={tag._id}
                       label={tag.name}
-                      color="info"
+                      color="tertiary"
                       size="small"
                       variant="outlined"
                     ></Chip>

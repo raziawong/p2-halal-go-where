@@ -1,14 +1,3 @@
-:root {
-    --pri-color: #1C7C54;
-    --sec-color: #F0BCD4;
-    --pri-text: #0A2E36;
-    --sec-text: #ECA72C;
-    --pri-accent: rgba(198, 197, 185, 0.8);
-    --sec-accent: #EBB9DF;
-    --bg-color: #F7F7FF;
-    --bg-color-o3: rgb(247, 247, 255, 0.3);
-}
-
 body {
     margin: 0 0 0 0;
     padding: 0 0 0 0;

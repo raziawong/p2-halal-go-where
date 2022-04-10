@@ -109,7 +109,7 @@ export default function AuthorAction({
           requestError={requestError}
         />
         <IconButton
-          color="primary"
+          color="secondary"
           aria-label="Delete Article"
           onClick={handleDelete}
         >
