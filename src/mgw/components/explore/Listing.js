@@ -8,13 +8,7 @@ export default function Listing({
   articlesTotal,
   pageNumber,
   setMgwState,
-  collectionAction,
-  collectionModal,
   curateState,
-  curateErrors,
-  validateCurate,
-  requestSuccess,
-  requestError
 }) {
   const showPagination = articlesTotal > helper.articlesLimit;
   const pageCount = Math.ceil(articlesTotal / helper.articlesLimit);
@@ -33,13 +27,7 @@ export default function Listing({
         articles={articles}
         type={helper.exploreView}
         setMgwState={setMgwState}
-        collectionAction={collectionAction}
-        collectionModal={collectionModal}
         curateState={curateState}
-        curateErrors={curateErrors}
-        validateCurate={validateCurate}
-        requestError={requestError}
-        requestSuccess={requestSuccess}
       />
       {showPagination ? (
         <Grid container sx={{ py: 2, mb: 4 }}>

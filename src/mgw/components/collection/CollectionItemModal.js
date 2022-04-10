@@ -32,13 +32,12 @@ export default function CollectionItemModal({
     setMgwState({
       collectionModal: false,
       collectionAction: "retrieve",
-      curateInputs: { ...helper.initCurateInputs },
+      curateInputs: { ...helper.initCurateInputs, curateEmail: curateState.curateEmail },
       curateInputsErrors: {},
       requstSuccess: "",
       requestError: "",
     });
   };
-
   return (
     <Dialog
       TransitionComponent={Transition}

@@ -1,6 +1,6 @@
-import { AppBar, BottomNavigation, Toolbar, Typography } from "@mui/material";
+import { AppBar, Toolbar, Typography } from "@mui/material";
 import React from "react";
-import { mgwColors } from "../../utils/mgwTheme";
+
 export default function Footer() {
   return (
     <AppBar component="footer" position="static">

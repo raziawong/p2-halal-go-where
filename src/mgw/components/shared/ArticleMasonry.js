@@ -20,19 +20,12 @@ import {
   BookmarkAddSharp,
   BookmarkRemoveSharp,
 } from "@mui/icons-material";
-import CollectionItemModal from "../collection/CollectionItemModal";
 
 export default function ArticleMasonry({
   articles,
   type,
   curateState,
-  curateErrors,
-  collectionAction,
-  collectionModal,
-  validateCurate,
   setMgwState,
-  requestSuccess,
-  requestError
 }) {
   const smQ = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   const mdQ = useMediaQuery((theme) => theme.breakpoints.down("md"));
@@ -120,16 +113,6 @@ export default function ArticleMasonry({
           );
         })}
       </Masonry>
-      <CollectionItemModal
-        collectionAction={collectionAction}
-        collectionModal={collectionModal}
-        curateState={curateState}
-        curateErrors={curateErrors}
-        validateCurate={validateCurate}
-        setMgwState={setMgwState}
-        requestSuccess={requestSuccess}
-        requestError={requestError}
-      />
     </Fragment>
   );
 }

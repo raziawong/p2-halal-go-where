@@ -29,6 +29,7 @@ import Article from "./Article";
 import NavBar from "./components/shared/NavBar";
 import NotFound from "./NotFound";
 import Footer from "./components/shared/Footer";
+import CollectionItemModal from "./components/collection/CollectionItemModal";
 
 export default class Mgw extends Component {
   state = {
@@ -111,13 +112,7 @@ export default class Mgw extends Component {
                   setMgwState={this.setMgwState}
                   setFilterOpts={this.setFilterOpts}
                   detectSearch={this.detectSearch}
-                  collectionAction={this.state.collectionAction}
-                  collectionModal={this.state.collectionModal}
                   curateState={this.state.curateInputs}
-                  curateErrors={this.state.curateInputsErrors}
-                  validateCurate={this.validateCurateInputs}
-                  requestSuccess={this.state.requestSuccess}
-                  requestError={this.state.requestError}
                 />
               }
             />
@@ -190,6 +185,7 @@ export default class Mgw extends Component {
                   validateComment={this.validateArticleComment}
                   setCommentState={this.setCommentInputs}
                   articlePosted={this.state.articlePosted}
+                  curateState={this.state.curateInputs}
                   requestSuccess={this.state.requestSuccess}
                   requestError={this.state.requestError}
                 />
@@ -197,8 +193,18 @@ export default class Mgw extends Component {
             />
             <Route path="*" element={<NotFound />} />
           </Routes>
-          <Footer />
+          {/* <Footer /> */}
         </ViewContainer>
+        <CollectionItemModal
+          collectionAction={this.state.collectionAction}
+          collectionModal={this.state.collectionModal}
+          curateState={this.state.curateInputs}
+          curateErrors={this.state.curateInputsErrors}
+          validateCurate={this.validateCurateInputs}
+          setMgwState={this.setMgwState}
+          requestSuccess={this.state.requestSuccess}
+          requestError={this.state.requestError}
+        />
         <Loader toShow={!this.state.isLoaded} />
         {this.state.requestError && (
           <Snackbar
@@ -763,26 +769,28 @@ export default class Mgw extends Component {
     this.setState({ isLoaded: false }, async () => {
       const { curateEmail } = { ...this.state.curateInputs };
       const { articlesLocations, allCategories } = this.state;
-  
+
       if (curateEmail) {
         await getCollection({ curateEmail })
           .then(async (resp) => {
-              const transformed = resp.data.count ? await helper.transformArticlesForRead(
-                resp.data.results,
-                articlesLocations,
-                allCategories
-              ) : [];
-              this.setState({
-                curatedFetched: [...transformed],
-                curateEmail: curateEmail,
-                isLoaded: true,
-                requestError: "",
-              });
+            const transformed = resp.data.count
+              ? await helper.transformArticlesForRead(
+                  resp.data.results,
+                  articlesLocations,
+                  allCategories
+                )
+              : [];
+            this.setState({
+              curatedFetched: [...transformed],
+              curateEmail: curateEmail,
+              isLoaded: true,
+              requestError: "",
+            });
           })
           .catch((err) => {
             this.setState({
               requestError: "Failed to get collection with " + curateEmail,
-              isLoaded: true
+              isLoaded: true,
             });
           });
       }

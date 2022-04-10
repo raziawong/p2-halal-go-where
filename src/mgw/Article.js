@@ -1,11 +1,12 @@
 import React, { Fragment, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import helper from "./utils/helper";
-import { Container, Box, Typography } from "@mui/material";
+import { Container, Box, IconButton, Typography } from "@mui/material";
+import { BookmarkAddSharp } from "@mui/icons-material";
 import ReactMarkdown from "react-markdown";
 import NotFound from "./NotFound";
 import ArticleChips from "./components/article/ArticleChips";
-import AuthorAction from "./components/article/AuthorAction"
+import AuthorAction from "./components/article/AuthorAction";
 import ArticleComments from "./components/article/ArticleComments";
 import ImageCarousel from "./components/article/ImageCarousel";
 
@@ -36,6 +37,7 @@ export default function Article({
   commentError,
   validateComment,
   setCommentState,
+  curateState,
   requestSuccess,
   requestError,
 }) {
@@ -52,16 +54,45 @@ export default function Article({
     }
     return "";
   }, [mounted, execSearch, params.id]);
+  const handleCollectionClick = (articleId, action) => {
+    setMgwState({
+      curateInputs: { ...curateState, articleId },
+      collectionModal: true,
+      collectionAction: action,
+      requestSuccess: "",
+      requestError: ""
+    });
+  };
   return (
     <Fragment>
       {article.title && loaded && (
-        <Container component="main" disableGutters maxWidth="xl" sx={{width: "100vw"}}>
+        <Container
+          component="main"
+          disableGutters
+          maxWidth="xl"
+          sx={{ width: "100vw" }}
+        >
           <Box component="article" sx={{ my: { xs: 0.5, lg: 4 }, mx: 0 }}>
             <ImageCarousel images={helper.getImg(article, true)} />
             <Box sx={{ my: { xs: 3, lg: 5 }, mx: { xs: 3, lg: 5 } }}>
-              <Typography component="h1" variant="h2">
-                {article.title}
-              </Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <Typography component="h1" variant="h2">
+                  {article.title}
+                </Typography>
+                <IconButton
+                  size="large"
+                  aria-label="Add to Collection"
+                  onClick={(evt) => handleCollectionClick(article._id, "add")}
+                >
+                  <BookmarkAddSharp fontSize="small" />
+                </IconButton>
+              </Box>
               <Typography component="p" variant="h5">
                 {article.description}
               </Typography>
