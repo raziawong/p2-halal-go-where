@@ -11,7 +11,7 @@ import helper from "./helper";
 
 const mgwRequests = {
     axiosBase: axios.create({
-        baseURL: "http://localhost:3388"
+        baseURL: "https://muslim-go-where-api.herokuapp.com/"
     }),
     queryPaths: {
         countries: "/countries",
