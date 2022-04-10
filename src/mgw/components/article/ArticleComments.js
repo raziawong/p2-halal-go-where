@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import { AddCommentSharp } from "@mui/icons-material";
 import ArticleRating from "./ArticleRating";
-import CommentFields from "../formgroups/CommentFields";
+import CommentFields from "../formfields/CommentFields";
 
 export default function ArticleComments({
   rating,

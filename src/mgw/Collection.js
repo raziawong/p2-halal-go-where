@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Container, Typography } from "@mui/material";
-import CurateFields from "./components/formgroups/CurateFields";
+import CurateFields from "./components/formfields/CurateFields";
 import ArticleMasonry from "./components/shared/ArticleMasonry";
 import helper from "./utils/helper";
 

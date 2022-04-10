@@ -3,12 +3,12 @@ import helper from "../../utils/helper";
 import { Link } from "react-router-dom";
 import { Alert, Box, Button, Icon, MobileStepper, Paper, Typography} from '@mui/material';
 import { KeyboardArrowLeft, KeyboardArrowRight, WarningAmber} from '@mui/icons-material';
-import NewAuthor from "../formgroups/NewAuthor";
-import VerifyAuthor from "../formgroups/VerifyAuthor";
-import ArticleSummary from "../formgroups/ArticleSummary";
-import ArticleDetails from "../formgroups/ArticleDetails";
-import ArticleTags from "../formgroups/ArticleTags";
-import ConfirmDelete from "../formgroups/ConfimDelete";
+import NewAuthor from "../formfields/NewAuthor";
+import VerifyAuthor from "../formfields/VerifyAuthor";
+import ArticleSummary from "../formfields/ArticleSummary";
+import ArticleDetails from "../formfields/ArticleDetails";
+import ArticleTags from "../formfields/ArticleTags";
+import ConfirmDelete from "../formfields/ConfimDelete";
 
 export default function CompactStepper({
     locationOpts,

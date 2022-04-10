@@ -11,7 +11,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { CloseSharp } from "@mui/icons-material";
-import CurateFields from "../formgroups/CurateFields";
+import CurateFields from "../formfields/CurateFields";
 import helper from "../../utils/helper";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
