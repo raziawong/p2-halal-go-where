@@ -4,7 +4,7 @@
         transform: translate(-100%, -20%); 
     }
     to { 
-        fill: rgb(232, 157, 92, 0.8);
+        fill: rgb(232, 157, 92);
         transform: translate(0); 
     }
 }
@@ -16,7 +16,7 @@
 
 @keyframes fill-pri {
     from { fill: transparent; }
-    to { fill: rgb(28, 124, 84, 0.8); }
+    to { fill: rgb(28, 124, 84); }
 }
 
 @keyframes skewbook {
@@ -25,7 +25,7 @@
         transform: skew(50deg, 30deg);
     }
     to { 
-        fill: rgb(232, 157, 92, 0.8);
+        fill: rgb(232, 157, 92);
         transform: skew(0);
     }
 }
@@ -33,25 +33,25 @@
 svg .circle,
 svg .arc-1,
 svg .arc-2 {
-    fill: rgb(18, 94, 138, 0.5);
+    fill: rgb(18, 94, 138);
     animation: rotatearc 4s ease-in-out infinite 0.8s;
 }
 
 svg .crescent,
 svg .dome {
-    fill: rgb(28, 124, 84, 0.8);
+    fill: rgb(28, 124, 84);
     animation: fill-pri 5s ease-in 1 0.3s;
 }
 
 svg .page,
 svg .book-1,
 svg .book-2 {
-    fill: rgb(232, 157, 92, 0.8);
+    fill: rgb(232, 157, 92);
     animation: skewbook 4.5s ease-in 1 0.3s;
 }
 
 svg .plane {
-    fill: rgb(232, 157, 92, 0.8);
+    fill: rgb(232, 157, 92);
     animation: flyingplane 4s ease-in 1 0.3s;
 }
   

@@ -28,6 +28,7 @@ import Collection from "./Collection";
 import Article from "./Article";
 import NavBar from "./components/shared/NavBar";
 import NotFound from "./NotFound";
+import Footer from "./components/shared/Footer";
 
 export default class Mgw extends Component {
   state = {
@@ -196,6 +197,7 @@ export default class Mgw extends Component {
             />
             <Route path="*" element={<NotFound />} />
           </Routes>
+          <Footer />
         </ViewContainer>
         <Loader toShow={!this.state.isLoaded} />
         {this.state.requestError && (

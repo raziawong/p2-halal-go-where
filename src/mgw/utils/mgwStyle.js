@@ -44,7 +44,8 @@ const NavBarLogo = styled(Link)(({ theme }) => ({
     ...theme.typography.subtitle2,
     position: "absolute",
     marginTop: "2.5vh",
-    color: theme.palette.grey[800]
+    color: theme.palette.grey[800],
+    visibility: "hidden"
   }
 }));
 
