@@ -45,8 +45,7 @@ export default function LatestGrid({ latestArticles }) {
                   {latestArticles[0].title}
                 </Typography>
                 <Typography variant="subtitle1" color={mgwColors.secContrast}>
-                  {latestArticles[0].country?.name}{" "}
-                  {", " + latestArticles[0].city?.name}
+                {[latestArticles[0].city.name,latestArticles[0].country.name].join(", ")}
                 </Typography>
               </Box>
               <Typography color={mgwColors.secContrast} sx={{ pt: 4 }}>
@@ -96,8 +95,7 @@ export default function LatestGrid({ latestArticles }) {
                       variant="subtitle1"
                       color={mgwColors.secContrast}
                     >
-                      {latestArticles[1].country?.name}{" "}
-                      {", " + latestArticles[1].city?.name}
+                      {[latestArticles[1].city.name,latestArticles[1].country.name].join(", ")}
                     </Typography>
                   </Box>
                   <Button
@@ -142,8 +140,7 @@ export default function LatestGrid({ latestArticles }) {
                       variant="subtitle1"
                       color={mgwColors.secContrast}
                     >
-                      {latestArticles[2].country?.name}{" "}
-                      {", " + latestArticles[2].city?.name}
+                      {[latestArticles[2].city.name,latestArticles[2].country.name].join(", ")}
                     </Typography>
                   </Box>
                   <Button
