@@ -1,5 +1,6 @@
 import React from "react";
 import helper from "../../utils/helper";
+import { useNavigate } from "react-router-dom";
 import {
   Dialog,
   DialogContent,
@@ -29,6 +30,7 @@ export default function DeleteModal({
   requestError,
   requestSuccess
 }) {
+  const navigate = useNavigate();
   const stepperProps = {
     activeStep,
     articleState,
@@ -44,6 +46,9 @@ export default function DeleteModal({
     const inputs = helper.initArticleInputs;
     if (!userVerifyErrorMsg) {
       inputs.email = userEmail;
+    }
+    if (deleteModal && activeStep === helper.deleteSteps.length && requestSuccess) {
+      navigate('/explore');
     }
     setMgwState({
       deleteModal: false,
