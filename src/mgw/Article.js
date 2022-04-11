@@ -114,8 +114,8 @@ export default function Article({
               <Typography component="p" variant="body1">
                 {[
                   article.address,
-                  article.country?.name,
                   article.city?.name,
+                  article.country?.name
                 ].join(", ")}
               </Typography>
             </Box>

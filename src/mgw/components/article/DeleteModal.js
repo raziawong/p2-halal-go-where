@@ -46,8 +46,6 @@ export default function DeleteModal({
     const inputs = helper.initArticleInputs;
     if (!userVerifyErrorMsg) {
       inputs.email = userEmail;
-    }
-    if (deleteModal && activeStep === helper.deleteSteps.length && requestSuccess) {
       navigate('/explore');
     }
     setMgwState({

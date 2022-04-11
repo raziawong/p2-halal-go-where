@@ -163,6 +163,7 @@ const CatStackHeader = styled(Typography)(({ theme }) => ({
   ...theme.typography.h2,
   textAlign: "center",
   color: mgwColors.secContrast,
+  "&:hover": { animation: "bounce 1s ease-in-out infinite" }
 }));
 
 export {

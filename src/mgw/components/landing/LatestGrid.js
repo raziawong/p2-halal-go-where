@@ -37,7 +37,11 @@ export default function LatestGrid({ latestArticles }) {
           >
             <LatestOverlay>
               <Box>
-                <Typography component="h3" variant="h3" color={mgwColors.secContrast}>
+                <Typography
+                  component="h3"
+                  variant="h3"
+                  color={mgwColors.secContrast}
+                >
                   {latestArticles[0].title}
                 </Typography>
                 <Typography variant="subtitle1" color={mgwColors.secContrast}>
@@ -52,7 +56,13 @@ export default function LatestGrid({ latestArticles }) {
                 component={Link}
                 to={`/article/${latestArticles[0]._id}`}
                 size="small"
-                sx={{ mt: 4, p: 0, color: mgwColors.secContrast, justifyContent: "flex-end" }}
+                sx={{
+                  mt: 4,
+                  p: 0,
+                  color: mgwColors.secContrast,
+                  justifyContent: "flex-end",
+                  "&:hover": { animation: "bounce 1s ease-in-out infinite" },
+                }}
               >
                 Read More <ArrowRightAlt />
               </Button>
@@ -72,13 +82,20 @@ export default function LatestGrid({ latestArticles }) {
                 }}
               >
                 <LatestOverlay>
-                <Box>
-                    <Typography component="h3" variant="h3" color={mgwColors.secContrast}>
+                  <Box>
+                    <Typography
+                      component="h3"
+                      variant="h3"
+                      color={mgwColors.secContrast}
+                    >
                       {latestArticles[1].title.length > 60
                         ? latestArticles[1].title.substr(0, 60) + "..."
                         : latestArticles[1].title}
                     </Typography>
-                    <Typography variant="subtitle1" color={mgwColors.secContrast}>
+                    <Typography
+                      variant="subtitle1"
+                      color={mgwColors.secContrast}
+                    >
                       {latestArticles[1].country?.name}{" "}
                       {", " + latestArticles[1].city?.name}
                     </Typography>
@@ -87,7 +104,13 @@ export default function LatestGrid({ latestArticles }) {
                     component={Link}
                     to={`/article/${latestArticles[1]._id}`}
                     size="small"
-                    sx={{ mt: { xs: 1, sm: 2 }, p: 0, color: mgwColors.secContrast, justifyContent: "flex-end" }}
+                    sx={{
+                      mt: { xs: 1, sm: 2 },
+                      p: 0,
+                      color: mgwColors.secContrast,
+                      justifyContent: "flex-end",
+                      "&:hover": { animation: "bounce 1s ease-in-out infinite" }
+                    }}
                   >
                     Read More <ArrowRightAlt />
                   </Button>
@@ -106,12 +129,19 @@ export default function LatestGrid({ latestArticles }) {
               >
                 <LatestOverlay>
                   <Box>
-                    <Typography component="h3" variant="h3" color={mgwColors.secContrast}>
+                    <Typography
+                      component="h3"
+                      variant="h3"
+                      color={mgwColors.secContrast}
+                    >
                       {latestArticles[2].title.length > 60
                         ? latestArticles[2].title.substr(0, 60) + "..."
                         : latestArticles[2].title}
                     </Typography>
-                    <Typography variant="subtitle1" color={mgwColors.secContrast}>
+                    <Typography
+                      variant="subtitle1"
+                      color={mgwColors.secContrast}
+                    >
                       {latestArticles[2].country?.name}{" "}
                       {", " + latestArticles[2].city?.name}
                     </Typography>
@@ -120,7 +150,13 @@ export default function LatestGrid({ latestArticles }) {
                     component={Link}
                     to={`/article/${latestArticles[2]._id}`}
                     size="small"
-                    sx={{ mt: { xs: 1, sm: 2 }, p: 0, color: mgwColors.secContrast, justifyContent: "flex-end" }}
+                    sx={{
+                      mt: { xs: 1, sm: 2 },
+                      p: 0,
+                      color: mgwColors.secContrast,
+                      justifyContent: "flex-end",
+                      "&:hover": { animation: "bounce 1s ease-in-out infinite" }
+                    }}
                   >
                     Read More <ArrowRightAlt />
                   </Button>
@@ -161,13 +197,17 @@ export default function LatestGrid({ latestArticles }) {
                 bgcolor: alpha(mgwColors.darkBg, 0.5),
               }}
             >
-              <Typography component="h3" variant="h3" color={mgwColors.secContrast}>
+              <Typography
+                component="h3"
+                variant="h3"
+                color={mgwColors.secContrast}
+              >
                 {slide.title.length > 60
                   ? slide.title.substr(0, 60) + "..."
                   : slide.title}
               </Typography>
               <Typography variant="subtitle1" color={mgwColors.secContrast}>
-                {slide.country?.name} {", " + slide.city?.name}
+                {[slide.city?.name, slide.country?.name].join(", ")}
               </Typography>
               <Typography
                 color={mgwColors.secContrast}
@@ -179,7 +219,12 @@ export default function LatestGrid({ latestArticles }) {
                 component={Link}
                 to={`/article/${slide._id}`}
                 size="small"
-                sx={{ mt: { xs: 1, sm: 2 }, p: 0, color: mgwColors.secContrast }}
+                sx={{
+                  mt: { xs: 1, sm: 2 },
+                  p: 0,
+                  color: mgwColors.secContrast,
+                  "&:hover": { animation: "bounce 1s ease-in-out infinite" },
+                }}
               >
                 Read More <ArrowRightAlt />
               </Button>

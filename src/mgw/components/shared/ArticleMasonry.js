@@ -53,7 +53,7 @@ export default function ArticleMasonry({
             <Card key={card._id}>
               <CardHeader
                 title={card.title}
-                subheader={([card.country?.name, card.city?.name] || "").join(
+                subheader={([card.city?.name, card.country?.name]).join(
                   ", "
                 )}
                 action={
@@ -105,6 +105,7 @@ export default function ArticleMasonry({
                   to={`/article/${card._id}`}
                   size="small"
                   color="primary"
+                  sx={{"&:hover": { animation: "bounce 1s ease-in-out infinite" }}}
                 >
                   Read More <ArrowRightAlt />
                 </Button>
