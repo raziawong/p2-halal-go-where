@@ -63,6 +63,7 @@ export default function Explore({
               position: "fixed",
               bottom: 28,
               right: 12,
+              zIndex: 1,
               display: { xs: "block", md: "none" },
               "& > :not(style)": { m: 1 },
             }}
