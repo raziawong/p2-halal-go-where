@@ -429,7 +429,7 @@ const helper = {
   },
   regex: {
     spaces: /^[\s]*$/,
-    displayName: /^[A-Za-zÀ-ȕ\s-]*$/,
+    displayName: /^[A-Za-zÀ-ȕ0-9\s-:,]*$/,
     optionValue: /^[A-Za-z0-9-]*$/,
     alphaNumeric: /^[A-Za-zÀ-ȕ0-9\s-]*$/,
     email:
@@ -439,7 +439,7 @@ const helper = {
   templates: {
     required: `This is required`,
     spaces: `This cannot contain only space(s)`,
-    special: `This cannot contain special characters and numbers`,
+    special: `This cannot contain special characters except '-', ',', and/or ':' `,
     specialSpace: `This cannot contain special characters and/or spaces`,
     alphaNumeric: `This can only be alphanumeric inclusive of spaces and -`,
     maxLength: (length) =>
