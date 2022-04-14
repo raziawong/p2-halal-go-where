@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import logo from "../../../assets/image/mgw-logo.svg";
 import { NavBarLogo, NavBarLink } from "../../utils/mgwStyle";
 import {
@@ -17,7 +17,7 @@ import {
 import { SearchSharp } from "@mui/icons-material";
 import NavDrawer from "./NavDrawer";
 import helper from "../../utils/helper";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function NavBar({
   navOpen,
@@ -27,6 +27,7 @@ export default function NavBar({
   setFilterOpts,
 }) {
   const navigate = useNavigate();
+  const location = useLocation();
   const handleSearch = (evt) => {
     const { type, key } = evt;
     if (type === "mousedown" || type === "click" || key === "Enter") {
@@ -34,6 +35,11 @@ export default function NavBar({
       navigate("/explore");
     }
   };
+  useEffect(() => {
+    setMgwState({
+      navDrawer: false,
+    });
+  }, [location]);
   return (
     <Fragment>
       <AppBar position="sticky">
@@ -49,9 +55,7 @@ export default function NavBar({
                 }}
               >
                 <img src={logo} alt="Muslim Go Where" />
-                <Typography>
-                  MGW
-                </Typography>
+                <Typography>MGW</Typography>
               </NavBarLogo>
             </Box>
             <Box sx={{ display: { xs: "none", sm: "block" } }}>

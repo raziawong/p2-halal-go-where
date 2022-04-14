@@ -261,10 +261,7 @@ export default class Mgw extends Component {
     ) {
       this.fetchArticles(helper.exploreView);
     }
-    if (
-      this.state.articleActedOn &&
-      prevState.articleActedOn !== this.state.articleActedOn
-    ) {
+    if (this.state.articleActedOn && this.state.articleActedOn.length) {
       const articles = await getMgwArticles();
       const uniqueTags = articles.tags.results
         .reduce((a, r) => [...a, ...r.tags], [])
@@ -276,6 +273,7 @@ export default class Mgw extends Component {
       );
 
       this.setState({
+        articleActedOn: '',
         filterOpts: { ...helper.initFilterOpts },
         sortIndex: 0,
         sortMenuAnchor: null,
@@ -286,15 +284,9 @@ export default class Mgw extends Component {
         articlesTags: uniqueTags,
         articlesLocations: articles.location.count
           ? articles.location.results
-          : [],
-        isLoaded: true,
+          : []
       });
     }
-    // if (prevState.navDrawer) {
-    //   this.setState({
-    //     navDrawer: false,
-    //   });
-    // }
   }
 
   detectSearch = (evt, viewType) => {
