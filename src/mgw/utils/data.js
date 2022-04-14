@@ -11,7 +11,7 @@ import helper from "./helper";
 
 const mgwRequests = {
     axiosBase: axios.create({
-        baseURL: "https://muslim-go-where-api.herokuapp.com/"
+        baseURL: "http://localhost:3388"
     }),
     queryPaths: {
         countries: "/countries",
@@ -63,7 +63,7 @@ const mgwCategoriesMap = {
 }
 
 const getMgwFixed = async () => {
-  const gCountries = mgwRequests.axiosBase.get(mgwRequests.queryPaths.countriesCities);
+  const gCountries = mgwRequests.axiosBase.get(mgwRequests.queryPaths.countries);
   const gCategories = mgwRequests.axiosBase.get(mgwRequests.queryPaths.categoriesSubcats);
   let data = {};
 
@@ -131,7 +131,11 @@ const getArticleContributor = async (params) => {
 };
 
 const getCountries = async (params) => {
-  return await mgwRequests.axiosBase.get(mgwRequests.queryPaths.countries, { params });
+  return await mgwRequests.axiosBase.get(mgwRequests.queryPaths.countriesCities, { params });
+}
+
+const getCities = async (params) => {
+  return await mgwRequests.axiosBase.get(mgwRequests.queryPaths.countriesCities, { params });
 }
 
 const getLocationsTagged = async (params) => {
@@ -181,6 +185,7 @@ export {
   getArticles,
   getArticleContributor,
   getCountries,
+  getCities,
   getLocationsTagged,
   getCategories,
   postArticle,
