@@ -45,7 +45,7 @@ export default function Article({
 
   useEffect(() => {
     setFilterOpts({ name: "id", value: params.id });
-    return setMgwState({ articlePosted: "" });
+    return setMgwState({ articleActedOn: "" });
   }, [setFilterOpts, setMgwState, params.id]);
 
   useEffect(async () => {

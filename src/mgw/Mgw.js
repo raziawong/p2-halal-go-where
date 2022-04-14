@@ -48,7 +48,7 @@ export default class Mgw extends Component {
     articleDetail: [],
     articlesTags: [],
     articlesLocations: [],
-    articlePosted: "",
+    articleActedOn: "",
     commentInputs: { ...helper.initCommentInputs },
     commentInputsErrors: {},
     createActiveStep: 0,
@@ -132,7 +132,7 @@ export default class Mgw extends Component {
                   validateArticle={this.validateArticleInputs}
                   setArr={this.addArticleArraySize}
                   removeArr={this.removeArticleArraySize}
-                  articlePosted={this.state.articlePosted}
+                  articleActedOn={this.state.articleActedOn}
                   requestSuccess={this.state.requestSuccess}
                   requestError={this.state.requestError}
                 />
@@ -184,7 +184,7 @@ export default class Mgw extends Component {
                   commentError={this.state.commentInputsErrors}
                   validateComment={this.validateArticleComment}
                   setCommentState={this.setCommentInputs}
-                  articlePosted={this.state.articlePosted}
+                  articleActedOn={this.state.articleActedOn}
                   curateState={this.state.curateInputs}
                   requestSuccess={this.state.requestSuccess}
                   requestError={this.state.requestError}
@@ -254,7 +254,7 @@ export default class Mgw extends Component {
     });
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  async componentDidUpdate(prevProps, prevState) {
     if (
       prevState.sortIndex !== this.state.sortIndex ||
       prevState.pageNumber !== this.state.pageNumber
@@ -262,12 +262,33 @@ export default class Mgw extends Component {
       this.fetchArticles(helper.exploreView);
     }
     if (
-      this.state.articlePosted &&
-      prevState.articlePosted !== this.state.articlePosted
+      this.state.articleActedOn &&
+      prevState.articleActedOn !== this.state.articleActedOn
     ) {
-      this.fetchLocationsTagged();
-      this.fetchArticles(helper.exploreView);
-      this.fetchArticlesLatest();
+      const articles = await getMgwArticles();
+      const uniqueTags = articles.tags.results
+        .reduce((a, r) => [...a, ...r.tags], [])
+        .filter((v, i, a) => a.indexOf(v) === i);
+      const transformed = await helper.transformArticlesForRead(
+        articles.main.results,
+        articles.location.results,
+        this.state.allCatsSubCats
+      );
+
+      this.setState({
+        filterOpts: { ...helper.initFilterOpts },
+        sortIndex: 0,
+        sortMenuAnchor: null,
+        pageNumber: 1,
+        allArticles: articles.main,
+        articlesFetched: articles.main.count ? [...transformed] : [],
+        articlesTotal: articles.main.totalCount || null,
+        articlesTags: uniqueTags,
+        articlesLocations: articles.location.count
+          ? articles.location.results
+          : [],
+        isLoaded: true,
+      });
     }
     // if (prevState.navDrawer) {
     //   this.setState({
@@ -472,7 +493,7 @@ export default class Mgw extends Component {
                 this.setState({
                   articleInputs: { ...helper.initArticleInputs },
                   articleErrors: {},
-                  articlePosted: resp.data.results.insertedId,
+                  articleActedOn: resp.data.results.insertedId,
                   createActiveStep: 0,
                   requestSuccess: "Article created successfully",
                   requestError: "",
@@ -480,7 +501,7 @@ export default class Mgw extends Component {
               })
               .catch((err) => {
                 this.setState({
-                  articlePosted: "",
+                  articleActedOn: "",
                   requestError: "Failed to post new article, please try again",
                 });
               });
@@ -532,7 +553,7 @@ export default class Mgw extends Component {
                 this.setState({
                   articleErrors: {},
                   editActiveStep: 0,
-                  articlePosted: resp.data.results.insertedId,
+                  articleActedOn: articleInputs._id,
                   requestSuccess:
                     "Article updated successfully, close the modal to view the updates",
                   requestError: "",
@@ -564,6 +585,7 @@ export default class Mgw extends Component {
                   this.setState({
                     articleErrors: {},
                     deleteActiveStep: 0,
+                    articleActedOn: articleId,
                     requestSuccess: "Article deleted successfully",
                     requestError: "",
                   });

@@ -24,7 +24,7 @@ export default function CompactStepper({
     removeArr,
     setMgwState,
     type,
-    articlePosted,
+    articleActedOn,
     requestError,
     requestSuccess
   }) {
@@ -81,11 +81,11 @@ export default function CompactStepper({
             severity="success"
             action={
               type === "create" &&
-              articlePosted && (
+              articleActedOn && (
                 <Button
                   component={Link}
                   aria-label="View article"
-                  to={`/article/${articlePosted}`}
+                  to={`/article/${articleActedOn}`}
                   size="small"
                   color="secondary"
                 >

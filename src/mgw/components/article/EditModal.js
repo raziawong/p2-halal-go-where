@@ -61,7 +61,7 @@ export default function EditModal({
       articleInputsErrors: {},
       editActiveStep: 0,
       userVerifyErrorMsg: "",
-      articlePosted: "",
+      articleActedOn: "",
       requestError: "",
       requestSuccess: ""
     });

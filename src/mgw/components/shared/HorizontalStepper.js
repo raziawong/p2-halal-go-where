@@ -31,7 +31,7 @@ export default function HorizontalStepper({
   removeArr,
   setMgwState,
   type,
-  articlePosted,
+  articleActedOn,
   requestError,
   requestSuccess
 }) {
@@ -73,11 +73,11 @@ export default function HorizontalStepper({
             severity="success"
             action={
               type === "create" &&
-              articlePosted && (
+              articleActedOn && (
                 <Button
                   component={Link}
                   aria-label="View article"
-                  to={`/article/${articlePosted}`}
+                  to={`/article/${articleActedOn}`}
                   size="small"
                   color="secondary"
                 >
