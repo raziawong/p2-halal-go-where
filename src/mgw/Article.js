@@ -12,7 +12,7 @@ import ImageCarousel from "./components/article/ImageCarousel";
 
 export default function Article({
   tagOpts,
-  locationOpts,
+  countryOpts,
   catOpts,
   articleState,
   articleError,
@@ -127,7 +127,7 @@ export default function Article({
               execSearch={execSearch}
             />
             <AuthorAction
-              locationOpts={locationOpts}
+              countryOpts={countryOpts}
               catOpts={catOpts}
               tagOpts={tagOpts}
               article={article}

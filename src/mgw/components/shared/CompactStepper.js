@@ -11,7 +11,7 @@ import ArticleTags from "../formfields/ArticleTags";
 import ConfirmDelete from "../formfields/ConfimDelete";
 
 export default function CompactStepper({
-    locationOpts,
+    countryOpts,
     catOpts,
     tagOpts,
     activeStep,
@@ -125,7 +125,7 @@ export default function CompactStepper({
             articleState={articleState}
             setArticleState={setArticleState}
             articleError={articleError}
-            locationOpts={locationOpts}
+            countryOpts={countryOpts}
           />
         )}
         {activeStep === 1 && type === "delete" && <ConfirmDelete />}

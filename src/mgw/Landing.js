@@ -7,7 +7,7 @@ import CategoriesStack from "./components/landing/CategoriesStack";
 
 export default function Landing({
   latestArticles,
-  allCategories,
+  allCatsSubCats,
   setMgwState,
   execSearch,
 }) {
@@ -55,7 +55,7 @@ export default function Landing({
       </HeroBanner>
       <LatestGrid latestArticles={latestArticles} />
       <CategoriesStack
-        allCategories={allCategories}
+        allCatsSubCats={allCatsSubCats}
         setMgwState={setMgwState}
         execSearch={execSearch}
       />

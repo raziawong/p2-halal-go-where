@@ -10,7 +10,7 @@ import {
 } from "../../utils/mgwStyle";
 
 export default function CategoriesStack({
-  allCategories,
+  allCatsSubCats,
   setMgwState,
   execSearch,
 }) {
@@ -20,7 +20,7 @@ export default function CategoriesStack({
     execSearch(helper.exploreView);
     navgigate("/explore");
   };
-  const findDBCat = (val) => allCategories.find((cat) => cat.value === val);
+  const findDBCat = (val) => allCatsSubCats.find((cat) => cat.value === val);
   return (
     <Box sx={{ m: 4, pt: 4 }}>
       <Typography component="h2" variant="h3">

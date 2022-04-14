@@ -6,7 +6,7 @@ export default function ArticleSummary({
   articleState,
   setArticleState,
   articleError,
-  locationOpts
+  countryOpts,
 }) {
   return (
     <Grid
@@ -61,7 +61,7 @@ export default function ArticleSummary({
           fullWidth
           name="country"
           value={articleState.country}
-          options={locationOpts}
+          options={countryOpts}
           getOptionLabel={(option) => option.name}
           isOptionEqualToValue={(option, value) => option._id === value._id}
           renderInput={(params) => (

@@ -13,7 +13,7 @@ import DeleteModal from "./DeleteModal";
 
 export default function AuthorAction({
   tagOpts,
-  locationOpts,
+  countryOpts,
   catOpts,
   articleState,
   articleError,
@@ -91,7 +91,7 @@ export default function AuthorAction({
           <EditSharp />
         </IconButton>
         <EditModal
-          locationOpts={locationOpts}
+          countryOpts={countryOpts}
           catOpts={catOpts}
           tagOpts={tagOpts}
           activeStep={activeStep}

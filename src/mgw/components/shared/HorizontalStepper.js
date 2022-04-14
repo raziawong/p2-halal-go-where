@@ -18,7 +18,7 @@ import ArticleTags from "../formfields/ArticleTags";
 import ConfirmDelete from "../formfields/ConfimDelete";
 
 export default function HorizontalStepper({
-  locationOpts,
+  countryOpts,
   catOpts,
   tagOpts,
   activeStep,
@@ -130,7 +130,7 @@ export default function HorizontalStepper({
             articleState={articleState}
             setArticleState={setArticleState}
             articleError={articleError}
-            locationOpts={locationOpts}
+            countryOpts={countryOpts}
           />
         )}
         {activeStep === 1 && type === "delete" && <ConfirmDelete />}

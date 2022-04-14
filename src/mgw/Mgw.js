@@ -34,7 +34,7 @@ import CollectionItemModal from "./components/collection/CollectionItemModal";
 export default class Mgw extends Component {
   state = {
     allCountries: [],
-    allCategories: [],
+    allCatsSubCats: [],
     allArticles: [],
     filterOpts: { ...helper.initFilterOpts },
     sortIndex: 0,
@@ -89,7 +89,7 @@ export default class Mgw extends Component {
               element={
                 <Landing
                   latestArticles={this.state.articlesLatest}
-                  allCategories={this.state.allCategories}
+                  allCatsSubCats={this.state.allCatsSubCats}
                   setMgwState={this.setMgwState}
                   execSearch={this.fetchArticles}
                 />
@@ -104,7 +104,7 @@ export default class Mgw extends Component {
                   sortIndex={this.state.sortIndex}
                   sortAnchor={this.state.sortMenuAnchor}
                   countries={this.state.articlesLocations}
-                  categories={this.state.allCategories}
+                  categories={this.state.allCatsSubCats}
                   articles={this.state.articlesFetched}
                   articlesTotal={this.state.articlesTotal}
                   actionModal={this.state.actionModal}
@@ -121,8 +121,8 @@ export default class Mgw extends Component {
               element={
                 <Create
                   tagOpts={this.state.articlesTags}
-                  locationOpts={this.state.allCountries}
-                  catOpts={this.state.allCategories}
+                  countryOpts={this.state.allCountries}
+                  catOpts={this.state.allCatsSubCats}
                   articleErrors={this.state.articleInputsErrors}
                   activeStep={this.state.createActiveStep}
                   setMgwState={this.setMgwState}
@@ -159,8 +159,8 @@ export default class Mgw extends Component {
               element={
                 <Article
                   tagOpts={this.state.articlesTags}
-                  locationOpts={this.state.allCountries}
-                  catOpts={this.state.allCategories}
+                  countryOpts={this.state.allCountries}
+                  catOpts={this.state.allCatsSubCats}
                   articleState={this.state.articleInputs}
                   articleError={this.state.articleInputsErrors}
                   validateArticle={this.validateArticleInputs}
@@ -239,7 +239,7 @@ export default class Mgw extends Component {
 
     this.setState({
       allCountries: fixed.countries.results,
-      allCategories: fixed.categories.results,
+      allCatsSubCats: fixed.categories.results,
       allArticles: articles.main,
       articlesFetched: articles.main.count ? [...transformed] : [],
       articlesLatest:
@@ -306,7 +306,7 @@ export default class Mgw extends Component {
       const selSubcatIds =
         name === "subcatIds" ? opts.subcatIds : this.state.filterOpts.subcatIds;
       const catDep = helper.getCatDep(
-        this.state.allCategories,
+        this.state.allCatsSubCats,
         selCatIds,
         selSubcatIds
       );
@@ -343,11 +343,11 @@ export default class Mgw extends Component {
       await getArticles(params, viewType, sortOptions, this.state.pageNumber)
         .then(async (resp) => {
           if (resp.data.results?.length) {
-            const { articlesLocations, allCategories } = this.state;
+            const { articlesLocations, allCatsSubCats } = this.state;
             const transformed = await helper.transformArticlesForRead(
               resp.data.results,
               articlesLocations,
-              allCategories
+              allCatsSubCats
             );
             viewType === helper.articleView
               ? this.setState({
@@ -388,11 +388,11 @@ export default class Mgw extends Component {
     await getArticles({}, helper.exploreView)
       .then(async (resp) => {
         if (resp.data.results && resp.data.totalCount > 2) {
-          const { articlesLocations, allCategories } = this.state;
+          const { articlesLocations, allCatsSubCats } = this.state;
           const transformed = await helper.transformArticlesForRead(
             resp.data.results.slice(0, 3),
             articlesLocations,
-            allCategories
+            allCatsSubCats
           );
           this.setState({
             articlesLatest: [...transformed] || [],
@@ -432,7 +432,7 @@ export default class Mgw extends Component {
           ? inputs.subcatIds
           : this.state.articleInputs.subcatIds;
       const catDep = helper.getCatDep(
-        this.state.allCategories,
+        this.state.allCatsSubCats,
         selCatIds,
         selSubcatIds
       );
@@ -768,7 +768,7 @@ export default class Mgw extends Component {
   fetchCollection = async () => {
     this.setState({ isLoaded: false }, async () => {
       const { curateEmail } = { ...this.state.curateInputs };
-      const { articlesLocations, allCategories } = this.state;
+      const { articlesLocations, allCatsSubCats } = this.state;
 
       if (curateEmail) {
         await getCollection({ curateEmail })
@@ -777,7 +777,7 @@ export default class Mgw extends Component {
               ? await helper.transformArticlesForRead(
                   resp.data.results,
                   articlesLocations,
-                  allCategories
+                  allCatsSubCats
                 )
               : [];
             this.setState({
