@@ -7,7 +7,7 @@ export default function Create(props) {
   const { setMgwState } = props;
   useEffect(() => {
     return setMgwState({
-      articlePosted: "",
+      articleActedOn: "",
       articleInputs: {...helper.initArticleInputs},
       articleInputsErrors: {},
       createActiveStep: 0,

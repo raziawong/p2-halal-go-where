@@ -20,7 +20,6 @@ export default function Explore({
   articlesTotal,
   loaded,
   curateState,
-  curateErrors,
 }) {
   const handleFabClick = () => {
     setMgwState({

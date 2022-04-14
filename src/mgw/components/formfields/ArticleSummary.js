@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import helper from "../../utils/helper";
 import { Autocomplete, Grid, FormHelperText, TextField } from "@mui/material";
 
@@ -6,8 +6,36 @@ export default function ArticleSummary({
   articleState,
   setArticleState,
   articleError,
-  locationOpts
+  countryOpts,
 }) {
+  const [cityOpen, setCityOpen] = useState(false);
+  const [cityOpts, setCityOptions] = React.useState([]);
+  const loading = cityOpen && cityOpts.length === 0;
+
+  useEffect(() => {
+    let active = true;
+    if (!loading) {
+      return undefined;
+    }
+
+    (async () => {
+      if (articleState.country) {
+        const opts = await helper.cityObj(countryOpts, articleState.countryId);
+        setCityOptions([...opts]);
+      }
+    })();
+
+    return () => {
+      active = false;
+    };
+  }, [loading, articleState.country]);
+
+  useEffect(() => {
+    if (!cityOpen) {
+      setCityOptions([]);
+    }
+  }, [cityOpen]);
+
   return (
     <Grid
       container
@@ -61,7 +89,7 @@ export default function ArticleSummary({
           fullWidth
           name="country"
           value={articleState.country}
-          options={locationOpts}
+          options={countryOpts}
           getOptionLabel={(option) => option.name}
           isOptionEqualToValue={(option, value) => option._id === value._id}
           renderInput={(params) => (
@@ -85,9 +113,13 @@ export default function ArticleSummary({
           autoSelect
           fullWidth
           name="cityId"
+          open={cityOpen}
+          onOpen={() => setCityOpen(true)}
+          onClose={() => setCityOpen(false)}
           disabled={!articleState.countryId}
           value={articleState.city}
-          options={helper.cityObj(locationOpts, articleState.countryId)}
+          options={cityOpts}
+          loading={loading}
           getOptionLabel={(option) => option.name}
           isOptionEqualToValue={(option, value) => option._id === value._id}
           renderInput={(params) => (
@@ -105,7 +137,14 @@ export default function ArticleSummary({
             setArticleState(arg);
           }}
         />
-        <FormHelperText sx={{display: !!articleError?.cityId && articleState.country?.name ? "none" : "block"}}>
+        <FormHelperText
+          sx={{
+            display:
+              !!articleError?.cityId && articleState.country?.name
+                ? "none"
+                : "block",
+          }}
+        >
           Please select Country first
         </FormHelperText>
       </Grid>

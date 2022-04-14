@@ -11,7 +11,7 @@ import ArticleTags from "../formfields/ArticleTags";
 import ConfirmDelete from "../formfields/ConfimDelete";
 
 export default function CompactStepper({
-    locationOpts,
+    countryOpts,
     catOpts,
     tagOpts,
     activeStep,
@@ -24,7 +24,7 @@ export default function CompactStepper({
     removeArr,
     setMgwState,
     type,
-    articlePosted,
+    articleActedOn,
     requestError,
     requestSuccess
   }) {
@@ -81,11 +81,11 @@ export default function CompactStepper({
             severity="success"
             action={
               type === "create" &&
-              articlePosted && (
+              articleActedOn && (
                 <Button
                   component={Link}
                   aria-label="View article"
-                  to={`/article/${articlePosted}`}
+                  to={`/article/${articleActedOn}`}
                   size="small"
                   color="secondary"
                 >
@@ -125,7 +125,7 @@ export default function CompactStepper({
             articleState={articleState}
             setArticleState={setArticleState}
             articleError={articleError}
-            locationOpts={locationOpts}
+            countryOpts={countryOpts}
           />
         )}
         {activeStep === 1 && type === "delete" && <ConfirmDelete />}

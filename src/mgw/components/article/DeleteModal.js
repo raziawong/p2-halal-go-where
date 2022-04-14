@@ -54,7 +54,7 @@ export default function DeleteModal({
       articleInputsErrors: {},
       deleteActiveStep: 0,
       userVerifyErrorMsg: "",
-      articlePosted: "",
+      articleActedOn: "",
       requestError: "",
       requestSuccess: ""
     });

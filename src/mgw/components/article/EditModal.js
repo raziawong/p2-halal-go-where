@@ -17,7 +17,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export default function EditModal({
-  locationOpts,
+  countryOpts,
   catOpts,
   tagOpts,
   activeStep,
@@ -35,7 +35,7 @@ export default function EditModal({
   requestSuccess
 }) {
   const stepperProps = {
-    locationOpts,
+    countryOpts,
     catOpts,
     tagOpts,
     activeStep,
@@ -61,7 +61,7 @@ export default function EditModal({
       articleInputsErrors: {},
       editActiveStep: 0,
       userVerifyErrorMsg: "",
-      articlePosted: "",
+      articleActedOn: "",
       requestError: "",
       requestSuccess: ""
     });

@@ -34,7 +34,7 @@ import CollectionItemModal from "./components/collection/CollectionItemModal";
 export default class Mgw extends Component {
   state = {
     allCountries: [],
-    allCategories: [],
+    allCatsSubCats: [],
     allArticles: [],
     filterOpts: { ...helper.initFilterOpts },
     sortIndex: 0,
@@ -48,7 +48,7 @@ export default class Mgw extends Component {
     articleDetail: [],
     articlesTags: [],
     articlesLocations: [],
-    articlePosted: "",
+    articleActedOn: "",
     commentInputs: { ...helper.initCommentInputs },
     commentInputsErrors: {},
     createActiveStep: 0,
@@ -89,7 +89,7 @@ export default class Mgw extends Component {
               element={
                 <Landing
                   latestArticles={this.state.articlesLatest}
-                  allCategories={this.state.allCategories}
+                  allCatsSubCats={this.state.allCatsSubCats}
                   setMgwState={this.setMgwState}
                   execSearch={this.fetchArticles}
                 />
@@ -104,7 +104,7 @@ export default class Mgw extends Component {
                   sortIndex={this.state.sortIndex}
                   sortAnchor={this.state.sortMenuAnchor}
                   countries={this.state.articlesLocations}
-                  categories={this.state.allCategories}
+                  categories={this.state.allCatsSubCats}
                   articles={this.state.articlesFetched}
                   articlesTotal={this.state.articlesTotal}
                   actionModal={this.state.actionModal}
@@ -121,8 +121,8 @@ export default class Mgw extends Component {
               element={
                 <Create
                   tagOpts={this.state.articlesTags}
-                  locationOpts={this.state.allCountries}
-                  catOpts={this.state.allCategories}
+                  countryOpts={this.state.allCountries}
+                  catOpts={this.state.allCatsSubCats}
                   articleErrors={this.state.articleInputsErrors}
                   activeStep={this.state.createActiveStep}
                   setMgwState={this.setMgwState}
@@ -132,7 +132,7 @@ export default class Mgw extends Component {
                   validateArticle={this.validateArticleInputs}
                   setArr={this.addArticleArraySize}
                   removeArr={this.removeArticleArraySize}
-                  articlePosted={this.state.articlePosted}
+                  articleActedOn={this.state.articleActedOn}
                   requestSuccess={this.state.requestSuccess}
                   requestError={this.state.requestError}
                 />
@@ -159,8 +159,8 @@ export default class Mgw extends Component {
               element={
                 <Article
                   tagOpts={this.state.articlesTags}
-                  locationOpts={this.state.allCountries}
-                  catOpts={this.state.allCategories}
+                  countryOpts={this.state.allCountries}
+                  catOpts={this.state.allCatsSubCats}
                   articleState={this.state.articleInputs}
                   articleError={this.state.articleInputsErrors}
                   validateArticle={this.validateArticleInputs}
@@ -184,7 +184,7 @@ export default class Mgw extends Component {
                   commentError={this.state.commentInputsErrors}
                   validateComment={this.validateArticleComment}
                   setCommentState={this.setCommentInputs}
-                  articlePosted={this.state.articlePosted}
+                  articleActedOn={this.state.articleActedOn}
                   curateState={this.state.curateInputs}
                   requestSuccess={this.state.requestSuccess}
                   requestError={this.state.requestError}
@@ -239,7 +239,7 @@ export default class Mgw extends Component {
 
     this.setState({
       allCountries: fixed.countries.results,
-      allCategories: fixed.categories.results,
+      allCatsSubCats: fixed.categories.results,
       allArticles: articles.main,
       articlesFetched: articles.main.count ? [...transformed] : [],
       articlesLatest:
@@ -254,7 +254,7 @@ export default class Mgw extends Component {
     });
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  async componentDidUpdate(prevProps, prevState) {
     if (
       prevState.sortIndex !== this.state.sortIndex ||
       prevState.pageNumber !== this.state.pageNumber
@@ -262,12 +262,33 @@ export default class Mgw extends Component {
       this.fetchArticles(helper.exploreView);
     }
     if (
-      this.state.articlePosted &&
-      prevState.articlePosted !== this.state.articlePosted
+      this.state.articleActedOn &&
+      prevState.articleActedOn !== this.state.articleActedOn
     ) {
-      this.fetchLocationsTagged();
-      this.fetchArticles(helper.exploreView);
-      this.fetchArticlesLatest();
+      const articles = await getMgwArticles();
+      const uniqueTags = articles.tags.results
+        .reduce((a, r) => [...a, ...r.tags], [])
+        .filter((v, i, a) => a.indexOf(v) === i);
+      const transformed = await helper.transformArticlesForRead(
+        articles.main.results,
+        articles.location.results,
+        this.state.allCatsSubCats
+      );
+
+      this.setState({
+        filterOpts: { ...helper.initFilterOpts },
+        sortIndex: 0,
+        sortMenuAnchor: null,
+        pageNumber: 1,
+        allArticles: articles.main,
+        articlesFetched: articles.main.count ? [...transformed] : [],
+        articlesTotal: articles.main.totalCount || null,
+        articlesTags: uniqueTags,
+        articlesLocations: articles.location.count
+          ? articles.location.results
+          : [],
+        isLoaded: true,
+      });
     }
     // if (prevState.navDrawer) {
     //   this.setState({
@@ -306,7 +327,7 @@ export default class Mgw extends Component {
       const selSubcatIds =
         name === "subcatIds" ? opts.subcatIds : this.state.filterOpts.subcatIds;
       const catDep = helper.getCatDep(
-        this.state.allCategories,
+        this.state.allCatsSubCats,
         selCatIds,
         selSubcatIds
       );
@@ -343,11 +364,11 @@ export default class Mgw extends Component {
       await getArticles(params, viewType, sortOptions, this.state.pageNumber)
         .then(async (resp) => {
           if (resp.data.results?.length) {
-            const { articlesLocations, allCategories } = this.state;
+            const { articlesLocations, allCatsSubCats } = this.state;
             const transformed = await helper.transformArticlesForRead(
               resp.data.results,
               articlesLocations,
-              allCategories
+              allCatsSubCats
             );
             viewType === helper.articleView
               ? this.setState({
@@ -388,11 +409,11 @@ export default class Mgw extends Component {
     await getArticles({}, helper.exploreView)
       .then(async (resp) => {
         if (resp.data.results && resp.data.totalCount > 2) {
-          const { articlesLocations, allCategories } = this.state;
+          const { articlesLocations, allCatsSubCats } = this.state;
           const transformed = await helper.transformArticlesForRead(
             resp.data.results.slice(0, 3),
             articlesLocations,
-            allCategories
+            allCatsSubCats
           );
           this.setState({
             articlesLatest: [...transformed] || [],
@@ -432,7 +453,7 @@ export default class Mgw extends Component {
           ? inputs.subcatIds
           : this.state.articleInputs.subcatIds;
       const catDep = helper.getCatDep(
-        this.state.allCategories,
+        this.state.allCatsSubCats,
         selCatIds,
         selSubcatIds
       );
@@ -472,7 +493,7 @@ export default class Mgw extends Component {
                 this.setState({
                   articleInputs: { ...helper.initArticleInputs },
                   articleErrors: {},
-                  articlePosted: resp.data.results.insertedId,
+                  articleActedOn: resp.data.results.insertedId,
                   createActiveStep: 0,
                   requestSuccess: "Article created successfully",
                   requestError: "",
@@ -480,7 +501,7 @@ export default class Mgw extends Component {
               })
               .catch((err) => {
                 this.setState({
-                  articlePosted: "",
+                  articleActedOn: "",
                   requestError: "Failed to post new article, please try again",
                 });
               });
@@ -532,7 +553,7 @@ export default class Mgw extends Component {
                 this.setState({
                   articleErrors: {},
                   editActiveStep: 0,
-                  articlePosted: resp.data.results.insertedId,
+                  articleActedOn: articleInputs._id,
                   requestSuccess:
                     "Article updated successfully, close the modal to view the updates",
                   requestError: "",
@@ -564,6 +585,7 @@ export default class Mgw extends Component {
                   this.setState({
                     articleErrors: {},
                     deleteActiveStep: 0,
+                    articleActedOn: articleId,
                     requestSuccess: "Article deleted successfully",
                     requestError: "",
                   });
@@ -768,7 +790,7 @@ export default class Mgw extends Component {
   fetchCollection = async () => {
     this.setState({ isLoaded: false }, async () => {
       const { curateEmail } = { ...this.state.curateInputs };
-      const { articlesLocations, allCategories } = this.state;
+      const { articlesLocations, allCatsSubCats } = this.state;
 
       if (curateEmail) {
         await getCollection({ curateEmail })
@@ -777,7 +799,7 @@ export default class Mgw extends Component {
               ? await helper.transformArticlesForRead(
                   resp.data.results,
                   articlesLocations,
-                  allCategories
+                  allCatsSubCats
                 )
               : [];
             this.setState({

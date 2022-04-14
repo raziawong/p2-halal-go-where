@@ -1,7 +1,7 @@
 import { Checkbox, ListItemText, MenuItem } from "@mui/material";
 import { EditorState, convertToRaw } from "draft-js";
 import { draftToMarkdown, markdownToDraft } from "markdown-draft-js";
-import { mgwCategoriesMap } from "./data";
+import { getCities, mgwCategoriesMap } from "./data";
 
 const helper = {
   exploreView: "listing",
@@ -63,8 +63,8 @@ const helper = {
   curateSteps: [
     {
       title: "Email",
-      fields: ["curateEmail"]
-    }
+      fields: ["curateEmail"],
+    },
   ],
   fieldValidations: {
     displayName: {
@@ -122,7 +122,7 @@ const helper = {
         patterns: ["displayName", "spaces"],
         maxLength: 80,
         minLength: 3,
-      }
+      },
     },
     comments: {
       title: {
@@ -150,8 +150,8 @@ const helper = {
       curateEmail: {
         required: true,
         patterns: ["email"],
-      }
-    }
+      },
+    },
   },
   initFilterOpts: {
     id: "",
@@ -195,7 +195,7 @@ const helper = {
   },
   initCurateInputs: {
     articleId: "",
-    curateEmail: ""
+    curateEmail: "",
   },
   ratingMarks: [
     { value: 0, text: "No Rating" },
@@ -219,16 +219,18 @@ const helper = {
     "quote",
     "code",
   ],
-  cityObj: (countries, countryId) => {
+  cityObj: async (countries, countryId) => {
     const c =
       countries && countries.length
-        ? countryId
-          ? countries.filter((country) => country._id === countryId)
-          : countries
-        : [];
-    return c.length
-      ? c.map((country) => country.cities).reduce((a, v) => [...a, ...v], [])
-      : [];
+        ? countries.filter((country) => country._id === countryId)
+        : [];   
+    const getCountryCities = async (countryId) => {
+      return await getCities({ countryId });
+    };
+    const citiesProm = async () => Promise.all(c.map((country) => getCountryCities(country._id)));
+    const resp = await citiesProm();
+    const cities = resp.length ? resp[0].data.count ? resp[0].data.results[0].cities : [] : []; 
+    return cities;
   },
   countryOptDisplay: (countries) => {
     return countries && countries.length
@@ -305,7 +307,7 @@ const helper = {
     }
     return { catIds: selCats, subcatIds: selSubcats, depCatArr: [] };
   },
-  getImg: (article, isArray=false) => {
+  getImg: (article, isArray = false) => {
     const { photos, catLabels } = article;
     if (photos?.length) {
       return isArray ? photos : photos[0];
@@ -316,7 +318,7 @@ const helper = {
       return isArray ? [def] : def;
     }
   },
-  transformArticleForUpdate: (inputData, isExistUser=false) => {
+  transformArticleForUpdate: (inputData, isExistUser = false) => {
     let pd = JSON.parse(JSON.stringify(inputData));
     if (pd._id) {
       pd.articleId = pd._id;
@@ -448,7 +450,7 @@ const helper = {
     email: `This is not a valid email address`,
     url: `This is not a valid URL`,
     user: `User verification failed`,
-    userPublic: `You are not a registered user yet, please fill up at least contact name to proceed`
+    userPublic: `You are not a registered user yet, please fill up at least contact name to proceed`,
   },
   validate: (fieldName, inputs, valKey = "") => {
     let inputVal = inputs[fieldName];
