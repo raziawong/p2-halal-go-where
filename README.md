@@ -140,7 +140,7 @@ Test Cases can be found [here](/readme/test_cases.xlsx)
 1. [Git](https://git-scm.com/) for version control
 2. [GitHub](http://github.com) for the repository
 3. [Visual Studio Code](https://code.visualstudio.com/) for code editing
-4. [Heroku](https://www.heroku.com/) for deployment of Express server
+4. [Render](https://render.com/) for deployment of Express server
 5. [Netlify](https://www.netlify.com/) for deployment of React app
 
 ### Logos and Images
@@ -169,16 +169,17 @@ Test Cases can be found [here](/readme/test_cases.xlsx)
 Backend is build using Node.js and Express. Frontend have been created with create-react-app which includes a webpack that builds the files for production environment.
 
 ### Backend Deployment
-Express server is deployed using [Heroku](https://www.heroku.com/).
+Express server is deployed using [Render](https://render.com/).
 
 Prerequisites:
-- Heroku is connected and authorized to Github account under "Deploy"
-- Correct repository is selected under "App connected to Github"
+- Render is connected and authorized to Github account
+- Correct repository is selected
 - Automatic deploys have been enabled for continuous deployment
 
 Steps to publish:
 1. After connecting to repository, ensure edits were added, commited, and pushed to Github repository
-2. Heroku will perform automatic deployments upon detecting changes
+2. Update environment variables to have MONGO_URI with the connection string value retrieved from MongoDB Atlas
+3. Deploy
 
 ### Frontend Deployment
 [![Netlify Status](https://api.netlify.com/api/v1/badges/24d0b156-5ce6-440f-832d-f37cf429d50c/deploy-status)](https://app.netlify.com/sites/muslimgowhere/deploys)

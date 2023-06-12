@@ -11,7 +11,7 @@ import helper from "./helper";
 
 const mgwRequests = {
   axiosBase: axios.create({
-    baseURL: "https://muslim-go-where-api.herokuapp.com/",
+    baseURL: "https://muslim-go-where-api.onrender.com/",
   }),
   queryPaths: {
     countries: "/countries",
@@ -89,7 +89,8 @@ const getMgwFixed = async () => {
 
 const getMgwArticles = async () => {
   const gArticles = mgwRequests.axiosBase.get(
-    mgwRequests.queryPaths.articlesDefault, {params: {ratingFrom: 0, ratingTo: 5}}
+    mgwRequests.queryPaths.articlesDefault,
+    { params: { ratingFrom: 0, ratingTo: 5 } }
   );
   const gArticleTags = mgwRequests.axiosBase.get(
     mgwRequests.queryPaths.articleTags
@@ -127,7 +128,7 @@ const getArticles = async (
   if (viewType === helper.exploreView && sortField && sortOrder) {
     qPath += "/" + sortField + "/" + sortOrder;
     if (page) {
-      qPath += "/" + page;  
+      qPath += "/" + page;
     }
   }
   return await mgwRequests.axiosBase.get(qPath, { params });
